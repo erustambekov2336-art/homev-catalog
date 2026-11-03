@@ -29,3 +29,26 @@ export function verifyInitData(initData, botToken) {
 }
 
 export const STORE_NAME = 'maison-forfe';
+
+// Отправка сообщения ботом. Возвращает true, если Telegram принял сообщение.
+export async function tgSend(chatId, text, extra = {}) {
+  const token = process.env.BOT_TOKEN;
+  if (!token || !chatId) return false;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true, ...extra }),
+    });
+    const j = await r.json().catch(() => ({}));
+    return r.ok && j.ok;
+  } catch {
+    return false;
+  }
+}
+
+// Кто может управлять аукционом: Telegram ID через запятую в ADMIN_IDS (по умолчанию — владелец).
+export const ADMIN_IDS = (process.env.ADMIN_IDS || '349086871').split(',').map((s) => s.trim()).filter(Boolean);
+export const isAdmin = (user) => !!user && ADMIN_IDS.includes(String(user.id));
+
+export const sum = (n) => Math.round(Number(n) || 0).toLocaleString('ru-RU').replace(/\s/g, ' ') + ' сум';

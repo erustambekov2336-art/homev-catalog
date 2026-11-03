@@ -1,6 +1,6 @@
 // Статус сертификата клиента — одинаковый на телефоне, компьютере и планшете.
 import { getStore } from '@netlify/blobs';
-import { json, verifyInitData, STORE_NAME } from '../lib/tg.mjs';
+import { json, verifyInitData, STORE_NAME, isAdmin } from '../lib/tg.mjs';
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { ok: false });
@@ -11,7 +11,7 @@ export default async (req) => {
   try {
     const store = getStore({ name: STORE_NAME, consistency: 'strong' });
     const rec = await store.get(`cert/${user.id}`, { type: 'json' });
-    return json(200, { ok: true, certUsed: !!rec, order: rec?.order || '' }, { 'Cache-Control': 'no-store' });
+    return json(200, { ok: true, certUsed: !!rec, order: rec?.order || '', isAdmin: isAdmin(user) }, { 'Cache-Control': 'no-store' });
   } catch {
     return json(200, { ok: false });
   }

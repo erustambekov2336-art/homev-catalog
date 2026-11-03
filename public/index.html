@@ -84,6 +84,47 @@ svg.ci{width:18px;height:18px;flex:0 0 auto}
 .bar i{display:block;height:100%;border-radius:9px;background:var(--accent);transition:width .7s var(--ease)}
 .hero-s{font-size:12px;color:var(--ink2);margin-top:7px}
 
+/* auction */
+.auc{background:var(--surface);border-radius:26px;padding:14px;box-shadow:0 0 0 1px var(--hair)}
+.auc-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill.live i{animation:live 2s infinite}
+.auc-end{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.auc-ph{margin-top:12px;aspect-ratio:4/3;border-radius:20px;background:var(--tile);position:relative;overflow:hidden;cursor:pointer}
+.auc-ph img{position:absolute;inset:5%;width:90%;height:90%;object-fit:contain;mix-blend-mode:var(--blend)}
+.auc-name{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-top:14px;line-height:1.15}
+.auc-meta{font-size:13.5px;color:var(--muted);margin-top:4px}
+.auc-price{display:flex;align-items:baseline;gap:8px;margin-top:14px}
+.auc-price b{font-size:38px;font-weight:700;letter-spacing:-1.3px;font-variant-numeric:tabular-nums;line-height:1}
+.auc-price b.drop{animation:dropf .9s var(--ease)}
+@keyframes dropf{0%{color:var(--accent);transform:translateY(-6px)}100%{color:var(--ink);transform:none}}
+.auc-price span{font-size:15px;color:var(--muted);font-weight:500}
+.auc-bar{height:8px;margin-top:12px;background:var(--surface2)}
+.auc-lim{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:7px}
+.auc-next{display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;padding:12px 14px;border-radius:16px;background:var(--surface2);font-size:13.5px;color:var(--ink2)}
+.auc-next b{font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
+.auc .btn+.btn{margin-top:8px}
+.auc .btn.wait{background:var(--surface2);color:var(--ink2);box-shadow:none}
+.auc-count{font-size:44px;font-weight:700;letter-spacing:-1.5px;font-variant-numeric:tabular-nums;margin-top:4px;line-height:1.1}
+.auc-h{font-size:17px;font-weight:600;margin-top:14px}
+.auc-prev{display:flex;gap:12px;align-items:center;text-align:left;margin-top:18px;padding:10px;border-radius:18px;background:var(--surface2)}
+.auc-prev .thumb{width:56px;height:56px}
+.auc-sold{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.auc-sold .thumb{width:52px;height:52px}
+.nav .ldot{position:absolute;top:7px;left:calc(50% + 7px);width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 2px var(--surface);animation:live 2s infinite}
+.ad-lot{padding:14px;border-radius:18px;background:var(--surface2);margin-bottom:10px}
+.ad-lot .t{font-weight:700;font-size:15px}
+.ad-lot .m{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.45}
+.ad-tag{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface);margin-left:6px;vertical-align:1px}
+.ad-off{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0 0;margin-top:10px;border-top:1px solid var(--hair);font-size:13px}
+.ad-off .btns{display:flex;gap:6px}
+.ad-off .btns button{height:32px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:600;background:var(--surface)}
+.ad-off .btns button.yes{background:var(--ok-soft);color:var(--ok)}
+.ad-res{max-height:220px;overflow-y:auto;margin-top:8px;border-radius:14px;background:var(--surface2)}
+.ad-res button{display:flex;width:100%;justify-content:space-between;gap:8px;padding:11px 14px;font-size:14px;text-align:left;border-bottom:1px solid var(--hair)}
+.ad-res button span{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+select.inp{appearance:none;-webkit-appearance:none}
+
 /* recent orders feed */
 .feed{padding:4px 0 2px}
 .feed-h{display:flex;align-items:center;gap:7px;margin:8px 20px 8px;font-size:13px;color:var(--muted);font-weight:500}
@@ -452,6 +493,7 @@ html.lite .lg::after{display:none}
     <div id="catEmpty"></div>
     <div class="sentinel" id="sentinel"></div>
   </section>
+  <section class="view" id="v-auction"></section>
   <section class="view" id="v-favs"></section>
   <section class="view" id="v-cart"></section>
   <section class="view" id="v-profile"></section>
@@ -496,7 +538,7 @@ const T={
   whole:'Оптом для магазинов',wholeS:'Условия и цены для магазинов в регионах',pdfRu:'Предложение на русском',pdfUz:'Предложение на узбекском',soon:'Файлы с условиями скоро появятся. Пока напишите менеджеру — пришлём всё в чат.',
   manager:'Написать менеджеру',welT:'Подарок новому покупателю',welS:'Сертификат на 500 000 сум к заказу от 3 000 000 сум. Он уже в профиле и применится в корзине сам.',welB:'Забрать подарок',later:'Позже',
   heroK:'Ваш подарок',heroT:'500 000 сум к заказу',heroNeed:'Осталось добавить {x}',heroReady:'Сумма набрана — применится в корзине',heroStart:'Действует на заказ от 3 000 000 сум',
-  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад'},
+  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад',auction:'Аукцион',aucLive:'Идёт сейчас',aucLeft:'Осталось {t}',aucStart:'старт {x}',aucMin:'минимум {x}',aucNext:'Следующее снижение',aucMinReached:'Минимальная цена',aucBuy:'Купить за {x}',aucOfferBtn:'Предложить свою цену',aucHeldOther:'Лот оформляет покупатель · {t}',aucContinue:'Продолжить оформление · {t}',aucNextIn:'Следующий лот через',aucSoon:'Скоро новый лот',aucAbout:'Каждый час на торги выходит набор посуды. Цена снижается, пока кто-то не купит.',aucRemind:'Напомнить о лоте',aucReminded:'Напоминание включено',aucRemindNote:'Бот пришлёт сообщение за 5 минут до старта',aucNeedAccess:'Разрешите боту писать вам, чтобы получить напоминание',aucSoldFor:'Продан за {x}',aucYouWon:'Этот лот ваш',aucCheckout:'Покупка с аукциона',aucLocked:'Цена закреплена за вами ещё {t}',aucConfirm:'Подтвердить покупку',aucExpired:'Время вышло, аукцион продолжается',aucHeld:'Лот уже оформляет другой покупатель',aucTooMany:'Лимит попыток для этого лота исчерпан',aucEnded:'Аукцион по этому лоту завершён',aucErr:'Не получилось, попробуйте ещё раз',aucWonT:'Лот ваш!',aucWonS:'Заказ {n} на {x}. Менеджер свяжется с вами в течение рабочего дня.',aucOfferT:'Своя цена',aucOfferPrice:'Ваша цена, сум',aucOfferNote:'Если цена нас устроит, менеджер свяжется с вами, а бот пришлёт ответ.',aucOfferSend:'Отправить предложение',aucOfferSent:'Предложение отправлено',aucLow:'Слишком низкая цена для этого лота',aucBuyInstead:'Ваша цена не ниже текущей — просто купите лот',aucHowT:'Как это работает',aucHow1:'Цена снижается каждые {n} мин',aucHow2:'Нажмите «Купить», когда цена устроит',aucHow3:'Цена закрепляется за вами на 2 минуты, пока вы заполняете форму',enterPrice:'Укажите цену',aucTag:'Аукцион',aucNow:'Сейчас',aucStartsAt:'Старт {d}',aucAgo:'продан {t}'},
  uz:{catalog:'Katalog',favs:'Sevimlilar',cart:'Savat',profile:'Profil',brandSub:'Toshkentda Eron chinnisi',search:'Nomi yoki kolleksiya bo‘yicha qidirish',all:'Barchasi',
   filters:'Filtrlar',price:'Narx',b_all:'Istalgan narx',b_a:'500 minggacha',b_b:'500 ming – 1 mln',b_c:'1 – 3 mln',b_d:'3 mln dan',apply:'Ko‘rsatish',reset:'Tozalash',
   sum:'so‘m',pcs:'dona',qtyU:'dona',found:'{n} ta mahsulot',inStock:'Mavjud',outStock:'Mavjud emas',showMore:'Yana ko‘rsatish',
@@ -520,7 +562,7 @@ const T={
   whole:'Do‘konlar uchun ulgurji',wholeS:'Viloyatlardagi do‘konlar uchun shartlar va narxlar',pdfRu:'Rus tilidagi taklif',pdfUz:'O‘zbek tilidagi taklif',soon:'Shartlar fayllari tez orada qo‘shiladi. Hozircha menejerga yozing — hammasini chatga yuboramiz.',
   manager:'Menejerga yozish',welT:'Yangi xaridorga sovg‘a',welS:'3 000 000 so‘mdan buyurtmaga 500 000 so‘mlik sertifikat. U profilingizda va savatda o‘zi qo‘llanadi.',welB:'Sovg‘ani olish',later:'Keyinroq',
   heroK:'Sizning sovg‘angiz',heroT:'Buyurtmaga 500 000 so‘m',heroNeed:'Yana {x} qo‘shish kerak',heroReady:'Summa yetarli — savatda qo‘llanadi',heroStart:'3 000 000 so‘mdan buyurtmaga amal qiladi',
-  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin'}
+  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin',auction:'Auksion',aucLive:'Hozir davom etmoqda',aucLeft:'{t} qoldi',aucStart:'start {x}',aucMin:'minimum {x}',aucNext:'Keyingi pasayish',aucMinReached:'Eng past narx',aucBuy:'{x} ga sotib olish',aucOfferBtn:'O‘z narxingizni taklif qilish',aucHeldOther:'Lotni xaridor rasmiylashtirmoqda · {t}',aucContinue:'Rasmiylashtirishni davom ettirish · {t}',aucNextIn:'Keyingi lotgacha',aucSoon:'Tez orada yangi lot',aucAbout:'Har soatda savdoga idishlar to‘plami chiqadi. Narx kimdir sotib olguncha pasayib boradi.',aucRemind:'Lot haqida eslatish',aucReminded:'Eslatma yoqildi',aucRemindNote:'Bot boshlanishidan 5 daqiqa oldin xabar yuboradi',aucNeedAccess:'Eslatma olish uchun botga sizga yozishga ruxsat bering',aucSoldFor:'{x} ga sotildi',aucYouWon:'Bu lot sizniki',aucCheckout:'Auksiondan xarid',aucLocked:'Narx siz uchun yana {t} saqlanadi',aucConfirm:'Xaridni tasdiqlash',aucExpired:'Vaqt tugadi, auksion davom etmoqda',aucHeld:'Lotni boshqa xaridor rasmiylashtirmoqda',aucTooMany:'Bu lot uchun urinishlar soni tugadi',aucEnded:'Bu lot bo‘yicha auksion yakunlandi',aucErr:'Bo‘lmadi, qayta urinib ko‘ring',aucWonT:'Lot sizniki!',aucWonS:'Buyurtma {n}, {x}. Menejer ish kuni davomida siz bilan bog‘lanadi.',aucOfferT:'O‘z narxingiz',aucOfferPrice:'Sizning narxingiz, so‘m',aucOfferNote:'Narx bizga mos kelsa, menejer bog‘lanadi va bot javob yuboradi.',aucOfferSend:'Taklifni yuborish',aucOfferSent:'Taklif yuborildi',aucLow:'Bu lot uchun narx juda past',aucBuyInstead:'Narxingiz joriy narxdan past emas — lotni sotib oling',aucHowT:'Bu qanday ishlaydi',aucHow1:'Narx har {n} daqiqada pasayadi',aucHow2:'Narx ma’qul bo‘lganda «Sotib olish»ni bosing',aucHow3:'Formani to‘ldirguningizcha narx 2 daqiqa siz uchun saqlanadi',enterPrice:'Narxni kiriting',aucTag:'Auksion',aucNow:'Hozir',aucStartsAt:'Start {d}',aucAgo:'sotildi {t}'}
 };
 
 /* Uzbek Latin -> Cyrillic */
@@ -558,7 +600,10 @@ const I={
  globe:'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5S9.7 5.9 12 3.5z"/>',
  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',repeat:'<path d="M4 12a7 7 0 0 1 12-4.9L19 10M20 12a7 7 0 0 1-12 4.9L5 14M19 5v5h-5M5 19v-5h5"/>',
  phone:'<path d="M6.5 3.5h3l1.5 4-2 1.3a10 10 0 0 0 6.2 6.2l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/>',
- sparkle:'<path d="M12 3.5l1.8 5 5 1.8-5 1.8-1.8 5-1.8-5-5-1.8 5-1.8z"/>'
+ sparkle:'<path d="M12 3.5l1.8 5 5 1.8-5 1.8-1.8 5-1.8-5-5-1.8 5-1.8z"/>',
+ gavel:'<path d="M13.5 4.5l6 6M10.5 7.5l6 6M12 6l-4 4 6 6 4-4z"/><path d="M10 12l-6 6.5"/><path d="M3.5 21h8"/>',
+ bell:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+ lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'
 };
 const ic=(n,cls='',extra='')=>`<svg class="i ${cls}" viewBox="0 0 24 24" ${extra}>${I[n]}</svg>`;
 
@@ -661,14 +706,14 @@ function onCartChange(id){
 }
 
 /* NAV */
-const TABS=[['catalog','grid'],['favs','heart'],['cart','bag'],['profile','user']];
+const TABS=[['catalog','grid'],['auction','gavel'],['cart','bag'],['profile','user']];
 let lastCount=0;
 function renderNav(bump){
   const nav=$('nav');const c=cartCount();
   nav.querySelectorAll('button').forEach(b=>b.remove());
   TABS.forEach(([k,icn])=>{
-    const b=document.createElement('button');b.className='press'+(S.tab===k?' on':'');b.dataset.tab=k;
-    b.innerHTML=ic(icn,'fillable')+'<span>'+esc(tr(k))+'</span>'+(k==='cart'&&c?`<b class="bdg${bump&&c!==lastCount?' pop':''}">${c}</b>`:'')+(k==='favs'&&S.favs.length?'':'');
+    const b=document.createElement('button');b.className='press'+((S.tab==='favs'?'profile':S.tab)===k?' on':'');b.dataset.tab=k;
+    b.innerHTML=ic(icn,'fillable')+'<span>'+esc(tr(k))+'</span>'+(k==='cart'&&c?`<b class="bdg${bump&&c!==lastCount?' pop':''}">${c}</b>`:'')+(k==='auction'&&AUC.data&&AUC.data.current?'<i class="ldot"></i>':'');
     b.onclick=()=>go(k);nav.appendChild(b);
   });
   lastCount=c;
@@ -680,13 +725,14 @@ function go(tab){
   hap('sel');S.tab=tab;setTimeout(()=>moveInd(true),0);
   document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+tab));
   window.scrollTo(0,0);renderTop();renderNav();
+  if(tab==='auction'){renderAuction();loadAuction();}
   if(tab==='favs')renderFavs();if(tab==='cart')renderCart();if(tab==='profile')renderProfile();
   renderDock();updateBack();
 }
 
 /* TOP */
 function renderTop(){
-  const titles={catalog:'Maison Forfè',favs:tr('favs'),cart:tr('cart'),profile:tr('profile')};
+  const titles={catalog:'Maison Forfè',auction:tr('auction'),favs:tr('favs'),cart:tr('cart'),profile:tr('profile')};
   $('title').innerHTML=esc(titles[S.tab])+(S.tab==='catalog'?`<span class="sub">${esc(tr('brandSub'))}</span>`:'');
   $('searchWrap').style.display=S.tab==='catalog'?'':'none';
   $('search').placeholder=tr('search');
@@ -852,7 +898,7 @@ function closeSheet(instant){
   onClose&&onClose();updateBack();
 }
 function updateBack(){if(!tg||!tg.BackButton)return;(cur||S.tab!=='catalog')?tg.BackButton.show():tg.BackButton.hide();}
-if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{if(cur){if(!cur.el.querySelector('.close'))return;closeSheet();}else go('catalog');});
+if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{if(cur){if(!cur.el.querySelector('.close'))return;closeSheet();}else go(S.tab==='favs'?'profile':'catalog');});
 
 /* FAVS VIEW */
 function renderFavs(){
@@ -979,6 +1025,7 @@ function renderProfile(){
    <div class="group" id="wholeBox" style="margin-top:26px"><div class="mrow"><div class="mi">${ic('store')}</div><div class="mt">${esc(tr('whole'))}<small>${esc(tr('wholeS'))}</small></div></div></div>
    <div class="group" style="margin-top:12px">
     <button class="mrow press" id="mgr"><div class="mi">${ic('send')}</div><div class="mt">${esc(tr('manager'))}<small>@${MANAGER}</small></div><div class="mv">${ic('chev')}</div></button>
+    ${S.isAdmin?`<button class="mrow press" id="adminBtn"><div class="mi">${ic('gavel')}</div><div class="mt">Управление аукционом<small>Лоты и предложения цены</small></div><div class="mv">${ic('chev')}</div></button>`:''}
     <button class="mrow press" data-go="favs"><div class="mi">${ic('heart')}</div><div class="mt">${esc(tr('favs'))}</div><div class="mv">${S.favs.length||''}${ic('chev')}</div></button>
    </div>
    <div style="text-align:center;color:var(--muted);font-size:12px;margin:26px 0 6px">Maison Forfè · Tashkent</div>
@@ -986,6 +1033,7 @@ function renderProfile(){
   el.querySelectorAll('#segL button').forEach(b=>b.onclick=()=>{hap('sel');S.lang=b.dataset.k;save('lang',S.lang);refreshLang();});
   el.querySelectorAll('#segT button').forEach(b=>b.onclick=()=>{hap('sel');S.themePref=b.dataset.k;save('theme',S.themePref);applyTheme();renderProfile();});
   el.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{const o=S.orders[+b.dataset.rep];hap('medium');o.items.forEach(i=>{if(S.byId[i.id])S.cart[i.id]=(S.cart[i.id]||0)+i.q;});saveCart();Object.keys(cardCache).forEach(updateCardAction);renderNav(true);renderHero();toast(tr('repeated'),'bag');});
+  const ab=$('adminBtn');if(ab)ab.onclick=()=>{hap();openAdmin();};
   $('mgr').onclick=()=>{hap();const url='https://t.me/'+MANAGER;try{tg&&tg.openTelegramLink?tg.openTelegramLink(url):open(url,'_blank');}catch(e){open(url,'_blank');}};
   bindGo(el);
   wholesale();
@@ -1021,11 +1069,225 @@ setInterval(()=>{if(S.tab==='catalog'&&feedItems.length)el_feed_tick();},60000);
 function el_feed_tick(){document.querySelectorAll('#feed .fd').forEach((b,i)=>{const x=feedItems[i];if(x){const s=b.querySelector('small');if(s)s.textContent=ago(x.at);}});}
 setInterval(()=>{if(!document.hidden&&S.loaded)loadFeed();},120000);
 
+
+/* ================= АУКЦИОН ================= */
+const AUC={data:null,off:0,phase:'',lastPrice:0};
+const nowS=()=>Date.now()+AUC.off;
+/* та же формула, что в netlify/lib/auction.mjs — меняйте вместе */
+function aucPrice(lot,now){
+  const stepMs=lot.stepMin*60000,durMs=lot.durationMin*60000,n=Math.max(2,Math.floor(durMs/stepMs));
+  const holdActive=!!(lot.hold&&lot.hold.until>now),paused=(lot.paused||0)+(lot.hold&&!holdActive?lot.hold.until-lot.hold.since:0);
+  const effNow=holdActive?lot.hold.since:now,elapsed=effNow-lot.startAt-paused;
+  if(lot.status==='sold')return{phase:'sold',price:lot.sold?lot.sold.price:lot.min};
+  if(lot.status==='cancelled')return{phase:'cancelled',price:lot.min};
+  if(elapsed<0)return{phase:'scheduled',price:lot.start,startsAt:lot.startAt+paused};
+  if(elapsed>=durMs&&!holdActive)return{phase:'ended',price:lot.min};
+  const steps=Math.min(n-1,Math.floor(elapsed/stepMs)),raw=lot.start-(lot.start-lot.min)*steps/(n-1);
+  const price=steps===0?lot.start:steps>=n-1?lot.min:Math.max(lot.min,Math.round(raw/10000)*10000);
+  const base=lot.startAt+paused;
+  return{phase:holdActive?'held':'live',price,nextDropAt:steps<n-1?base+(steps+1)*stepMs:null,endAt:base+durMs};
+}
+const mmss=ms=>{ms=Math.max(0,ms);const t=Math.ceil(ms/1000),h=Math.floor(t/3600),m=Math.floor(t%3600/60),sec=t%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;};
+async function aucApi(action,extra={}){
+  try{const r=await fetch('/api/auction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,initData:(tg&&tg.initData)||'',...extra})});return await r.json();}catch(e){return{ok:false,error:'network'};}
+}
+async function loadAuction(){
+  const j=await aucApi('state');
+  if(j&&j.ok){const had=!!(AUC.data&&AUC.data.current);AUC.data=j;AUC.off=j.now-Date.now();if(S.tab==='auction')renderAuction();if(had!==!!j.current)renderNav();}
+}
+function aucThumb(id,cls='thumb'){const it=S.byId[id];return `<div class="${cls}">${it&&photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div>`;}
+function renderAuction(){
+  const el=$('v-auction');const d=AUC.data;
+  if(!d){el.innerHTML=`<div class="pad"><div class="skel" style="border-radius:26px"><div class="t" style="aspect-ratio:4/3"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div></div>`;return;}
+  const lot=d.current;let h='<div class="pad">';
+  if(lot){
+    const it=S.byId[lot.itemId];const p=aucPrice(lot,nowS());AUC.phase=p.phase;AUC.lastPrice=p.price;
+    h+=`<div class="auc">
+      <div class="auc-top"><span class="pill live"><i></i>${esc(tr('aucLive'))}</span><span class="auc-end" id="aEnd"></span></div>
+      <div class="auc-ph" data-open="${esc(lot.itemId)}">${it&&photo(it)?`<img alt="" src="${esc(photo(it))}">`:''}</div>
+      <div class="auc-name">${esc(it?it.name:lot.itemName)}</div>
+      <div class="auc-meta">${it?esc(trType(it.type))+(it.qty?', '+it.qty+' '+esc(tr('pcs')):''):''}</div>
+      <div class="auc-price"><b id="aP">${num(p.price)}</b><span>${esc(tr('sum'))}</span></div>
+      <div class="bar auc-bar"><i id="aBar" style="width:${Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)}%"></i></div>
+      <div class="auc-lim"><span>${esc(tr('aucStart',{x:num(lot.start)}))}</span><span>${esc(tr('aucMin',{x:num(lot.min)}))}</span></div>
+      <div class="auc-next"><span id="aNextL">${esc(tr('aucNext'))}</span><b id="aNext"></b></div>
+      <button class="btn full" id="aBuy"></button>
+      <button class="btn ghost full" id="aOffer">${esc(tr('aucOfferBtn'))}</button>
+    </div>`;
+  }else{
+    if(d.recentSold){const r=d.recentSold;h+=`<div class="card2 auc-sold">${aucThumb(r.itemId)}<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">${esc((S.byId[r.itemId]||{}).name||r.itemName)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(r.sold.mine?tr('aucYouWon'):tr('aucSoldFor',{x:money(r.sold.price)}))} · ${esc(ago(r.sold.at))}</div></div></div>`;}
+    const nx=d.next;const reminded=LS.get('mf_remind_'+(nx?nx.id:'next'),0);
+    h+=`<div class="auc center" style="padding:26px 18px 20px">
+      <div class="empty" style="padding:0"><div class="ic" style="margin-bottom:6px">${ic('clock')}</div></div>
+      ${nx?`<div class="auc-h">${esc(tr('aucNextIn'))}</div><div class="auc-count" id="aCount"></div>`:`<div class="auc-h" style="font-size:20px">${esc(tr('aucSoon'))}</div>`}
+      <p class="lead" style="font-size:14px">${esc(tr('aucAbout'))}</p>
+      ${nx?`<div class="auc-prev">${aucThumb(nx.itemId)}<div style="min-width:0"><div style="font-weight:600;font-size:15px">${esc((S.byId[nx.itemId]||{}).name||nx.itemName)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(tr('aucStart',{x:money(nx.start)}))}</div></div></div>`:''}
+      <button class="btn full${reminded?' ghost':''}" id="aRemind" style="margin-top:16px">${ic(reminded?'check':'bell')}${esc(tr(reminded?'aucReminded':'aucRemind'))}</button>
+      <div style="font-size:12.5px;color:var(--muted);margin-top:10px">${esc(tr('aucRemindNote'))}</div>
+    </div>`;
+  }
+  const stepN=lot?lot.stepMin:(d.next?d.next.stepMin:1);
+  h+=`<div class="sec-t">${esc(tr('aucHowT'))}</div><div class="card2"><div class="steps">${[tr('aucHow1',{n:stepN}),tr('aucHow2'),tr('aucHow3')].map((x,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(x)}</div></div>`).join('')}</div></div><div style="height:30px"></div></div>`;
+  el.innerHTML=h;
+  const ph=el.querySelector('.auc-ph');if(ph)ph.onclick=()=>openProduct(ph.dataset.open);
+  const bb=$('aBuy');if(bb)bb.onclick=()=>aucBuy(lot);
+  const ob=$('aOffer');if(ob)ob.onclick=()=>aucOffer(lot);
+  const rb=$('aRemind');if(rb)rb.onclick=()=>aucRemind(d.next?d.next.id:'');
+  aucTick();
+}
+function aucTick(){
+  if(S.tab!=='auction'||!AUC.data)return;
+  const d=AUC.data,now=nowS();
+  if(d.current){
+    const lot=d.current,p=aucPrice(lot,now);
+    if(p.phase!==AUC.phase){AUC.phase=p.phase;loadAuction();return;}
+    const P=$('aP');if(!P)return;
+    if(p.price!==AUC.lastPrice){AUC.lastPrice=p.price;P.textContent=num(p.price);P.classList.remove('drop');void P.offsetWidth;P.classList.add('drop');hap('sel');
+      $('aBar').style.width=Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)+'%';}
+    $('aEnd').textContent=p.endAt?tr('aucLeft',{t:mmss(p.endAt-now)}):'';
+    if(p.nextDropAt){$('aNextL').textContent=tr('aucNext');$('aNext').textContent=mmss(p.nextDropAt-now);}else{$('aNextL').textContent=tr('aucMinReached');$('aNext').textContent=num(lot.min);}
+    const bb=$('aBuy');
+    if(p.phase==='held'&&lot.hold&&lot.hold.mine){bb.className='btn full';bb.textContent=tr('aucContinue',{t:mmss(lot.hold.until-now)});}
+    else if(p.phase==='held'){bb.className='btn full wait';bb.innerHTML=ic('lock')+esc(tr('aucHeldOther',{t:mmss(lot.hold.until-now)}));}
+    else{bb.className='btn full';bb.textContent=tr('aucBuy',{x:money(p.price)});}
+  }else if(d.next){
+    const c=$('aCount');if(c){const ms=d.next.startAt-now;if(ms<=0){loadAuction();return;}c.textContent=mmss(ms);}
+  }
+}
+setInterval(aucTick,1000);
+setInterval(()=>{if(!document.hidden&&S.tab==='auction')loadAuction();},5000);
+setInterval(()=>{if(!document.hidden&&S.tab!=='auction'&&S.loaded)loadAuction();},45000);
+
+async function aucBuy(lot){
+  if(!tgUser){toast(tr('guestS'),'x');return;}
+  const p=aucPrice(lot,nowS());
+  if(p.phase==='held'&&!(lot.hold&&lot.hold.mine)){hap('err');toast(tr('aucHeld'),'lock');return;}
+  hap('medium');const bb=$('aBuy');bb.disabled=true;
+  const j=await aucApi('hold',{id:lot.id});bb.disabled=false;
+  if(!j.ok){hap('err');toast(tr({held:'aucHeld',too_many:'aucTooMany',ended:'aucEnded',sold:'aucEnded',cancelled:'aucEnded'}[j.error]||'aucErr'),'x');loadAuction();return;}
+  AUC.off=j.now-Date.now();loadAuction();openAucCheckout(lot,j.price,j.until);
+}
+function openAucCheckout(lot,price,until){
+  const it=S.byId[lot.itemId]||{name:lot.itemName};let done=false,timer;const f=S.form;
+  const fld=(id,k,label,ph,type,rows)=>`<div class="fld"><label>${esc(label)}</label>${rows?`<textarea class="inp" id="${id}" rows="2" placeholder="${esc(ph)}">${esc(f[k])}</textarea>`:`<input class="inp" id="${id}" ${type?`type="${type}" inputmode="${type}"`:''} placeholder="${esc(ph)}" value="${esc(f[k])}">`}<div class="err" data-e="${k}" hidden></div></div>`;
+  const body=`<div class="auc-prev" style="margin-top:0">${aucThumb(lot.itemId)}<div style="min-width:0"><div style="font-weight:600;font-size:15px">${esc(it.name)}</div><div style="font-size:19px;font-weight:700;margin-top:2px;letter-spacing:-.4px">${money(price)}</div></div></div>
+    <div class="note" style="margin:14px 0 16px">${ic('lock')}<span id="acT"></span></div>
+    ${fld('acName','name',tr('name'),tr('nameP'))}${fld('acPhone','phone',tr('phone'),'+998 90 123 45 67','tel')}${fld('acAddr','addr',tr('addr'),tr('addrP'),'',1)}
+    <div class="fld"><label>${esc(tr('comment'))}<em>${esc(tr('opt'))}</em></label><textarea class="inp" id="acCom" rows="2" placeholder="${esc(tr('commentP'))}"></textarea></div>`;
+  const sh=openSheet({title:tr('aucCheckout'),body,foot:`<button class="btn full" id="acGo">${esc(tr('aucConfirm'))}</button>`,
+    onClose:()=>{clearInterval(timer);if(!done)aucApi('release',{id:lot.id}).then(loadAuction);}});
+  const tick=()=>{const ms=until-nowS();const t=sh.el.querySelector('#acT');if(t)t.textContent=tr('aucLocked',{t:mmss(ms)});if(ms<=0&&!done){clearInterval(timer);done=true;closeSheet();toast(tr('aucExpired'),'clock');loadAuction();}};
+  tick();timer=setInterval(tick,1000);
+  sh.el.querySelector('#acGo').onclick=async e=>{
+    const btn=e.currentTarget;
+    S.form.name=sh.el.querySelector('#acName').value;S.form.phone=fmtPhone(sh.el.querySelector('#acPhone').value)||sh.el.querySelector('#acPhone').value;S.form.addr=sh.el.querySelector('#acAddr').value;
+    const ok=validate();sh.el.querySelectorAll('[data-e]').forEach(n=>{const m=S.errors[n.dataset.e];n.hidden=!m;n.textContent=m||'';n.previousElementSibling.classList.toggle('bad',!!m);});
+    if(!ok){hap('err');return;}
+    save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});
+    btn.disabled=true;btn.textContent=tr('sending');
+    const j=await aucApi('buy',{id:lot.id,form:{name:S.form.name,phone:S.form.phone,addr:S.form.addr,comment:sh.el.querySelector('#acCom').value}});
+    if(!j.ok){btn.disabled=false;btn.textContent=tr('aucConfirm');hap('err');
+      if(j.error==='expired'){done=true;closeSheet();toast(tr('aucExpired'),'clock');loadAuction();}else toast(tr('sendErr').split('.')[0],'x');return;}
+    done=true;clearInterval(timer);hap('ok');
+    S.orders.unshift({no:j.no,date:Date.now(),items:[{id:lot.itemId,q:1,p:j.price,n:it.name}],total:j.price,discount:0,auction:true});S.orders=S.orders.slice(0,30);save('orders',S.orders);
+    const s2=openSheet({title:'',noClose:true,body:`<div class="center"><div class="done-ic">${ic('gavel')}</div><div class="h1">${esc(tr('aucWonT'))}</div><p class="lead">${esc(tr('aucWonS',{n:j.no,x:money(j.price)}))}</p></div>`,foot:`<button class="btn full" id="wOk">${esc(tr('ok'))}</button>`});
+    s2.el.querySelector('#wOk').onclick=()=>{closeSheet();loadAuction();};
+  };
+}
+function aucOffer(lot){
+  if(!tgUser){toast(tr('guestS'),'x');return;}
+  hap();try{tg.requestWriteAccess&&tg.isVersionAtLeast('6.9')&&tg.requestWriteAccess(()=>{});}catch(e){}
+  const it=S.byId[lot.itemId]||{name:lot.itemName};const p=aucPrice(lot,nowS());
+  const body=`<div class="auc-prev" style="margin-top:0">${aucThumb(lot.itemId)}<div style="min-width:0"><div style="font-weight:600;font-size:15px">${esc(it.name)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(tr('aucNow'))}: ${money(p.price)}</div></div></div>
+   <div class="fld" style="margin-top:16px"><label>${esc(tr('aucOfferPrice'))}</label><input class="inp" id="ofP" inputmode="numeric" placeholder="${num(Math.round(lot.min*0.98/10000)*10000)}" style="font-size:20px;font-weight:700"><div class="err" id="ofE" hidden></div></div>
+   <div class="fld"><label>${esc(tr('phone'))}</label><input class="inp" id="ofPh" type="tel" inputmode="tel" placeholder="+998 90 123 45 67" value="${esc(S.form.phone)}"></div>
+   <div class="note">${ic('send')}<span>${esc(tr('aucOfferNote'))}</span></div>`;
+  const sh=openSheet({title:tr('aucOfferT'),body,foot:`<button class="btn full" id="ofGo">${esc(tr('aucOfferSend'))}</button>`});
+  const pi=sh.el.querySelector('#ofP'),E=sh.el.querySelector('#ofE');
+  pi.addEventListener('input',()=>{const d=pi.value.replace(/\D/g,'');pi.value=d?num(+d):'';E.hidden=true;});
+  sh.el.querySelector('#ofGo').onclick=async e=>{
+    const price=+pi.value.replace(/\D/g,'');const ph=fmtPhone(sh.el.querySelector('#ofPh').value);
+    const err=m=>{E.textContent=m;E.hidden=false;hap('err');};
+    if(!price)return err(tr('enterPrice'));if(!ph)return err(tr('ePhoneF'));
+    const btn=e.currentTarget;btn.disabled=true;
+    const j=await aucApi('offer',{id:lot.id,price,phone:ph,name:S.form.name||(tgUser&&tgUser.first_name)||''});btn.disabled=false;
+    if(!j.ok)return err(tr({low:'aucLow',buy_instead:'aucBuyInstead',ended:'aucEnded',sold:'aucEnded'}[j.error]||'aucErr'));
+    S.form.phone=ph;save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});
+    hap('ok');closeSheet();toast(tr('aucOfferSent'),'send');
+  };
+}
+function aucRemind(id){
+  if(!tgUser){toast(tr('guestS'),'x');return;}
+  hap();const key='mf_remind_'+(id||'next');
+  const doIt=()=>aucApi('remind',{id:id||''}).then(j=>{if(j.ok){LS.set(key,1);hap('ok');toast(tr('aucReminded'),'bell');renderAuction();}else toast(tr('aucErr'),'x');});
+  try{if(tg.requestWriteAccess&&tg.isVersionAtLeast('6.9')){tg.requestWriteAccess(ok=>{if(ok)doIt();else toast(tr('aucNeedAccess'),'x');});return;}}catch(e){}
+  doIt();
+}
+
+/* ================= АДМИН-ПАНЕЛЬ (видна и работает только для владельца) ================= */
+const PH={scheduled:['Запланирован','var(--accent)'],live:['Идёт','var(--ok)'],held:['Оформляется','var(--gold)'],sold:['Продан','var(--ok)'],ended:['Завершён без продажи','var(--muted)'],cancelled:['Отменён','var(--muted)']};
+const askC=(m,cb)=>{try{if(tg&&tg.showConfirm&&tg.isVersionAtLeast('6.2')){tg.showConfirm(m,ok=>{if(ok)cb();});return;}}catch(e){}if(confirm(m))cb();};
+const dt=ms=>new Date(ms).toLocaleString('ru-RU',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+async function openAdmin(){
+  const sh=openSheet({title:'Управление аукционом',body:'<div class="lbl" style="text-align:center;padding:30px 0">Загрузка…</div>',foot:`<button class="btn full" id="adNew">${ic('plus')}Новый лот</button>`});
+  sh.el.querySelector('#adNew').onclick=()=>openAdminCreate();
+  const j=await aucApi('admin_list');if(!sh.el.isConnected)return;
+  if(!j.ok){sh.bd.innerHTML='<div class="lbl" style="text-align:center;padding:30px 0">Нет доступа</div>';return;}
+  const lots=(j.lots||[]).slice().reverse();
+  sh.bd.innerHTML=lots.length?lots.map(l=>{const [lab,col]=PH[l.phase]||[l.phase,'var(--muted)'];
+    const offers=(l.offers||[]).slice().reverse();
+    return `<div class="ad-lot"><div class="t">${esc(l.itemName)}<span class="ad-tag" style="color:${col}">${lab}</span></div>
+      <div class="m">Старт ${dt(l.startAt)} · ${l.durationMin} мин, снижение каждые ${l.stepMin} мин<br>${num(l.start)} → ${num(l.min)} сум · порог предложений ${num(l.floor||l.min)}${['live','held'].includes(l.phase)?`<br>Сейчас: <b>${num(l.price)} сум</b>`:''}
+      ${l.sold?`<br>Продан за <b>${num(l.sold.price)} сум</b> (${l.sold.via==='offer'?'по предложению':'кнопкой «Купить»'}) · ${esc(l.sold.name||'')} ${esc(l.sold.phone||'')} ${l.sold.username?'@'+esc(l.sold.username):''} · ${esc(l.sold.order||'')}`:''}</div>
+      ${offers.map(o=>`<div class="ad-off"><div><b>${num(o.price)} сум</b><div class="m" style="margin:0">${esc(o.name||'')} ${o.username?'@'+esc(o.username):''} · ${esc(o.phone)}</div></div>${o.status==='new'&&l.status==='active'?`<div class="btns"><button class="yes" data-acc="${l.id}|${o.uid}">Принять</button><button data-dec="${l.id}|${o.uid}">Отклонить</button></div>`:`<span class="m" style="margin:0">${o.status==='accepted'?'принято':o.status==='declined'?'отклонено':'—'}</span>`}</div>`).join('')}
+      ${l.status==='active'&&!['ended'].includes(l.phase)?`<button class="link" data-cancel="${l.id}" style="margin-top:10px;color:var(--bad);font-size:13.5px">Отменить лот</button>`:''}
+    </div>`;}).join(''):'<div class="lbl" style="text-align:center;padding:30px 0">Лотов пока нет. Создайте первый.</div>';
+  const act=async(payload,msg)=>{const r=await aucApi(payload.action,payload);if(r.ok){hap('ok');toast(msg);openAdmin();loadAuction();}else{hap('err');toast(r.error||'Ошибка','x');}};
+  sh.bd.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{const [id,uid]=b.dataset.acc.split('|');askC('Принять предложение? Лот будет продан, клиенту придёт сообщение.',()=>act({action:'admin_offer',id,uid:+uid,decision:'accept'},'Предложение принято'));});
+  sh.bd.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const [id,uid]=b.dataset.dec.split('|');act({action:'admin_offer',id,uid:+uid,decision:'decline'},'Предложение отклонено');});
+  sh.bd.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>{askC('Отменить этот лот?',()=>act({action:'admin_cancel',id:b.dataset.cancel},'Лот отменён'));});
+}
+function openAdminCreate(){
+  let pick=null;
+  const d=new Date();d.setMinutes(0,0,0);d.setHours(d.getHours()+1);
+  const loc=x=>{const p=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${p(x.getMonth()+1)}-${p(x.getDate())}T${p(x.getHours())}:${p(x.getMinutes())}`;};
+  const nf=(id,label)=>`<div class="fld"><label>${label}</label><input class="inp" id="${id}" inputmode="numeric"></div>`;
+  const body=`<div class="fld"><label>Набор из каталога</label><input class="inp" id="adQ" placeholder="Начните вводить название"><div class="ad-res" id="adRes" hidden></div><div id="adPick" style="margin-top:8px"></div></div>
+   <div class="ad-grid">${nf('adStart','Старт, сум')}${nf('adMin','Минимум, сум')}</div>
+   ${nf('adFloor','Порог предложений, сум')}
+   <div class="fld"><label>Время старта</label><input class="inp" id="adAt" type="datetime-local" value="${loc(d)}"></div>
+   <div class="ad-grid"><div class="fld"><label>Длительность</label><select class="inp" id="adDur">${[15,20,30,45,60,90,120].map(m=>`<option value="${m}"${m===30?' selected':''}>${m} мин</option>`).join('')}</select></div>
+   <div class="fld"><label>Снижение цены</label><select class="inp" id="adStep">${[1,2,3,5,10].map(m=>`<option value="${m}">каждые ${m} мин</option>`).join('')}</select></div></div>
+   <div class="note" id="adPrev">${ic('gavel')}<span>Выберите набор и цены</span></div><div class="err" id="adErr" hidden style="margin-top:10px"></div>`;
+  const sh=openSheet({title:'Новый лот',body,foot:`<button class="btn full" id="adGo">Запланировать лот</button>`});
+  const $$=id=>sh.el.querySelector('#'+id);const val=id=>+($$(id).value||'').replace(/\D/g,'');
+  ['adStart','adMin','adFloor'].forEach(id=>$$(id).addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v?num(+v):'';prev();}));
+  ['adDur','adStep','adAt'].forEach(id=>$$(id).addEventListener('change',prev));
+  function prev(){const st=val('adStart'),mn=val('adMin'),du=+$$('adDur').value,sp=+$$('adStep').value;const n=Math.max(2,Math.floor(du/sp));
+    $$('adPrev').querySelector('span').textContent=st>mn&&mn>0?`Цена снижается примерно на ${num(Math.round((st-mn)/(n-1)/10000)*10000)} сум каждые ${sp} мин и дойдёт до минимума за ${sp*(n-1)} мин.`:'Старт должен быть больше минимума';}
+  $$('adQ').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();const r=$$('adRes');
+    if(q.length<2){r.hidden=true;return;}
+    const list=S.items.filter(i=>i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)).slice(0,12);
+    r.hidden=!list.length;r.innerHTML=list.map(i=>`<button data-id="${esc(i.id)}">${esc(i.name)}<span>${num(i.price_uzs)}</span></button>`).join('');
+    r.querySelectorAll('button').forEach(b=>b.onclick=()=>{pick=S.byId[b.dataset.id];r.hidden=true;$$('adQ').value='';
+      $$('adPick').innerHTML=`<div class="auc-prev" style="margin:0">${aucThumb(pick.id)}<div><div style="font-weight:600">${esc(pick.name)}</div><div style="font-size:13px;color:var(--muted)">В каталоге: ${money(pick.price_uzs)}</div></div></div>`;
+      const P=pick.price_uzs,r10=x=>Math.round(x/10000)*10000;$$('adStart').value=num(P);$$('adMin').value=num(r10(P*0.75));$$('adFloor').value=num(r10(P*0.7));prev();});});
+  $$('adGo').onclick=async e=>{
+    const E=$$('adErr');E.hidden=true;
+    if(!pick){E.textContent='Выберите набор';E.hidden=false;return;}
+    const at=new Date($$('adAt').value).getTime();
+    const lot={itemId:pick.id,itemName:pick.name,start:val('adStart'),min:val('adMin'),floor:val('adFloor'),startAt:at,durationMin:+$$('adDur').value,stepMin:+$$('adStep').value};
+    const btn=e.currentTarget;btn.disabled=true;const r=await aucApi('admin_create',{lot});btn.disabled=false;
+    if(!r.ok){E.textContent=r.error||'Ошибка';E.hidden=false;hap('err');return;}
+    hap('ok');toast('Лот запланирован','gavel');loadAuction();openAdmin();
+  };
+}
+
 /* Сертификат: статус берётся с сервера, одинаковый на всех устройствах */
 async function syncCert(){
   if(!tg||!tg.initData||!tgUser)return;
   try{const r=await fetch('/api/me',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tg.initData})});const j=await r.json();
-    if(j&&j.ok){S.cert.used=!!j.certUsed;S.cert.usedOn=j.order||'';LS.set('mf_cert_v1_'+UID,S.cert);}}catch(e){}
+    if(j&&j.ok){S.isAdmin=!!j.isAdmin;S.cert.used=!!j.certUsed;S.cert.usedOn=j.order||'';LS.set('mf_cert_v1_'+UID,S.cert);}}catch(e){}
 }
 
 /* WELCOME */
@@ -1074,10 +1336,11 @@ function welcome(){
     items.sort((x,y)=>(!x.photo)-(!y.photo));S.items=items;items.forEach(i=>S.byId[i.id]=i);S.loaded=true;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     $('grid').innerHTML='';renderChips();renderGrid(true);renderHero();renderNav();setupInfinite();
-    loadFeed();
+    loadFeed();loadAuction();
     await sync;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
-    applyTheme();refreshLang();Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
+    applyTheme();refreshLang();if(S.tab==='profile')renderProfile();Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
+    if(location.hash==='#auction')go('auction');
     setTimeout(welcome,500);
   }).catch(()=>{$('grid').innerHTML='';$('catEmpty').innerHTML=`<div class="empty"><div class="ic">${ic('x')}</div><h3>Нет соединения</h3><p>Проверьте интернет и откройте каталог ещё раз.</p></div>`;});
 })();
