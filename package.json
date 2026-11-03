@@ -1,0 +1,8 @@
+{
+  "name": "homev-catalog",
+  "private": true,
+  "description": "Maison Forfè — каталог в Telegram",
+  "dependencies": {
+    "@netlify/blobs": "11.1.4"
+  }
+}
