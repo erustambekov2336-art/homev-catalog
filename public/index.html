@@ -649,9 +649,22 @@ function pullCloud(){return new Promise(res=>{
     clearTimeout(to);if(err||!vals)return res(false);let changed=false;
     Object.keys(CLOUD).forEach(n=>{
       let c=null;try{c=vals[n]?JSON.parse(vals[n]):null;}catch(e){}
-      const lu=LS.get(CLOUD[n]+'__u',0);
+      const local=LS.get(CLOUD[n],null);
+      let lu=LS.get(CLOUD[n]+'__u',0);
+      // данные, сохранённые до появления синхронизации, считаем локальными изменениями — их нужно выгрузить
+      if(!lu&&local!=null&&!(Array.isArray(local)&&!local.length)){lu=1;}
+      // заказы и избранное объединяем с разных устройств, чтобы ничего не потерять
+      if(c&&local!=null&&(n==='orders'||n==='favs')&&Array.isArray(c.v)&&Array.isArray(local)){
+        let merged;
+        if(n==='orders'){const m=new Map();[...c.v,...local].forEach(o=>{if(o&&o.no&&!m.has(o.no))m.set(o.no,o);});merged=[...m.values()].sort((a,b)=>(b.date||0)-(a.date||0)).slice(0,30);}
+        else merged=c.u>=lu?c.v.slice():[...new Set([...c.v,...local])];
+        const same=JSON.stringify(merged)===JSON.stringify(c.v),u=Math.max(c.u||0,lu,Date.now());
+        LS.set(CLOUD[n],merged);LS.set(CLOUD[n]+'__u',u);applyCloud(n,merged);changed=true;
+        if(!same)pendingCloud[n]=1;
+        return;
+      }
       if(c&&c.u>lu){LS.set(CLOUD[n],c.v);LS.set(CLOUD[n]+'__u',c.u);applyCloud(n,c.v);changed=true;}
-      else if(lu&&(!c||lu>c.u))pendingCloud[n]=1;
+      else if(lu&&(!c||lu>c.u)){if(!LS.get(CLOUD[n]+'__u',0))LS.set(CLOUD[n]+'__u',Date.now());pendingCloud[n]=1;}
     });
     if(Object.keys(pendingCloud).length)flushCloud();
     res(changed);
