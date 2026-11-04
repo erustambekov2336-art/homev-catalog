@@ -1,7 +1,7 @@
 // Аукцион: состояние лота, бронь цены, покупка, предложения цены, напоминания и админ-управление.
 // Все действия — POST /api/auction с полем action. Управлять лотами могут только ADMIN_IDS.
 import { getStore } from '@netlify/blobs';
-import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum } from '../lib/tg.mjs';
+import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum, channelSold } from '../lib/tg.mjs';
 import { HOLD_MS, norm, priceAt } from '../lib/auction.mjs';
 
 const store = () => getStore({ name: STORE_NAME, consistency: 'strong' });
@@ -55,6 +55,7 @@ function publicView(lot, now, uid) {
     hold: lot.hold ? { since: lot.hold.since, until: lot.hold.until, mine: lot.hold.uid === uid, price: lot.hold.uid === uid ? lot.hold.price : undefined } : null,
     status: lot.status, phase: p.phase, price: p.price,
     sold: lot.sold ? { price: lot.sold.price, at: lot.sold.at, mine: lot.sold.uid === uid } : null,
+    alert: uid ? ((lot.alerts || []).find((a) => a.uid === uid && !a.sent) || {}).price || null : null,
   };
 }
 
@@ -147,6 +148,7 @@ export default async (req) => {
       return json(502, { ok: false, error: 'telegram' });
     }
     if (!/т[еe]ст|test/i.test(form.comment)) await addToFeed(s, lot.itemId).catch(() => {});
+    await channelSold(lot, r.price).catch(() => {});
     return json(200, { ok: true, no, price: r.price });
   }
 
@@ -174,6 +176,23 @@ export default async (req) => {
     return json(200, { ok: true });
   }
 
+  if (action === 'alert') {
+    // «Сообщить, когда цена опустится до…»
+    const id = str(body.id, 40);
+    const price = Math.round(Number(body.price) || 0);
+    const r = await updateLot(s, id, (lot) => {
+      const p = priceAt(lot, now);
+      if (!['live', 'held', 'scheduled'].includes(p.phase)) return { err: p.phase };
+      if (price < lot.min) return { err: 'below_min' };
+      if (price >= p.price) return { err: 'above_now' };
+      lot.alerts = (lot.alerts || []).filter((a) => a.uid !== uid);
+      lot.alerts.push({ uid, price, at: now, sent: false });
+      lot.alerts = lot.alerts.slice(-500);
+      return {};
+    });
+    return json(200, r.err ? { ok: false, error: r.err } : { ok: true });
+  }
+
   if (action === 'remind') {
     const id = str(body.id, 40) || 'next';
     const ok = await addToList(s, 'remind/' + id, uid);
@@ -192,7 +211,7 @@ export default async (req) => {
     const l = body.lot || {};
     const lot = {
       id: 'L' + now.toString(36),
-      itemId: str(l.itemId, 40), itemName: str(l.itemName, 120),
+      itemId: str(l.itemId, 40), itemName: str(l.itemName, 120), photo: str(l.photo, 160), catalogPrice: Math.round(Number(l.catalogPrice) || 0), alerts: [],
       start: Math.round(Number(l.start) || 0), min: Math.round(Number(l.min) || 0), floor: Math.round(Number(l.floor) || 0),
       startAt: Math.round(Number(l.startAt) || 0), durationMin: Math.round(Number(l.durationMin) || 30), stepMin: Math.round(Number(l.stepMin) || 1),
       status: 'active', paused: 0, hold: null, offers: [], createdAt: now,
@@ -202,13 +221,26 @@ export default async (req) => {
     if (!lot.floor) lot.floor = lot.min;
     if (lot.floor > lot.start) return json(400, { ok: false, error: 'Порог предложений не может быть выше старта' });
     if (lot.durationMin < 5 || lot.durationMin > 24 * 60) return json(400, { ok: false, error: 'Длительность от 5 минут до 24 часов' });
-    if (lot.stepMin < 1 || lot.stepMin * 2 > lot.durationMin) return json(400, { ok: false, error: 'Шаг слишком большой для такой длительности' });
     if (!lot.startAt || lot.startAt < now - 60000) return json(400, { ok: false, error: 'Время старта уже прошло' });
     const clash = (await loadLots(s)).find((x) => x.status === 'active' && priceAt(norm(x, now), now).phase !== 'ended' &&
       lot.startAt < x.startAt + (x.paused || 0) + x.durationMin * 60000 && x.startAt < lot.startAt + lot.durationMin * 60000);
     if (clash) return json(400, { ok: false, error: `Пересекается с лотом «${clash.itemName}»` });
     await s.setJSON('lot/' + lot.id, lot, { onlyIfNew: true });
     return json(200, { ok: true, lot });
+  }
+
+  if (action === 'admin_clear') {
+    // удаляет завершённые лоты: проданные, отменённые и закончившиеся без продажи
+    let removed = 0;
+    for (const l of await loadLots(s)) {
+      const ph = priceAt(norm(l, now), now).phase;
+      if (['sold', 'ended', 'cancelled'].includes(ph)) {
+        await s.delete('lot/' + l.id).catch(() => {});
+        await s.delete('remind/' + l.id).catch(() => {});
+        removed++;
+      }
+    }
+    return json(200, { ok: true, removed });
   }
 
   if (action === 'admin_cancel') {
@@ -252,6 +284,7 @@ export default async (req) => {
       ].join('\n'));
       await tgSend(ouid, `🎉 Ваше предложение ${sum(offer.price)} за «${lot.itemName}» принято! Менеджер свяжется с вами в течение рабочего дня.`);
       await addToFeed(s, lot.itemId).catch(() => {});
+      await channelSold(lot, offer.price).catch(() => {});
     } else {
       await tgSend(ouid, `К сожалению, предложение ${sum(offer.price)} за «${lot.itemName}» не принято. Следите за новыми лотами в каталоге Maison Forfè.`);
     }

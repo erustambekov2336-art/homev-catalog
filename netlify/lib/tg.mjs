@@ -52,3 +52,27 @@ export const ADMIN_IDS = (process.env.ADMIN_IDS || '349086871').split(',').map((
 export const isAdmin = (user) => !!user && ADMIN_IDS.includes(String(user.id));
 
 export const sum = (n) => Math.round(Number(n) || 0).toLocaleString('ru-RU').replace(/\s/g, ' ') + ' сум';
+
+// Любой метод Bot API. Возвращает result или null.
+export async function tgCall(method, payload) {
+  const token = process.env.BOT_TOKEN;
+  if (!token) return null;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const j = await r.json().catch(() => ({}));
+    return r.ok && j.ok ? j.result : null;
+  } catch {
+    return null;
+  }
+}
+
+// Ответ в канале под постом лота: «Продан за …»
+export async function channelSold(lot, price) {
+  const ch = process.env.CHANNEL_ID;
+  if (!ch || !lot.channelMsg) return;
+  await tgCall('sendMessage', { chat_id: ch, text: `✅ Лот «${lot.itemName}» продан за ${sum(price)}. Следите за новыми лотами!`, reply_to_message_id: lot.channelMsg });
+}

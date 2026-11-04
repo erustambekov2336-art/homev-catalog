@@ -100,7 +100,17 @@ svg.ci{width:18px;height:18px;flex:0 0 auto}
 .auc-price span{font-size:15px;color:var(--muted);font-weight:500}
 .auc-bar{height:8px;margin-top:12px;background:var(--surface2)}
 .auc-lim{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:7px}
-.auc-next{display:flex;justify-content:space-between;align-items:center;margin:14px 0 12px;padding:12px 14px;border-radius:16px;background:var(--surface2);font-size:13.5px;color:var(--ink2)}
+.auc-bar i{transition:width 1s linear}
+.auc-next[hidden]{display:none}
+.auc-disc{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:13px;color:var(--muted)}
+.auc-disc b{font-size:13px;font-weight:700;color:var(--ok);background:var(--ok-soft);padding:4px 9px;border-radius:999px}
+.auc-disc s{text-decoration-thickness:1px}
+.auc-alert{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:12px;font-size:14px;font-weight:600;color:var(--accent);padding:6px}
+.auc-alert svg{width:17px;height:17px}
+.chips2{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chips2 button{height:34px;padding:0 13px;border-radius:999px;background:var(--surface2);font-size:13px;font-weight:600}
+.auc-next span{display:flex;align-items:center;gap:8px;color:var(--gold);font-weight:600}
+.auc-next{display:flex;justify-content:space-between;align-items:center;margin:14px 0 0;padding:12px 14px;border-radius:16px;background:var(--surface2);font-size:13.5px;color:var(--ink2)}
 .auc-next b{font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}
 .auc .btn+.btn{margin-top:8px}
 .auc .btn.wait{background:var(--surface2);color:var(--ink2);box-shadow:none}
@@ -538,7 +548,7 @@ const T={
   whole:'Оптом для магазинов',wholeS:'Условия и цены для магазинов в регионах',pdfRu:'Предложение на русском',pdfUz:'Предложение на узбекском',soon:'Файлы с условиями скоро появятся. Пока напишите менеджеру — пришлём всё в чат.',
   manager:'Написать менеджеру',welT:'Подарок новому покупателю',welS:'Сертификат на 500 000 сум к заказу от 3 000 000 сум. Он уже в профиле и применится в корзине сам.',welB:'Забрать подарок',later:'Позже',
   heroK:'Ваш подарок',heroT:'500 000 сум к заказу',heroNeed:'Осталось добавить {x}',heroReady:'Сумма набрана — применится в корзине',heroStart:'Действует на заказ от 3 000 000 сум',
-  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад',auction:'Аукцион',aucLive:'Идёт сейчас',aucLeft:'Осталось {t}',aucStart:'старт {x}',aucMin:'минимум {x}',aucNext:'Следующее снижение',aucMinReached:'Минимальная цена',aucBuy:'Купить за {x}',aucOfferBtn:'Предложить свою цену',aucHeldOther:'Лот оформляет покупатель · {t}',aucContinue:'Продолжить оформление · {t}',aucNextIn:'Следующий лот через',aucSoon:'Скоро новый лот',aucAbout:'Каждый час на торги выходит набор посуды. Цена снижается, пока кто-то не купит.',aucRemind:'Напомнить о лоте',aucReminded:'Напоминание включено',aucRemindNote:'Бот пришлёт сообщение за 5 минут до старта',aucNeedAccess:'Разрешите боту писать вам, чтобы получить напоминание',aucSoldFor:'Продан за {x}',aucYouWon:'Этот лот ваш',aucCheckout:'Покупка с аукциона',aucLocked:'Цена закреплена за вами ещё {t}',aucConfirm:'Подтвердить покупку',aucExpired:'Время вышло, аукцион продолжается',aucHeld:'Лот уже оформляет другой покупатель',aucTooMany:'Лимит попыток для этого лота исчерпан',aucEnded:'Аукцион по этому лоту завершён',aucErr:'Не получилось, попробуйте ещё раз',aucWonT:'Лот ваш!',aucWonS:'Заказ {n} на {x}. Менеджер свяжется с вами в течение рабочего дня.',aucOfferT:'Своя цена',aucOfferPrice:'Ваша цена, сум',aucOfferNote:'Если цена нас устроит, менеджер свяжется с вами, а бот пришлёт ответ.',aucOfferSend:'Отправить предложение',aucOfferSent:'Предложение отправлено',aucLow:'Слишком низкая цена для этого лота',aucBuyInstead:'Ваша цена не ниже текущей — просто купите лот',aucHowT:'Как это работает',aucHow1:'Цена снижается каждые {n} мин',aucHow2:'Нажмите «Купить», когда цена устроит',aucHow3:'Цена закрепляется за вами на 2 минуты, пока вы заполняете форму',enterPrice:'Укажите цену',aucTag:'Аукцион',aucNow:'Сейчас',aucStartsAt:'Старт {d}',aucAgo:'продан {t}'},
+  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад',auction:'Аукцион',aucLive:'Идёт сейчас',aucLeft:'Осталось {t}',aucStart:'старт {x}',aucMin:'минимум {x}',aucNext:'Следующее снижение',aucMinReached:'Минимальная цена',aucBuy:'Купить за {x}',aucOfferBtn:'Предложить свою цену',aucHeldOther:'Лот оформляет покупатель · {t}',aucContinue:'Продолжить оформление · {t}',aucNextIn:'Следующий лот через',aucSoon:'Скоро новый лот',aucAbout:'Каждый час на торги выходит набор посуды. Цена снижается, пока кто-то не купит.',aucRemind:'Напомнить о лоте',aucReminded:'Напоминание включено',aucRemindNote:'Бот пришлёт сообщение за 5 минут до старта',aucNeedAccess:'Разрешите боту писать вам, чтобы получить напоминание',aucSoldFor:'Продан за {x}',aucYouWon:'Этот лот ваш',aucCheckout:'Покупка с аукциона',aucLocked:'Цена закреплена за вами ещё {t}',aucConfirm:'Подтвердить покупку',aucExpired:'Время вышло, аукцион продолжается',aucHeld:'Лот уже оформляет другой покупатель',aucTooMany:'Лимит попыток для этого лота исчерпан',aucEnded:'Аукцион по этому лоту завершён',aucErr:'Не получилось, попробуйте ещё раз',aucWonT:'Лот ваш!',aucWonS:'Заказ {n} на {x}. Менеджер свяжется с вами в течение рабочего дня.',aucOfferT:'Своя цена',aucOfferPrice:'Ваша цена, сум',aucOfferNote:'Если цена нас устроит, менеджер свяжется с вами, а бот пришлёт ответ.',aucOfferSend:'Отправить предложение',aucOfferSent:'Предложение отправлено',aucLow:'Слишком низкая цена для этого лота',aucBuyInstead:'Ваша цена не ниже текущей — просто купите лот',aucHowT:'Как это работает',aucHow1:'Цена снижается каждую секунду — чем дольше ждёте, тем дешевле, но лот может забрать другой',aucLastChance:'Минимальная цена — последний шанс',aucCat:'в каталоге',aucAlertBtn:'Сообщить, когда цена опустится до…',aucAlertSet:'Сообщим, когда цена дойдёт до {x}',aucAlertT:'Уведомление о цене',aucAlertPrice:'Сообщить при цене, сум',aucAlertMinus:'−{n}%',aucAlertMin:'Минимум',aucAlertNote:'Бот напишет вам, как только цена дойдёт до этой суммы. Лот могут купить раньше — уведомление не бронирует цену.',aucAlertSave:'Сохранить уведомление',aucAlertDone:'Уведомление включено',aucAlertLow:'Не ниже минимума: {x}',aucAlertLowS:'Не ниже минимума',aucAlertHigh:'Укажите цену ниже текущей',aucHow2:'Нажмите «Купить», когда цена устроит',aucHow3:'Цена закрепляется за вами на 2 минуты, пока вы заполняете форму',enterPrice:'Укажите цену',aucTag:'Аукцион',aucNow:'Сейчас',aucStartsAt:'Старт {d}',aucAgo:'продан {t}'},
  uz:{catalog:'Katalog',favs:'Sevimlilar',cart:'Savat',profile:'Profil',brandSub:'Toshkentda Eron chinnisi',search:'Nomi yoki kolleksiya bo‘yicha qidirish',all:'Barchasi',
   filters:'Filtrlar',price:'Narx',b_all:'Istalgan narx',b_a:'500 minggacha',b_b:'500 ming – 1 mln',b_c:'1 – 3 mln',b_d:'3 mln dan',apply:'Ko‘rsatish',reset:'Tozalash',
   sum:'so‘m',pcs:'dona',qtyU:'dona',found:'{n} ta mahsulot',inStock:'Mavjud',outStock:'Mavjud emas',showMore:'Yana ko‘rsatish',
@@ -562,7 +572,7 @@ const T={
   whole:'Do‘konlar uchun ulgurji',wholeS:'Viloyatlardagi do‘konlar uchun shartlar va narxlar',pdfRu:'Rus tilidagi taklif',pdfUz:'O‘zbek tilidagi taklif',soon:'Shartlar fayllari tez orada qo‘shiladi. Hozircha menejerga yozing — hammasini chatga yuboramiz.',
   manager:'Menejerga yozish',welT:'Yangi xaridorga sovg‘a',welS:'3 000 000 so‘mdan buyurtmaga 500 000 so‘mlik sertifikat. U profilingizda va savatda o‘zi qo‘llanadi.',welB:'Sovg‘ani olish',later:'Keyinroq',
   heroK:'Sizning sovg‘angiz',heroT:'Buyurtmaga 500 000 so‘m',heroNeed:'Yana {x} qo‘shish kerak',heroReady:'Summa yetarli — savatda qo‘llanadi',heroStart:'3 000 000 so‘mdan buyurtmaga amal qiladi',
-  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin',auction:'Auksion',aucLive:'Hozir davom etmoqda',aucLeft:'{t} qoldi',aucStart:'start {x}',aucMin:'minimum {x}',aucNext:'Keyingi pasayish',aucMinReached:'Eng past narx',aucBuy:'{x} ga sotib olish',aucOfferBtn:'O‘z narxingizni taklif qilish',aucHeldOther:'Lotni xaridor rasmiylashtirmoqda · {t}',aucContinue:'Rasmiylashtirishni davom ettirish · {t}',aucNextIn:'Keyingi lotgacha',aucSoon:'Tez orada yangi lot',aucAbout:'Har soatda savdoga idishlar to‘plami chiqadi. Narx kimdir sotib olguncha pasayib boradi.',aucRemind:'Lot haqida eslatish',aucReminded:'Eslatma yoqildi',aucRemindNote:'Bot boshlanishidan 5 daqiqa oldin xabar yuboradi',aucNeedAccess:'Eslatma olish uchun botga sizga yozishga ruxsat bering',aucSoldFor:'{x} ga sotildi',aucYouWon:'Bu lot sizniki',aucCheckout:'Auksiondan xarid',aucLocked:'Narx siz uchun yana {t} saqlanadi',aucConfirm:'Xaridni tasdiqlash',aucExpired:'Vaqt tugadi, auksion davom etmoqda',aucHeld:'Lotni boshqa xaridor rasmiylashtirmoqda',aucTooMany:'Bu lot uchun urinishlar soni tugadi',aucEnded:'Bu lot bo‘yicha auksion yakunlandi',aucErr:'Bo‘lmadi, qayta urinib ko‘ring',aucWonT:'Lot sizniki!',aucWonS:'Buyurtma {n}, {x}. Menejer ish kuni davomida siz bilan bog‘lanadi.',aucOfferT:'O‘z narxingiz',aucOfferPrice:'Sizning narxingiz, so‘m',aucOfferNote:'Narx bizga mos kelsa, menejer bog‘lanadi va bot javob yuboradi.',aucOfferSend:'Taklifni yuborish',aucOfferSent:'Taklif yuborildi',aucLow:'Bu lot uchun narx juda past',aucBuyInstead:'Narxingiz joriy narxdan past emas — lotni sotib oling',aucHowT:'Bu qanday ishlaydi',aucHow1:'Narx har {n} daqiqada pasayadi',aucHow2:'Narx ma’qul bo‘lganda «Sotib olish»ni bosing',aucHow3:'Formani to‘ldirguningizcha narx 2 daqiqa siz uchun saqlanadi',enterPrice:'Narxni kiriting',aucTag:'Auksion',aucNow:'Hozir',aucStartsAt:'Start {d}',aucAgo:'sotildi {t}'}
+  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin',auction:'Auksion',aucLive:'Hozir davom etmoqda',aucLeft:'{t} qoldi',aucStart:'start {x}',aucMin:'minimum {x}',aucNext:'Keyingi pasayish',aucMinReached:'Eng past narx',aucBuy:'{x} ga sotib olish',aucOfferBtn:'O‘z narxingizni taklif qilish',aucHeldOther:'Lotni xaridor rasmiylashtirmoqda · {t}',aucContinue:'Rasmiylashtirishni davom ettirish · {t}',aucNextIn:'Keyingi lotgacha',aucSoon:'Tez orada yangi lot',aucAbout:'Har soatda savdoga idishlar to‘plami chiqadi. Narx kimdir sotib olguncha pasayib boradi.',aucRemind:'Lot haqida eslatish',aucReminded:'Eslatma yoqildi',aucRemindNote:'Bot boshlanishidan 5 daqiqa oldin xabar yuboradi',aucNeedAccess:'Eslatma olish uchun botga sizga yozishga ruxsat bering',aucSoldFor:'{x} ga sotildi',aucYouWon:'Bu lot sizniki',aucCheckout:'Auksiondan xarid',aucLocked:'Narx siz uchun yana {t} saqlanadi',aucConfirm:'Xaridni tasdiqlash',aucExpired:'Vaqt tugadi, auksion davom etmoqda',aucHeld:'Lotni boshqa xaridor rasmiylashtirmoqda',aucTooMany:'Bu lot uchun urinishlar soni tugadi',aucEnded:'Bu lot bo‘yicha auksion yakunlandi',aucErr:'Bo‘lmadi, qayta urinib ko‘ring',aucWonT:'Lot sizniki!',aucWonS:'Buyurtma {n}, {x}. Menejer ish kuni davomida siz bilan bog‘lanadi.',aucOfferT:'O‘z narxingiz',aucOfferPrice:'Sizning narxingiz, so‘m',aucOfferNote:'Narx bizga mos kelsa, menejer bog‘lanadi va bot javob yuboradi.',aucOfferSend:'Taklifni yuborish',aucOfferSent:'Taklif yuborildi',aucLow:'Bu lot uchun narx juda past',aucBuyInstead:'Narxingiz joriy narxdan past emas — lotni sotib oling',aucHowT:'Bu qanday ishlaydi',aucHow1:'Narx har soniyada pasayadi — qancha kutsangiz, shuncha arzon, lekin lotni boshqasi olib qo‘yishi mumkin',aucLastChance:'Eng past narx — so‘nggi imkoniyat',aucCat:'katalogda',aucAlertBtn:'Narx tushganda xabar berish…',aucAlertSet:'Narx {x} ga tushganda xabar beramiz',aucAlertT:'Narx haqida xabar',aucAlertPrice:'Qaysi narxda xabar berish, so‘m',aucAlertMinus:'−{n}%',aucAlertMin:'Minimum',aucAlertNote:'Narx shu summaga tushishi bilan bot sizga yozadi. Lotni oldinroq sotib olishlari mumkin — xabarnoma narxni band qilmaydi.',aucAlertSave:'Xabarnomani saqlash',aucAlertDone:'Xabarnoma yoqildi',aucAlertLow:'Minimumdan past emas: {x}',aucAlertLowS:'Minimumdan past emas',aucAlertHigh:'Joriy narxdan pastroq narx kiriting',aucHow2:'Narx ma’qul bo‘lganda «Sotib olish»ni bosing',aucHow3:'Formani to‘ldirguningizcha narx 2 daqiqa siz uchun saqlanadi',enterPrice:'Narxni kiriting',aucTag:'Auksion',aucNow:'Hozir',aucStartsAt:'Start {d}',aucAgo:'sotildi {t}'}
 };
 
 /* Uzbek Latin -> Cyrillic */
@@ -1075,17 +1085,16 @@ const AUC={data:null,off:0,phase:'',lastPrice:0};
 const nowS=()=>Date.now()+AUC.off;
 /* та же формула, что в netlify/lib/auction.mjs — меняйте вместе */
 function aucPrice(lot,now){
-  const stepMs=lot.stepMin*60000,durMs=lot.durationMin*60000,n=Math.max(2,Math.floor(durMs/stepMs));
+  const durMs=lot.durationMin*60000,declineMs=durMs*0.9;
   const holdActive=!!(lot.hold&&lot.hold.until>now),paused=(lot.paused||0)+(lot.hold&&!holdActive?lot.hold.until-lot.hold.since:0);
   const effNow=holdActive?lot.hold.since:now,elapsed=effNow-lot.startAt-paused;
   if(lot.status==='sold')return{phase:'sold',price:lot.sold?lot.sold.price:lot.min};
   if(lot.status==='cancelled')return{phase:'cancelled',price:lot.min};
   if(elapsed<0)return{phase:'scheduled',price:lot.start,startsAt:lot.startAt+paused};
   if(elapsed>=durMs&&!holdActive)return{phase:'ended',price:lot.min};
-  const steps=Math.min(n-1,Math.floor(elapsed/stepMs)),raw=lot.start-(lot.start-lot.min)*steps/(n-1);
-  const price=steps===0?lot.start:steps>=n-1?lot.min:Math.max(lot.min,Math.round(raw/10000)*10000);
-  const base=lot.startAt+paused;
-  return{phase:holdActive?'held':'live',price,nextDropAt:steps<n-1?base+(steps+1)*stepMs:null,endAt:base+durMs};
+  const frac=Math.min(1,Math.floor(elapsed/1000)*1000/declineMs);
+  const price=frac>=1?lot.min:Math.max(lot.min,Math.round((lot.start-(lot.start-lot.min)*frac)/100)*100);
+  return{phase:holdActive?'held':'live',price,atMin:frac>=1,endAt:lot.startAt+paused+durMs};
 }
 const mmss=ms=>{ms=Math.max(0,ms);const t=Math.ceil(ms/1000),h=Math.floor(t/3600),m=Math.floor(t%3600/60),sec=t%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;};
 async function aucApi(action,extra={}){
@@ -1108,11 +1117,14 @@ function renderAuction(){
       <div class="auc-name">${esc(it?it.name:lot.itemName)}</div>
       <div class="auc-meta">${it?esc(trType(it.type))+(it.qty?', '+it.qty+' '+esc(tr('pcs')):''):''}</div>
       <div class="auc-price"><b id="aP">${num(p.price)}</b><span>${esc(tr('sum'))}</span></div>
+      <div class="auc-disc" id="aDisc"></div>
       <div class="bar auc-bar"><i id="aBar" style="width:${Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)}%"></i></div>
       <div class="auc-lim"><span>${esc(tr('aucStart',{x:num(lot.start)}))}</span><span>${esc(tr('aucMin',{x:num(lot.min)}))}</span></div>
-      <div class="auc-next"><span id="aNextL">${esc(tr('aucNext'))}</span><b id="aNext"></b></div>
+      <div class="auc-next" id="aMin" hidden><span>${ic('sparkle')}${esc(tr('aucLastChance'))}</span></div>
+      <div style="height:14px"></div>
       <button class="btn full" id="aBuy"></button>
       <button class="btn ghost full" id="aOffer">${esc(tr('aucOfferBtn'))}</button>
+      <button class="auc-alert" id="aAlert">${ic('bell')}<span>${esc(lot.alert?tr('aucAlertSet',{x:money(lot.alert)}):tr('aucAlertBtn'))}</span></button>
     </div>`;
   }else{
     if(d.recentSold){const r=d.recentSold;h+=`<div class="card2 auc-sold">${aucThumb(r.itemId)}<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">${esc((S.byId[r.itemId]||{}).name||r.itemName)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(r.sold.mine?tr('aucYouWon'):tr('aucSoldFor',{x:money(r.sold.price)}))} · ${esc(ago(r.sold.at))}</div></div></div>`;}
@@ -1126,12 +1138,12 @@ function renderAuction(){
       <div style="font-size:12.5px;color:var(--muted);margin-top:10px">${esc(tr('aucRemindNote'))}</div>
     </div>`;
   }
-  const stepN=lot?lot.stepMin:(d.next?d.next.stepMin:1);
-  h+=`<div class="sec-t">${esc(tr('aucHowT'))}</div><div class="card2"><div class="steps">${[tr('aucHow1',{n:stepN}),tr('aucHow2'),tr('aucHow3')].map((x,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(x)}</div></div>`).join('')}</div></div><div style="height:30px"></div></div>`;
+    h+=`<div class="sec-t">${esc(tr('aucHowT'))}</div><div class="card2"><div class="steps">${[tr('aucHow1'),tr('aucHow2'),tr('aucHow3')].map((x,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(x)}</div></div>`).join('')}</div></div><div style="height:30px"></div></div>`;
   el.innerHTML=h;
   const ph=el.querySelector('.auc-ph');if(ph)ph.onclick=()=>openProduct(ph.dataset.open);
   const bb=$('aBuy');if(bb)bb.onclick=()=>aucBuy(lot);
   const ob=$('aOffer');if(ob)ob.onclick=()=>aucOffer(lot);
+  const al=$('aAlert');if(al)al.onclick=()=>aucAlert(lot);
   const rb=$('aRemind');if(rb)rb.onclick=()=>aucRemind(d.next?d.next.id:'');
   aucTick();
 }
@@ -1142,10 +1154,12 @@ function aucTick(){
     const lot=d.current,p=aucPrice(lot,now);
     if(p.phase!==AUC.phase){AUC.phase=p.phase;loadAuction();return;}
     const P=$('aP');if(!P)return;
-    if(p.price!==AUC.lastPrice){AUC.lastPrice=p.price;P.textContent=num(p.price);P.classList.remove('drop');void P.offsetWidth;P.classList.add('drop');hap('sel');
+    if(p.price!==AUC.lastPrice){AUC.lastPrice=p.price;P.textContent=num(p.price);
       $('aBar').style.width=Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)+'%';}
     $('aEnd').textContent=p.endAt?tr('aucLeft',{t:mmss(p.endAt-now)}):'';
-    if(p.nextDropAt){$('aNextL').textContent=tr('aucNext');$('aNext').textContent=mmss(p.nextDropAt-now);}else{$('aNextL').textContent=tr('aucMinReached');$('aNext').textContent=num(lot.min);}
+    $('aMin').hidden=!p.atMin;
+    const it=S.byId[lot.itemId],cp=it?it.price_uzs:0,D=$('aDisc');
+    if(D){const pct=cp?Math.floor((1-p.price/cp)*100):0;D.innerHTML=pct>=1?`<b>−${pct}%</b><span>${esc(tr('aucCat'))} <s>${num(cp)}</s></span>`:'';}
     const bb=$('aBuy');
     if(p.phase==='held'&&lot.hold&&lot.hold.mine){bb.className='btn full';bb.textContent=tr('aucContinue',{t:mmss(lot.hold.until-now)});}
     else if(p.phase==='held'){bb.className='btn full wait';bb.innerHTML=ic('lock')+esc(tr('aucHeldOther',{t:mmss(lot.hold.until-now)}));}
@@ -1216,6 +1230,30 @@ function aucOffer(lot){
     hap('ok');closeSheet();toast(tr('aucOfferSent'),'send');
   };
 }
+function aucAlert(lot){
+  if(!tgUser){toast(tr('guestS'),'x');return;}
+  hap();try{tg.requestWriteAccess&&tg.isVersionAtLeast('6.9')&&tg.requestWriteAccess(()=>{});}catch(e){}
+  const it=S.byId[lot.itemId]||{name:lot.itemName};const cur=aucPrice(lot,nowS()).price;
+  const r10=x=>Math.round(x/10000)*10000;
+  const opts=[[tr('aucAlertMinus',{n:10}),r10(cur*0.9)],[tr('aucAlertMinus',{n:20}),r10(cur*0.8)],[tr('aucAlertMin'),lot.min]].filter(o=>o[1]>=lot.min&&o[1]<cur);
+  const body=`<div class="auc-prev" style="margin-top:0">${aucThumb(lot.itemId)}<div style="min-width:0"><div style="font-weight:600;font-size:15px">${esc(it.name)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(tr('aucNow'))}: ${money(cur)} · ${esc(tr('aucMin',{x:num(lot.min)}))}</div></div></div>
+   <div class="fld" style="margin-top:16px"><label>${esc(tr('aucAlertPrice'))}</label><input class="inp" id="alP" inputmode="numeric" value="${lot.alert?num(lot.alert):''}" placeholder="${num(r10(cur*0.9))}" style="font-size:20px;font-weight:700"><div class="err" id="alE" hidden></div>
+   <div class="chips2">${opts.map(o=>`<button data-v="${o[1]}">${esc(o[0])}</button>`).join('')}</div></div>
+   <div class="note">${ic('bell')}<span>${esc(tr('aucAlertNote'))}</span></div>`;
+  const sh=openSheet({title:tr('aucAlertT'),body,foot:`<button class="btn full" id="alGo">${esc(tr('aucAlertSave'))}</button>`});
+  const pi=sh.el.querySelector('#alP'),E=sh.el.querySelector('#alE');
+  pi.addEventListener('input',()=>{const d=pi.value.replace(/\D/g,'');pi.value=d?num(+d):'';E.hidden=true;});
+  sh.el.querySelectorAll('.chips2 button').forEach(b=>b.onclick=()=>{hap('sel');pi.value=num(+b.dataset.v);E.hidden=true;});
+  sh.el.querySelector('#alGo').onclick=async e=>{
+    const price=+pi.value.replace(/\D/g,'');const err=m=>{E.textContent=m;E.hidden=false;hap('err');};
+    if(!price)return err(tr('enterPrice'));
+    if(price<lot.min)return err(tr('aucAlertLow',{x:money(lot.min)}));
+    if(price>=aucPrice(lot,nowS()).price)return err(tr('aucAlertHigh'));
+    const btn=e.currentTarget;btn.disabled=true;const j=await aucApi('alert',{id:lot.id,price});btn.disabled=false;
+    if(!j.ok)return err(tr({below_min:'aucAlertLowS',above_now:'aucAlertHigh',ended:'aucEnded',sold:'aucEnded'}[j.error]||'aucErr',{x:money(lot.min)}));
+    hap('ok');closeSheet();toast(tr('aucAlertDone'),'bell');loadAuction();
+  };
+}
 function aucRemind(id){
   if(!tgUser){toast(tr('guestS'),'x');return;}
   hap();const key='mf_remind_'+(id||'next');
@@ -1234,17 +1272,19 @@ async function openAdmin(){
   const j=await aucApi('admin_list');if(!sh.el.isConnected)return;
   if(!j.ok){sh.bd.innerHTML='<div class="lbl" style="text-align:center;padding:30px 0">Нет доступа</div>';return;}
   const lots=(j.lots||[]).slice().reverse();
-  sh.bd.innerHTML=lots.length?lots.map(l=>{const [lab,col]=PH[l.phase]||[l.phase,'var(--muted)'];
+  const done=lots.filter(l=>['sold','ended','cancelled'].includes(l.phase)).length;
+  sh.bd.innerHTML=(done?`<div style="display:flex;justify-content:space-between;align-items:center;margin:0 2px 12px"><span class="lbl" style="margin:0">Завершённых лотов: ${done}</span><button class="link" id="adClear" style="color:var(--bad);font-size:13.5px">${ic('x','','style="width:15px;height:15px;vertical-align:-2px"')} Очистить историю</button></div>`:'')+(lots.length?lots.map(l=>{const [lab,col]=PH[l.phase]||[l.phase,'var(--muted)'];
     const offers=(l.offers||[]).slice().reverse();
     return `<div class="ad-lot"><div class="t">${esc(l.itemName)}<span class="ad-tag" style="color:${col}">${lab}</span></div>
-      <div class="m">Старт ${dt(l.startAt)} · ${l.durationMin} мин, снижение каждые ${l.stepMin} мин<br>${num(l.start)} → ${num(l.min)} сум · порог предложений ${num(l.floor||l.min)}${['live','held'].includes(l.phase)?`<br>Сейчас: <b>${num(l.price)} сум</b>`:''}
+      <div class="m">Старт ${dt(l.startAt)} · ${l.durationMin} мин<br>${num(l.start)} → ${num(l.min)} сум · порог предложений ${num(l.floor||l.min)}${['live','held'].includes(l.phase)?`<br>Сейчас: <b>${num(l.price)} сум</b>`:''}
       ${l.sold?`<br>Продан за <b>${num(l.sold.price)} сум</b> (${l.sold.via==='offer'?'по предложению':'кнопкой «Купить»'}) · ${esc(l.sold.name||'')} ${esc(l.sold.phone||'')} ${l.sold.username?'@'+esc(l.sold.username):''} · ${esc(l.sold.order||'')}`:''}</div>
       ${offers.map(o=>`<div class="ad-off"><div><b>${num(o.price)} сум</b><div class="m" style="margin:0">${esc(o.name||'')} ${o.username?'@'+esc(o.username):''} · ${esc(o.phone)}</div></div>${o.status==='new'&&l.status==='active'?`<div class="btns"><button class="yes" data-acc="${l.id}|${o.uid}">Принять</button><button data-dec="${l.id}|${o.uid}">Отклонить</button></div>`:`<span class="m" style="margin:0">${o.status==='accepted'?'принято':o.status==='declined'?'отклонено':'—'}</span>`}</div>`).join('')}
       ${l.status==='active'&&!['ended'].includes(l.phase)?`<button class="link" data-cancel="${l.id}" style="margin-top:10px;color:var(--bad);font-size:13.5px">Отменить лот</button>`:''}
-    </div>`;}).join(''):'<div class="lbl" style="text-align:center;padding:30px 0">Лотов пока нет. Создайте первый.</div>';
+    </div>`;}).join(''):'<div class="lbl" style="text-align:center;padding:30px 0">Лотов пока нет. Создайте первый.</div>');
   const act=async(payload,msg)=>{const r=await aucApi(payload.action,payload);if(r.ok){hap('ok');toast(msg);openAdmin();loadAuction();}else{hap('err');toast(r.error||'Ошибка','x');}};
   sh.bd.querySelectorAll('[data-acc]').forEach(b=>b.onclick=()=>{const [id,uid]=b.dataset.acc.split('|');askC('Принять предложение? Лот будет продан, клиенту придёт сообщение.',()=>act({action:'admin_offer',id,uid:+uid,decision:'accept'},'Предложение принято'));});
   sh.bd.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const [id,uid]=b.dataset.dec.split('|');act({action:'admin_offer',id,uid:+uid,decision:'decline'},'Предложение отклонено');});
+  const clr=sh.bd.querySelector('#adClear');if(clr)clr.onclick=()=>askC('Удалить из списка все проданные, отменённые и завершённые лоты? Заказы в группе останутся.',()=>act({action:'admin_clear'},'История очищена'));
   sh.bd.querySelectorAll('[data-cancel]').forEach(b=>b.onclick=()=>{askC('Отменить этот лот?',()=>act({action:'admin_cancel',id:b.dataset.cancel},'Лот отменён'));});
 }
 function openAdminCreate(){
@@ -1256,15 +1296,14 @@ function openAdminCreate(){
    <div class="ad-grid">${nf('adStart','Старт, сум')}${nf('adMin','Минимум, сум')}</div>
    ${nf('adFloor','Порог предложений, сум')}
    <div class="fld"><label>Время старта</label><input class="inp" id="adAt" type="datetime-local" value="${loc(d)}"></div>
-   <div class="ad-grid"><div class="fld"><label>Длительность</label><select class="inp" id="adDur">${[15,20,30,45,60,90,120].map(m=>`<option value="${m}"${m===30?' selected':''}>${m} мин</option>`).join('')}</select></div>
-   <div class="fld"><label>Снижение цены</label><select class="inp" id="adStep">${[1,2,3,5,10].map(m=>`<option value="${m}">каждые ${m} мин</option>`).join('')}</select></div></div>
+   <div class="fld"><label>Длительность</label><select class="inp" id="adDur">${[10,15,20,30,45,60,90,120].map(m=>`<option value="${m}"${m===30?' selected':''}>${m} мин</option>`).join('')}</select></div>
    <div class="note" id="adPrev">${ic('gavel')}<span>Выберите набор и цены</span></div><div class="err" id="adErr" hidden style="margin-top:10px"></div>`;
   const sh=openSheet({title:'Новый лот',body,foot:`<button class="btn full" id="adGo">Запланировать лот</button>`});
   const $$=id=>sh.el.querySelector('#'+id);const val=id=>+($$(id).value||'').replace(/\D/g,'');
   ['adStart','adMin','adFloor'].forEach(id=>$$(id).addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v?num(+v):'';prev();}));
-  ['adDur','adStep','adAt'].forEach(id=>$$(id).addEventListener('change',prev));
-  function prev(){const st=val('adStart'),mn=val('adMin'),du=+$$('adDur').value,sp=+$$('adStep').value;const n=Math.max(2,Math.floor(du/sp));
-    $$('adPrev').querySelector('span').textContent=st>mn&&mn>0?`Цена снижается примерно на ${num(Math.round((st-mn)/(n-1)/10000)*10000)} сум каждые ${sp} мин и дойдёт до минимума за ${sp*(n-1)} мин.`:'Старт должен быть больше минимума';}
+  ['adDur','adAt'].forEach(id=>$$(id).addEventListener('change',prev));
+  function prev(){const st=val('adStart'),mn=val('adMin'),du=+$$('adDur').value;const dec=du*0.9;
+    $$('adPrev').querySelector('span').textContent=st>mn&&mn>0?`Цена снижается каждую секунду, примерно на ${num(Math.max(100,Math.round((st-mn)/(dec*60)/100)*100))} сум в секунду (${num(Math.round((st-mn)/dec/1000)*1000)} сум в минуту). Минимум — через ${Math.round(dec)} мин, последние ${Math.round(du-dec)} мин лот стоит по минимальной цене.`:'Старт должен быть больше минимума';}
   $$('adQ').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();const r=$$('adRes');
     if(q.length<2){r.hidden=true;return;}
     const list=S.items.filter(i=>i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)).slice(0,12);
@@ -1276,7 +1315,7 @@ function openAdminCreate(){
     const E=$$('adErr');E.hidden=true;
     if(!pick){E.textContent='Выберите набор';E.hidden=false;return;}
     const at=new Date($$('adAt').value).getTime();
-    const lot={itemId:pick.id,itemName:pick.name,start:val('adStart'),min:val('adMin'),floor:val('adFloor'),startAt:at,durationMin:+$$('adDur').value,stepMin:+$$('adStep').value};
+    const lot={itemId:pick.id,itemName:pick.name,photo:pick.photo||'',catalogPrice:pick.price_uzs,start:val('adStart'),min:val('adMin'),floor:val('adFloor'),startAt:at,durationMin:+$$('adDur').value,stepMin:1};
     const btn=e.currentTarget;btn.disabled=true;const r=await aucApi('admin_create',{lot});btn.disabled=false;
     if(!r.ok){E.textContent=r.error||'Ошибка';E.hidden=false;hap('err');return;}
     hap('ok');toast('Лот запланирован','gavel');loadAuction();openAdmin();
@@ -1340,7 +1379,7 @@ function welcome(){
     await sync;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     applyTheme();refreshLang();if(S.tab==='profile')renderProfile();Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
-    if(location.hash==='#auction')go('auction');
+    if(location.hash==='#auction'||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param==='auction'))go('auction');
     setTimeout(welcome,500);
   }).catch(()=>{$('grid').innerHTML='';$('catEmpty').innerHTML=`<div class="empty"><div class="ic">${ic('x')}</div><h3>Нет соединения</h3><p>Проверьте интернет и откройте каталог ещё раз.</p></div>`;});
 })();

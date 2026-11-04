@@ -1,7 +1,8 @@
-// Голландский аукцион: цена снижается ступенями от старта до минимума.
+// Голландский аукцион: цена плавно снижается каждую секунду от старта до минимума.
 // Эта же формула продублирована в public/index.html — меняйте обе вместе.
-export const HOLD_MS = 2 * 60 * 1000; // сколько минут цена закреплена за покупателем, пока он заполняет форму
-const ROUND = 10000;
+export const HOLD_MS = 2 * 60 * 1000; // сколько цена закреплена за покупателем, пока он заполняет форму
+export const DECLINE_SHARE = 0.9;     // цена падает 90% времени лота, последние 10% — по минимальной цене
+const ROUND = 100;                    // шаг округления цены, сум
 
 // Учитывает истёкшую бронь: время брони не съедает время аукциона.
 export function norm(lot, now) {
@@ -14,9 +15,8 @@ export function norm(lot, now) {
 }
 
 export function priceAt(lot, now) {
-  const stepMs = lot.stepMin * 60000;
   const durMs = lot.durationMin * 60000;
-  const n = Math.max(2, Math.floor(durMs / stepMs));
+  const declineMs = durMs * DECLINE_SHARE;
   const holdActive = !!(lot.hold && lot.hold.until > now);
   const effNow = holdActive ? lot.hold.since : now;
   const elapsed = effNow - lot.startAt - (lot.paused || 0);
@@ -24,14 +24,8 @@ export function priceAt(lot, now) {
   if (lot.status === 'cancelled') return { phase: 'cancelled', price: lot.min };
   if (elapsed < 0) return { phase: 'scheduled', price: lot.start, startsAt: lot.startAt + (lot.paused || 0) };
   if (elapsed >= durMs && !holdActive) return { phase: 'ended', price: lot.min };
-  const steps = Math.min(n - 1, Math.floor(elapsed / stepMs));
-  const raw = lot.start - ((lot.start - lot.min) * steps) / (n - 1);
-  const price = steps === 0 ? lot.start : steps >= n - 1 ? lot.min : Math.max(lot.min, Math.round(raw / ROUND) * ROUND);
-  const base = lot.startAt + (lot.paused || 0);
-  return {
-    phase: holdActive ? 'held' : 'live',
-    price,
-    nextDropAt: steps < n - 1 ? base + (steps + 1) * stepMs : null,
-    endAt: base + durMs,
-  };
+  const sec = Math.floor(elapsed / 1000) * 1000; // цена меняется ровно раз в секунду
+  const frac = Math.min(1, sec / declineMs);
+  const price = frac >= 1 ? lot.min : Math.max(lot.min, Math.round((lot.start - (lot.start - lot.min) * frac) / ROUND) * ROUND);
+  return { phase: holdActive ? 'held' : 'live', price, atMin: frac >= 1, endAt: lot.startAt + (lot.paused || 0) + durMs };
 }
