@@ -70,9 +70,18 @@ export async function tgCall(method, payload) {
   }
 }
 
-// Ответ в канале под постом лота: «Продан за …»
-export async function channelSold(lot, price) {
-  const ch = process.env.CHANNEL_ID;
-  if (!ch || !lot.channelMsg) return;
-  await tgCall('sendMessage', { chat_id: ch, text: `✅ Лот «${lot.itemName}» продан за ${sum(price)}. Следите за новыми лотами!`, reply_to_message_id: lot.channelMsg });
+// Любой метод Bot API с ответом Telegram целиком: { ok, result, description }.
+export async function tgApi(method, payload) {
+  const token = process.env.BOT_TOKEN;
+  if (!token) return { ok: false, description: 'no token' };
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return await r.json().catch(() => ({ ok: false, description: 'bad json' }));
+  } catch (e) {
+    return { ok: false, description: String(e) };
+  }
 }

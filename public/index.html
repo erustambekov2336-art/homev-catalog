@@ -478,6 +478,223 @@ html.lite .toast{background:var(--ink)}
 html.lite .ambient i{animation:none;filter:blur(40px)}
 html.lite .lg::after{display:none}
 </style>
+
+<style id="figma-polish">
+/* ===== Figma polish: единая сетка 4/8, радиусы, типографика, чистые поверхности ===== */
+:root{--r-xl:24px;--r-lg:20px;--r-md:14px;--gx:16px}
+html[data-theme="light"]{--bg:#F7F3EC;--surface2:#F0EADF;--hair:rgba(34,31,27,.07);--line:rgba(34,31,27,.06);
+  --shadow-1:0 1px 2px rgba(60,45,25,.04),0 2px 8px rgba(60,45,25,.04);--shadow-2:0 4px 16px rgba(60,45,25,.08),0 1px 3px rgba(60,45,25,.05);
+  --amb1:rgba(201,163,94,.18);--amb2:rgba(140,160,200,.10);--amb3:rgba(232,190,150,.16)}
+html[data-theme="dark"]{--line:rgba(237,240,247,.07);--shadow-1:0 1px 2px rgba(0,0,0,.25);--shadow-2:0 6px 20px rgba(0,0,0,.35);
+  --amb1:rgba(70,110,200,.22);--amb2:rgba(201,163,94,.08);--amb3:rgba(40,70,150,.2)}
+body{font-feature-settings:"cv11","ss01";text-rendering:optimizeLegibility}
+.top{padding:calc(var(--safe-top) + 12px) var(--gx) 8px}
+.title{font-size:28px;letter-spacing:-.6px;line-height:1.15}
+.title .sub{font-size:13px;margin-top:4px;letter-spacing:-.05px}
+.rbtn,.rbtn.lg{width:40px;height:40px;background:var(--surface);box-shadow:var(--shadow-1),inset 0 0 0 1px var(--line);-webkit-backdrop-filter:none;backdrop-filter:none}
+.rbtn.lg::before,.rbtn.lg::after{display:none}
+.search{margin-top:16px}
+.search input{height:44px;border-radius:12px;font-size:15px;background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-1)}
+.search input:focus{box-shadow:inset 0 0 0 1.5px var(--accent),0 0 0 4px var(--accent-soft)}
+.search svg{left:14px}
+.hero{margin:12px var(--gx) 0;padding:16px;border-radius:20px;gap:14px;background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-1)}
+.hero::after{right:-60px;top:-70px;width:200px;height:200px;opacity:.8}
+.hero-ic{width:48px;height:48px;border-radius:14px;background:var(--accent-soft);box-shadow:none}
+.hero-ic svg{width:24px;height:24px}
+.hero-k{font-size:12px;letter-spacing:.1px}
+.hero-t{font-size:17px;margin:2px 0 10px;letter-spacing:-.3px}
+.bar{height:4px;background:var(--surface2)}
+.hero-s{font-size:12px;margin-top:8px;color:var(--muted)}
+.feed-h{margin:12px var(--gx) 8px;font-size:12px;letter-spacing:.2px;text-transform:uppercase;font-weight:600}
+.feed-row{padding:0 var(--gx) 4px;scroll-padding-inline:var(--gx)}
+.fd{border-radius:16px;padding:6px 14px 6px 6px;background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 1px var(--line)}
+.fd-ph{width:44px;height:44px;border-radius:12px}
+.chips{padding:16px var(--gx) 4px;scroll-padding-inline:var(--gx)}
+.chip{height:36px;padding:0 14px;font-size:14px;gap:6px;letter-spacing:-.1px}
+.chip:not(.on){background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 1px var(--line)}
+.chip.icon{width:36px}
+.meta-row{padding:12px calc(var(--gx) + 4px) 0;font-size:12.5px}
+.grid{gap:12px;padding:12px var(--gx) 0}
+.card,.group,.card2{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-1)}
+.card{border-radius:20px;padding:6px 6px 12px}
+.card .tile,.tile{border-radius:14px}
+.card .c-name{font-size:14.5px;margin:12px 6px 0;line-height:1.3;letter-spacing:-.2px}
+.c-meta,.card .c-meta{font-size:12px;margin:4px 6px 0}
+.c-foot{gap:10px;padding-top:12px}
+.c-price{margin:0 6px;font-size:16px;letter-spacing:-.3px}
+.c-price span{font-size:12px;font-weight:500;color:var(--muted)}
+.cbtn{height:40px;margin:0;width:calc(100% - 0px);font-size:14px;box-shadow:none}
+.cbtn::after{display:none}
+.cstep{height:40px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent)}
+.cstep button{height:40px;width:44px}
+.fav{width:32px;height:32px;top:8px;right:8px;background:rgba(255,255,255,.9);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.fav svg{width:16px;height:16px}
+.skel{border-radius:20px;padding:6px;box-shadow:inset 0 0 0 1px var(--line)}
+.skel .t{border-radius:14px}
+.pad{padding:8px var(--gx) 0}
+.sec-t{font-size:20px;margin:24px 4px 12px;letter-spacing:-.4px}
+.group,.card2{border-radius:20px}
+.card2{padding:16px}
+.row{padding:12px 14px}
+.row+.row::before,.mrow+.mrow::before{background:var(--line)}
+.thumb{width:64px;height:64px;border-radius:12px}
+.row .n{font-size:15px}
+.mrow{padding:12px 14px;gap:12px}
+.mrow .mi{width:32px;height:32px;border-radius:10px;background:var(--accent-soft)}
+.mrow .mi svg{width:18px;height:18px}
+.mrow .mt{font-size:15px}
+.btn{height:52px;font-size:16px;letter-spacing:-.2px;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 22%,transparent)}
+.btn:not(.ghost)::after{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 60%);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.btn.sm{height:40px;font-size:14px}
+.dock{padding:0 var(--gx)}
+.inp{border-radius:12px;min-height:48px;font-size:15px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--hair)}
+.inp:focus{box-shadow:inset 0 0 0 1.5px var(--accent),0 0 0 4px var(--accent-soft)}
+.fld label{font-size:12.5px;margin:0 2px 6px}
+.nav{padding:4px;box-shadow:0 8px 24px rgba(60,45,25,.12),0 1px 2px rgba(60,45,25,.06),inset 0 0 0 1px var(--line)}
+html[data-theme="dark"] .nav{box-shadow:0 10px 30px rgba(0,0,0,.45),inset 0 0 0 1px var(--line)}
+.nav.lg::before{display:none}
+.nav .ind{top:4px;left:4px;height:calc(100% - 8px);background:var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.08),inset 0 0 0 1px var(--line)}
+.nav button{height:50px;min-width:66px;font-size:10.5px;letter-spacing:.1px;gap:4px}
+.nav button svg{width:22px;height:22px}
+.sheet{border-radius:28px 28px 0 0;background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 -8px 40px rgba(0,0,0,.14)}
+.sheet .ft{background:linear-gradient(to top,var(--surface) 75%,transparent)}
+.sheet .bd{padding:8px var(--gx) 20px}
+.sheet .ft{padding:12px var(--gx) calc(14px + var(--safe-bot))}
+.sheet .close{background:var(--surface2);box-shadow:none}
+.sheet .hd h2{font-size:17px}
+.p-photo{border-radius:20px}
+.p-name{font-size:24px;margin-top:20px;letter-spacing:-.5px}
+.p-sub{font-size:14px;margin-top:6px}
+.specs{gap:8px;margin-top:20px}
+.spec{border-radius:14px;padding:12px}
+.spec .k{font-size:11.5px}
+.p-price b{font-size:26px}
+.opt{height:52px;border-radius:14px;font-size:15px}
+.seg{border-radius:12px}
+.seg button{border-radius:9px;height:36px}
+.auc{border-radius:24px;padding:16px;box-shadow:inset 0 0 0 1px var(--line),var(--shadow-1)}
+.auc-ph{border-radius:16px}
+.auc-next,.auc-prev,.ad-lot{border-radius:14px}
+.empty .ic{width:72px;height:72px;border-radius:20px;background:var(--accent-soft)}
+.toast{border-radius:14px}
+.ambient i{filter:blur(80px)}
+
+/* nav: читаемость в тёмной теме поверх белых фото */
+html[data-theme="dark"] .nav{background:rgba(17,23,36,.82);-webkit-backdrop-filter:blur(20px) saturate(140%);backdrop-filter:blur(20px) saturate(140%)}
+html[data-theme="dark"] .nav .ind{background:rgba(255,255,255,.10);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+html[data-theme="dark"] .nav button{color:#A3ACBF}
+html[data-theme="dark"] .nav button.on{color:var(--accent)}
+html[data-theme="light"] .nav{background:rgba(255,253,249,.80);-webkit-backdrop-filter:blur(20px) saturate(160%);backdrop-filter:blur(20px) saturate(160%)}
+html.lite[data-theme="dark"] .nav{background:rgba(17,23,36,.94)}
+
+/* ===== Плавные анимации (только transform/opacity — нагрузка на GPU, не на процессор) ===== */
+:root{--ease:cubic-bezier(.2,.8,.2,1);--ease-out:cubic-bezier(.16,1,.3,1);--spring:cubic-bezier(.34,1.3,.64,1)}
+.press{transition:transform .45s var(--spring),background .3s var(--ease),opacity .3s var(--ease)}
+.press:active{transform:scale(.96);transition-duration:.12s}
+.chip{transition:background .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease),transform .45s var(--spring)}
+.chip:active{transform:scale(.95);transition-duration:.12s}
+.btn{transition:transform .45s var(--spring),background .25s var(--ease),box-shadow .3s var(--ease)}
+.btn:active{transform:scale(.97);transition-duration:.12s}
+@keyframes rise{from{opacity:0;transform:translate3d(0,10px,0) scale(.985)}to{opacity:1;transform:none}}
+.card.enter,.fd.new{animation:rise .7s var(--ease-out) both}
+@keyframes fade{from{opacity:0;transform:translate3d(0,6px,0)}to{opacity:1;transform:none}}
+.view.on{animation:fade .45s var(--ease-out)}
+.tile img{transition:opacity .6s var(--ease-out),transform .7s var(--ease-out)}
+.tile img:not(.ok){transform:scale(.97)}
+.tile:active img{transform:scale(.97)}
+.fav{transition:transform .45s var(--spring),color .25s var(--ease)}
+@keyframes pop{0%{transform:scale(.8)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
+.nav .ind{transition:transform .6s var(--spring),width .6s var(--spring);will-change:transform,width}
+.nav button{transition:color .35s var(--ease)}
+.nav button svg{transition:transform .45s var(--spring)}
+.nav button.on svg{transform:translateY(-1px) scale(1.04)}
+.nav button:active svg{transform:scale(.9);transition-duration:.12s}
+.sheet{transition:transform .55s var(--ease-out);will-change:transform}
+.scrim{transition:opacity .4s var(--ease)}
+.toast{transition:transform .55s var(--spring)}
+.toggle,.toggle::after{transition:background .3s var(--ease),transform .45s var(--spring)}
+.opt,.seg button{transition:background .3s var(--ease),box-shadow .3s var(--ease),color .3s var(--ease)}
+.cstep span,.step span,.nav .bdg{transition:transform .35s var(--spring)}
+.bar i{transition:width 1s var(--ease-out)}
+.more button{transition:transform .45s var(--spring),opacity .3s var(--ease)}
+.ambient i{animation-duration:30s;will-change:transform}
+html.lite .ambient i{will-change:auto}
+html.lite .card.enter{animation-duration:.45s}
+</style>
+<style id="auction-v2">
+/* ===== Аукцион v2: тёмная карточка лота, бегущая цена, «Сейчас / Скоро», последние продажи ===== */
+.ax-seg{display:flex;padding:4px;border-radius:999px;background:var(--surface2);box-shadow:inset 0 0 0 1px var(--line);margin:4px 0 14px}
+.ax-seg button{flex:1;height:38px;border-radius:999px;font-size:15px;font-weight:600;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:7px;transition:background .25s,color .25s}
+.ax-seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-1)}
+.ax-seg b{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.ax-dot{width:7px;height:7px;border-radius:50%;background:#E5373A;animation:live 1.6s infinite}
+.ax{position:relative;isolation:isolate;overflow:hidden;border-radius:30px;padding:16px 16px 18px;color:#F2F4F8;
+  background:radial-gradient(120% 60% at 50% 0%,#1F3563 0%,#141C2D 52%,#0D1119 100%);
+  box-shadow:0 22px 44px -18px rgba(31,90,200,.55),inset 0 0 0 1px rgba(255,255,255,.07)}
+.ax::before{content:'';position:absolute;inset:auto -20% -40% -20%;height:60%;background:radial-gradient(closest-side,rgba(47,134,255,.22),transparent);z-index:-1}
+.ax-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ax-live{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 13px;border-radius:999px;background:#E5373A;color:#fff;font-weight:800;font-size:13px;letter-spacing:1.4px;box-shadow:0 4px 14px -4px rgba(229,55,58,.7)}
+.ax-live i{width:8px;height:8px;border-radius:50%;background:#fff;animation:live 1.6s infinite}
+.ax-r{display:flex;align-items:center;gap:12px}
+.ax-eye{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:rgba(242,244,248,.72);font-variant-numeric:tabular-nums}
+.ax-eye[hidden]{display:none}
+.ax-eye svg{width:20px;height:20px;stroke-width:2}
+.ax-sh{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;color:#fff}
+.ax-sh svg{width:19px;height:19px;stroke-width:2}
+.ax-ph{position:relative;width:64%;max-width:250px;aspect-ratio:1;margin:8px auto 0;border-radius:32px;background:#F4EEE4;overflow:hidden;cursor:pointer;box-shadow:0 14px 34px -10px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.4)}
+.ax-ph.sm{width:44%;max-width:170px;border-radius:26px;margin-top:4px}
+.ax-ph img{position:absolute;inset:7%;width:86%;height:86%;object-fit:contain;mix-blend-mode:multiply}
+.ax-name{text-align:center;font-size:22px;font-weight:700;letter-spacing:-.4px;line-height:1.2;margin-top:16px}
+.ax-meta{text-align:center;font-size:14px;color:rgba(242,244,248,.58);margin-top:4px}
+.ax-chips{display:flex;justify-content:center;gap:6px;flex-wrap:nowrap;margin-top:12px;min-height:32px}
+.ax-chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 11px;white-space:nowrap;border-radius:999px;background:rgba(255,255,255,.08);font-size:13.5px;font-weight:600;color:rgba(242,244,248,.85)}
+.ax-chip svg{width:15px;height:15px;color:#C9A35E}
+.ax-chip s{color:#fff;text-decoration-thickness:1px;text-decoration-color:rgba(255,255,255,.55)}
+.ax-chip.ok{background:rgba(111,192,138,.16);color:#93E2AC}
+.ax-price{display:flex;justify-content:center;align-items:baseline;gap:8px;margin-top:12px}
+.ax-price b{font-size:46px;font-weight:800;letter-spacing:-1.8px;line-height:1;font-variant-numeric:tabular-nums}
+.ax-price span{font-size:18px;font-weight:700;color:#C9A35E}
+.ax-sub{text-align:center;font-size:14.5px;color:rgba(242,244,248,.58);margin-top:6px;line-height:1.4}
+.ax-sub[hidden]{display:none}
+.ax-bar{position:relative;height:14px;border-radius:999px;background:rgba(255,255,255,.09);margin-top:18px}
+.ax-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:linear-gradient(90deg,#1F6FEA,#4E9BFF);transition:width 1s linear}
+.ax-bar i::after{content:'';position:absolute;right:-6px;top:50%;width:16px;height:24px;transform:translateY(-50%);border-radius:50%;background:radial-gradient(circle at 50% 62%,#FFF1C9 0%,#F6A33A 42%,rgba(246,120,40,0) 72%);animation:flame 1.1s ease-in-out infinite}
+@keyframes flame{50%{transform:translateY(-50%) scale(1.18)}}
+.ax-lim{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;margin-top:10px;font-size:13.5px;color:rgba(242,244,248,.55)}
+.ax-lim b{display:block;margin-top:3px;font-size:19px;color:#fff;font-variant-numeric:tabular-nums}
+.ax-lim div:last-child{text-align:right}
+.ax-lim .c{font-size:12.5px;font-variant-numeric:tabular-nums;padding-bottom:3px}
+.ax-min{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;color:#E9C88A;font-size:14px;font-weight:600}
+.ax-min[hidden]{display:none}
+.ax-min svg{width:16px;height:16px}
+.ax-buy{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:58px;margin-top:18px;border-radius:999px;color:#fff;font-size:19px;font-weight:700;letter-spacing:-.2px;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#3A8DFF,#1F6FEA);box-shadow:0 12px 28px -10px rgba(47,134,255,.85),inset 0 1px 0 rgba(255,255,255,.28)}
+.ax-buy svg{width:19px;height:19px}
+.ax-buy.wait{background:rgba(255,255,255,.1);box-shadow:none;color:rgba(242,244,248,.85);font-size:15.5px;font-weight:600}
+.ax-buy:disabled{opacity:.7}
+.ax-sec{display:flex;gap:8px;margin-top:10px}
+.ax-sec button{flex:1;min-width:0;height:44px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.08);color:#F2F4F8;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;overflow:hidden}
+.ax-sec button span{overflow:hidden;text-overflow:ellipsis}
+.ax-sec svg{width:16px;height:16px;flex:none;color:#C9A35E}
+.ax-wait{text-align:center;padding:22px 18px 20px}
+.ax-ic{width:64px;height:64px;margin:6px auto 0;border-radius:20px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#C9A35E}
+.ax-ic svg{width:30px;height:30px}
+.ax-count{font-size:48px;font-weight:800;letter-spacing:-1.6px;font-variant-numeric:tabular-nums;line-height:1.1;margin-top:4px}
+.ax-h{margin:26px 6px 10px;font-size:13px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--muted)}
+.ax-list{padding:4px 14px}
+.ax-row{display:flex;align-items:center;gap:12px;padding:10px 0;cursor:pointer}
+.ax-row+.ax-row{border-top:1px solid var(--line)}
+.ax-row .thumb{width:54px;height:54px;flex:none}
+.ax-rt{min-width:0;flex:1}
+.ax-rt .t{font-weight:600;font-size:15.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ax-rt .m{font-size:13px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+.ax-row .p{font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ax-row .p span{font-size:12px;font-weight:600;color:var(--muted);margin-left:4px}
+.ax-bell{width:42px;height:42px;flex:none;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.ax-bell.on{background:var(--ok-soft);color:var(--ok)}
+.ax-bell svg{width:19px;height:19px}
+html.lite .ax::before{display:none}
+</style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -501,6 +718,7 @@ html.lite .lg::after{display:none}
     <div class="meta-row" id="metaRow"></div>
     <div class="grid" id="grid"></div>
     <div id="catEmpty"></div>
+    <div class="more" id="moreWrap" hidden><button class="press" id="moreBtn"></button></div>
     <div class="sentinel" id="sentinel"></div>
   </section>
   <section class="view" id="v-auction"></section>
@@ -519,7 +737,7 @@ const BASE='uploads/homev-catalog-redesign/';
 const ORDER_URL='/api/order';
 const MANAGER='irustambekov';
 const CERT_AMOUNT=500000, CERT_MIN=3000000;
-const PAGE=16;
+const PAGE=24;
 const CAT_ICONS={"all": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"3\" y=\"3\" width=\"7.5\" height=\"7.5\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"></rect><rect x=\"13.5\" y=\"3\" width=\"7.5\" height=\"7.5\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"></rect><rect x=\"3\" y=\"13.5\" width=\"7.5\" height=\"7.5\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"></rect><rect x=\"13.5\" y=\"13.5\" width=\"7.5\" height=\"7.5\" rx=\"1.5\" stroke=\"currentColor\" stroke-width=\"1.3\"></rect></svg>", "bowl": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 11h18c0 4.4-4 7.5-9 7.5S3 15.4 3 11z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path><ellipse cx=\"12\" cy=\"10.7\" rx=\"9\" ry=\"1.6\" stroke=\"currentColor\" stroke-width=\"1.2\" opacity=\"0.55\"></ellipse></svg>", "coffee-set": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4 9h13v3.5c0 2.8-2.9 5-6.5 5S4 15.3 4 12.5V9z\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linejoin=\"round\"></path><path d=\"M17 10.3c1.7 0 2.8 1 2.8 2.3S18.7 15 17 15\" stroke=\"currentColor\" stroke-width=\"1.2\"></path><path d=\"M8 6.2c0-1 .5-1.6 1-2.2M11 6.2c0-1 .5-1.6 1-2.2\" stroke=\"currentColor\" stroke-width=\"1.1\" stroke-linecap=\"round\"></path></svg>", "dining-set": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"9.5\" cy=\"13\" r=\"7\" stroke=\"currentColor\" stroke-width=\"1.3\"></circle><circle cx=\"9.5\" cy=\"13\" r=\"4\" stroke=\"currentColor\" stroke-width=\"1.1\" opacity=\"0.5\"></circle><path d=\"M18 4v6M20.3 4v4.5c0 1-.6 1.6-1.1 1.9V20M16.5 8.5c0 1 .6 1.6 1.5 1.9\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linecap=\"round\"></path></svg>", "gravyboat": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 10c0 4.5 3.8 8 9 8s9-3 8.5-6.3c-3 1-11.5 1.3-17.5-1.7z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path><path d=\"M4 15.5c-1 .3-2 1-2 2\" stroke=\"currentColor\" stroke-width=\"1.2\"></path></svg>", "mug": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M5 8h11v7c0 2.8-2.5 5-5.5 5S5 17.8 5 15V8z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path><path d=\"M16 10c2.2 0 3.5 1.2 3.5 3s-1.3 2.8-3.5 2.8\" stroke=\"currentColor\" stroke-width=\"1.3\"></path></svg>", "plate": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"12\" cy=\"12\" r=\"9.5\" stroke=\"currentColor\" stroke-width=\"1.4\"></circle><circle cx=\"12\" cy=\"12\" r=\"5.5\" stroke=\"currentColor\" stroke-width=\"1.2\" opacity=\"0.55\"></circle></svg>", "pot": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4 9h16v4c0 3-3.2 5.5-8 5.5S4 16 4 13V9z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path><path d=\"M2 9.5h20\" stroke=\"currentColor\" stroke-width=\"1.4\"></path><path d=\"M2 8c0-.8.6-1.3 1.4-1.3S4.8 7.2 4.8 8\" stroke=\"currentColor\" stroke-width=\"1.2\"></path><path d=\"M19.2 8c0-.8.6-1.3 1.4-1.3S22 7.2 22 8\" stroke=\"currentColor\" stroke-width=\"1.2\"></path></svg>", "shaker": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5c0-1.3.7-2 2-2h1c1.3 0 2 .7 2 2v1.5H8V5z\" stroke=\"currentColor\" stroke-width=\"1.3\"></path><path d=\"M7.3 6.5h8.4l.8 12.5c.1 1.7-1.2 3-2.9 3H9.4c-1.7 0-3-1.3-2.9-3l.8-12.5z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path><circle cx=\"9.5\" cy=\"9.5\" r=\".7\" fill=\"currentColor\"></circle><circle cx=\"12\" cy=\"9\" r=\".7\" fill=\"currentColor\"></circle><circle cx=\"14.3\" cy=\"9.7\" r=\".7\" fill=\"currentColor\"></circle></svg>", "sugarbowl": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"12\" cy=\"8\" rx=\"6.5\" ry=\"1.6\" stroke=\"currentColor\" stroke-width=\"1.3\"></ellipse><path d=\"M5.5 8c0 4 1.5 7.5 6.5 7.5s6.5-3.5 6.5-7.5\" stroke=\"currentColor\" stroke-width=\"1.4\"></path><circle cx=\"12\" cy=\"5.3\" r=\"1\" fill=\"currentColor\"></circle></svg>", "tea-set": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M2 9c0-2.3 2.3-4 5.5-4s5.5 1.7 5.5 4-2.3 4.5-5.5 4.5S2 11.3 2 9z\" stroke=\"currentColor\" stroke-width=\"1.3\"></path><path d=\"M12.3 7.7c1.6-.3 2.5.4 2.5 1.5s-1 1.9-2.5 1.7\" stroke=\"currentColor\" stroke-width=\"1.1\"></path><path d=\"M17 13h5v2.3c0 1.9-1.6 3.5-3.5 3.7v1.5h2.3M17 13v3.5c0 1.5.9 2.2 2 2.5\" stroke=\"currentColor\" stroke-width=\"1.2\" stroke-linecap=\"round\"></path></svg>", "teacup": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"11\" cy=\"18.5\" rx=\"9\" ry=\"1.8\" stroke=\"currentColor\" stroke-width=\"1.1\" opacity=\"0.5\"></ellipse><path d=\"M5 9h10v4c0 2.5-2.2 4.5-5 4.5S5 15.5 5 13V9z\" stroke=\"currentColor\" stroke-width=\"1.4\"></path><path d=\"M15 10.3c1.7 0 2.8 1 2.8 2.3S16.7 15 15 15\" stroke=\"currentColor\" stroke-width=\"1.2\"></path></svg>", "teapot": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4 12c0-3 3-5 8-5s8 2 8 5-3 6-8 6-8-3-8-6z\" stroke=\"currentColor\" stroke-width=\"1.4\"></path><path d=\"M20 10c2-.5 3 .5 3 2s-1.5 2.5-3 2\" stroke=\"currentColor\" stroke-width=\"1.3\"></path><path d=\"M2 11.5c-1 0-1.7.6-1.7 1.4\" stroke=\"currentColor\" stroke-width=\"1.1\" opacity=\"0\"></path><path d=\"M12 7V4.5\" stroke=\"currentColor\" stroke-width=\"1.3\"></path><circle cx=\"12\" cy=\"3.6\" r=\"1\" fill=\"currentColor\"></circle></svg>", "utensil": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M6 2v8c0 1.3 1 2.3 2 2.3s2-1 2-2.3V2M8 12.3V22\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"></path><path d=\"M17 2c-1.7 0-3 2-3 5s1.3 5 3 5V22\" stroke=\"currentColor\" stroke-width=\"1.3\" stroke-linecap=\"round\"></path></svg>", "vase": "<svg class=\"ci\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M9.5 3h5l-.7 4.5c2 1.5 3.2 4 3.2 6.8 0 3.7-2.2 6.2-5 6.2s-5-2.5-5-6.2c0-2.8 1.2-5.3 3.2-6.8L9.5 3z\" stroke=\"currentColor\" stroke-width=\"1.4\" stroke-linejoin=\"round\"></path></svg>"};
 const TYPE_ICON={'Обеденный набор':'dining-set','Пиала/Салатник':'bowl','Чайный набор':'tea-set','Тарелка':'plate','Солонка/Перечница':'shaker','Тарелка плоская':'plate','Кофейный набор':'coffee-set','Чайник заварочный':'teapot','Кружка':'mug','Соусник':'gravyboat','Тарелка обеденная':'plate','Чайная чашка':'teacup','Кастрюля/Жаровня':'pot','Сахарница':'sugarbowl','Кофейник':'teapot','Ваза':'vase','Тарелка глубокая':'bowl','Кухонная утварь':'utensil','Набор для специй':'shaker'};
 const TYPE_UZ={'Обеденный набор':'Ovqatlanish to‘plami','Пиала/Салатник':'Piyola va salatnik','Чайный набор':'Choy to‘plami','Тарелка':'Tarelka','Солонка/Перечница':'Tuzdon va qalampirdon','Тарелка плоская':'Yassi tarelka','Кофейный набор':'Qahva to‘plami','Чайник заварочный':'Damlash choynagi','Кружка':'Krujka','Соусник':'Sousdon','Тарелка обеденная':'Ovqat tarelkasi','Чайная чашка':'Choy finjoni','Кастрюля/Жаровня':'Qozon va tova','Сахарница':'Qanddon','Кофейник':'Qahvadon','Ваза':'Vaza','Тарелка глубокая':'Chuqur tarelka','Кухонная утварь':'Oshxona anjomlari','Набор для специй':'Ziravorlar to‘plami'};
@@ -548,7 +766,7 @@ const T={
   whole:'Оптом для магазинов',wholeS:'Условия и цены для магазинов в регионах',pdfRu:'Предложение на русском',pdfUz:'Предложение на узбекском',soon:'Файлы с условиями скоро появятся. Пока напишите менеджеру — пришлём всё в чат.',
   manager:'Написать менеджеру',welT:'Подарок новому покупателю',welS:'Сертификат на 500 000 сум к заказу от 3 000 000 сум. Он уже в профиле и применится в корзине сам.',welB:'Забрать подарок',later:'Позже',
   heroK:'Ваш подарок',heroT:'500 000 сум к заказу',heroNeed:'Осталось добавить {x}',heroReady:'Сумма набрана — применится в корзине',heroStart:'Действует на заказ от 3 000 000 сум',
-  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад',auction:'Аукцион',aucLive:'Идёт сейчас',aucLeft:'Осталось {t}',aucStart:'старт {x}',aucMin:'минимум {x}',aucNext:'Следующее снижение',aucMinReached:'Минимальная цена',aucBuy:'Купить за {x}',aucOfferBtn:'Предложить свою цену',aucHeldOther:'Лот оформляет покупатель · {t}',aucContinue:'Продолжить оформление · {t}',aucNextIn:'Следующий лот через',aucSoon:'Скоро новый лот',aucAbout:'Каждый час на торги выходит набор посуды. Цена снижается, пока кто-то не купит.',aucRemind:'Напомнить о лоте',aucReminded:'Напоминание включено',aucRemindNote:'Бот пришлёт сообщение за 5 минут до старта',aucNeedAccess:'Разрешите боту писать вам, чтобы получить напоминание',aucSoldFor:'Продан за {x}',aucYouWon:'Этот лот ваш',aucCheckout:'Покупка с аукциона',aucLocked:'Цена закреплена за вами ещё {t}',aucConfirm:'Подтвердить покупку',aucExpired:'Время вышло, аукцион продолжается',aucHeld:'Лот уже оформляет другой покупатель',aucTooMany:'Лимит попыток для этого лота исчерпан',aucEnded:'Аукцион по этому лоту завершён',aucErr:'Не получилось, попробуйте ещё раз',aucWonT:'Лот ваш!',aucWonS:'Заказ {n} на {x}. Менеджер свяжется с вами в течение рабочего дня.',aucOfferT:'Своя цена',aucOfferPrice:'Ваша цена, сум',aucOfferNote:'Если цена нас устроит, менеджер свяжется с вами, а бот пришлёт ответ.',aucOfferSend:'Отправить предложение',aucOfferSent:'Предложение отправлено',aucLow:'Слишком низкая цена для этого лота',aucBuyInstead:'Ваша цена не ниже текущей — просто купите лот',aucHowT:'Как это работает',aucHow1:'Цена снижается каждую секунду — чем дольше ждёте, тем дешевле, но лот может забрать другой',aucLastChance:'Минимальная цена — последний шанс',aucCat:'в каталоге',aucAlertBtn:'Сообщить, когда цена опустится до…',aucAlertSet:'Сообщим, когда цена дойдёт до {x}',aucAlertT:'Уведомление о цене',aucAlertPrice:'Сообщить при цене, сум',aucAlertMinus:'−{n}%',aucAlertMin:'Минимум',aucAlertNote:'Бот напишет вам, как только цена дойдёт до этой суммы. Лот могут купить раньше — уведомление не бронирует цену.',aucAlertSave:'Сохранить уведомление',aucAlertDone:'Уведомление включено',aucAlertLow:'Не ниже минимума: {x}',aucAlertLowS:'Не ниже минимума',aucAlertHigh:'Укажите цену ниже текущей',aucHow2:'Нажмите «Купить», когда цена устроит',aucHow3:'Цена закрепляется за вами на 2 минуты, пока вы заполняете форму',enterPrice:'Укажите цену',aucTag:'Аукцион',aucNow:'Сейчас',aucStartsAt:'Старт {d}',aucAgo:'продан {t}'},
+  close:'Закрыть',orderNo:'Заказ',inCartN:'в корзине',feedT:'Недавно заказали',justNow:'только что',minAgo:'{n} мин назад',hAgo:'{n} ч назад',dAgo:'{n} дн назад',auction:'Аукцион',aucLive:'Идёт сейчас',aucLeft:'Осталось {t}',aucStart:'старт {x}',aucMin:'минимум {x}',aucNext:'Следующее снижение',aucMinReached:'Минимальная цена',aucBuy:'Забрать за {x} сум',aucOfferBtn:'Предложить свою цену',aucHeldOther:'Лот оформляет покупатель · {t}',aucContinue:'Продолжить оформление · {t}',aucNextIn:'Следующий лот через',aucSoon:'Скоро новый лот',aucAbout:'Каждый час на торги выходит набор посуды. Цена снижается, пока кто-то не купит.',aucRemind:'Напомнить о лоте',aucReminded:'Напоминание включено',aucRemindNote:'Бот пришлёт сообщение за 5 минут до старта',aucNeedAccess:'Разрешите боту писать вам, чтобы получить напоминание',aucSoldFor:'Продан за {x}',aucYouWon:'Этот лот ваш',aucCheckout:'Покупка с аукциона',aucLocked:'Цена закреплена за вами ещё {t}',aucConfirm:'Подтвердить покупку',aucExpired:'Время вышло, аукцион продолжается',aucHeld:'Лот уже оформляет другой покупатель',aucTooMany:'Много попыток, повторите через {t}',aucEnded:'Аукцион по этому лоту завершён',aucErr:'Не получилось, попробуйте ещё раз',aucWonT:'Лот ваш!',aucWonS:'Заказ {n} на {x}. Менеджер свяжется с вами в течение рабочего дня.',aucOfferT:'Своя цена',aucOfferPrice:'Ваша цена, сум',aucOfferNote:'Если цена нас устроит, менеджер свяжется с вами, а бот пришлёт ответ.',aucOfferSend:'Отправить предложение',aucOfferSent:'Предложение отправлено',aucLow:'Слишком низкая цена для этого лота',aucBuyInstead:'Ваша цена не ниже текущей — просто купите лот',aucHowT:'Как это работает',aucHow1:'Цена снижается каждую секунду — чем дольше ждёте, тем дешевле, но лот может забрать другой',aucLastChance:'Минимальная цена — последний шанс',aucCat:'в каталоге',aucAlertBtn:'Сообщить, когда цена опустится до…',aucAlertSet:'Сообщим, когда цена дойдёт до {x}',aucAlertT:'Уведомление о цене',aucAlertPrice:'Сообщить при цене, сум',aucAlertMinus:'−{n}%',aucAlertMin:'Минимум',aucAlertNote:'Бот напишет вам, как только цена дойдёт до этой суммы. Лот могут купить раньше — уведомление не бронирует цену.',aucAlertSave:'Сохранить уведомление',aucAlertDone:'Уведомление включено',aucAlertLow:'Не ниже минимума: {x}',aucAlertLowS:'Не ниже минимума',aucAlertHigh:'Укажите цену ниже текущей',aucHow2:'Нажмите «Забрать», когда цена устроит',aucHow3:'Цена закрепляется за вами на 2 минуты, пока вы заполняете форму',enterPrice:'Укажите цену',aucTag:'Аукцион',aucNow:'Сейчас',aucStartsAt:'Старт {d}',aucAgo:'продан {t}',aucSoonTab:'Скоро',aucNoSoon:'Анонс следующего лота появится здесь и в канале за 5 минут до старта',aucStartsIn:'через {t}',aucFalls:'цена падает каждую секунду',aucStartL:'старт',aucMinL:'минимум',aucOfferShort:'Своя цена',aucAlertShort:'Уведомить',aucAlertSetS:'до {x}',aucSave:'−{n}%',aucSales:'Последние продажи',aucShareT:'Аукцион Maison Forfè: {n} — сейчас {x}',aucCopied:'Ссылка скопирована',aucOfferWait:'Предложить цену можно, когда аукцион начнётся'},
  uz:{catalog:'Katalog',favs:'Sevimlilar',cart:'Savat',profile:'Profil',brandSub:'Toshkentda Eron chinnisi',search:'Nomi yoki kolleksiya bo‘yicha qidirish',all:'Barchasi',
   filters:'Filtrlar',price:'Narx',b_all:'Istalgan narx',b_a:'500 minggacha',b_b:'500 ming – 1 mln',b_c:'1 – 3 mln',b_d:'3 mln dan',apply:'Ko‘rsatish',reset:'Tozalash',
   sum:'so‘m',pcs:'dona',qtyU:'dona',found:'{n} ta mahsulot',inStock:'Mavjud',outStock:'Mavjud emas',showMore:'Yana ko‘rsatish',
@@ -572,7 +790,7 @@ const T={
   whole:'Do‘konlar uchun ulgurji',wholeS:'Viloyatlardagi do‘konlar uchun shartlar va narxlar',pdfRu:'Rus tilidagi taklif',pdfUz:'O‘zbek tilidagi taklif',soon:'Shartlar fayllari tez orada qo‘shiladi. Hozircha menejerga yozing — hammasini chatga yuboramiz.',
   manager:'Menejerga yozish',welT:'Yangi xaridorga sovg‘a',welS:'3 000 000 so‘mdan buyurtmaga 500 000 so‘mlik sertifikat. U profilingizda va savatda o‘zi qo‘llanadi.',welB:'Sovg‘ani olish',later:'Keyinroq',
   heroK:'Sizning sovg‘angiz',heroT:'Buyurtmaga 500 000 so‘m',heroNeed:'Yana {x} qo‘shish kerak',heroReady:'Summa yetarli — savatda qo‘llanadi',heroStart:'3 000 000 so‘mdan buyurtmaga amal qiladi',
-  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin',auction:'Auksion',aucLive:'Hozir davom etmoqda',aucLeft:'{t} qoldi',aucStart:'start {x}',aucMin:'minimum {x}',aucNext:'Keyingi pasayish',aucMinReached:'Eng past narx',aucBuy:'{x} ga sotib olish',aucOfferBtn:'O‘z narxingizni taklif qilish',aucHeldOther:'Lotni xaridor rasmiylashtirmoqda · {t}',aucContinue:'Rasmiylashtirishni davom ettirish · {t}',aucNextIn:'Keyingi lotgacha',aucSoon:'Tez orada yangi lot',aucAbout:'Har soatda savdoga idishlar to‘plami chiqadi. Narx kimdir sotib olguncha pasayib boradi.',aucRemind:'Lot haqida eslatish',aucReminded:'Eslatma yoqildi',aucRemindNote:'Bot boshlanishidan 5 daqiqa oldin xabar yuboradi',aucNeedAccess:'Eslatma olish uchun botga sizga yozishga ruxsat bering',aucSoldFor:'{x} ga sotildi',aucYouWon:'Bu lot sizniki',aucCheckout:'Auksiondan xarid',aucLocked:'Narx siz uchun yana {t} saqlanadi',aucConfirm:'Xaridni tasdiqlash',aucExpired:'Vaqt tugadi, auksion davom etmoqda',aucHeld:'Lotni boshqa xaridor rasmiylashtirmoqda',aucTooMany:'Bu lot uchun urinishlar soni tugadi',aucEnded:'Bu lot bo‘yicha auksion yakunlandi',aucErr:'Bo‘lmadi, qayta urinib ko‘ring',aucWonT:'Lot sizniki!',aucWonS:'Buyurtma {n}, {x}. Menejer ish kuni davomida siz bilan bog‘lanadi.',aucOfferT:'O‘z narxingiz',aucOfferPrice:'Sizning narxingiz, so‘m',aucOfferNote:'Narx bizga mos kelsa, menejer bog‘lanadi va bot javob yuboradi.',aucOfferSend:'Taklifni yuborish',aucOfferSent:'Taklif yuborildi',aucLow:'Bu lot uchun narx juda past',aucBuyInstead:'Narxingiz joriy narxdan past emas — lotni sotib oling',aucHowT:'Bu qanday ishlaydi',aucHow1:'Narx har soniyada pasayadi — qancha kutsangiz, shuncha arzon, lekin lotni boshqasi olib qo‘yishi mumkin',aucLastChance:'Eng past narx — so‘nggi imkoniyat',aucCat:'katalogda',aucAlertBtn:'Narx tushganda xabar berish…',aucAlertSet:'Narx {x} ga tushganda xabar beramiz',aucAlertT:'Narx haqida xabar',aucAlertPrice:'Qaysi narxda xabar berish, so‘m',aucAlertMinus:'−{n}%',aucAlertMin:'Minimum',aucAlertNote:'Narx shu summaga tushishi bilan bot sizga yozadi. Lotni oldinroq sotib olishlari mumkin — xabarnoma narxni band qilmaydi.',aucAlertSave:'Xabarnomani saqlash',aucAlertDone:'Xabarnoma yoqildi',aucAlertLow:'Minimumdan past emas: {x}',aucAlertLowS:'Minimumdan past emas',aucAlertHigh:'Joriy narxdan pastroq narx kiriting',aucHow2:'Narx ma’qul bo‘lganda «Sotib olish»ni bosing',aucHow3:'Formani to‘ldirguningizcha narx 2 daqiqa siz uchun saqlanadi',enterPrice:'Narxni kiriting',aucTag:'Auksion',aucNow:'Hozir',aucStartsAt:'Start {d}',aucAgo:'sotildi {t}'}
+  close:'Yopish',orderNo:'Buyurtma',inCartN:'savatda',feedT:'Yaqinda buyurtma qilishdi',justNow:'hozirgina',minAgo:'{n} daqiqa oldin',hAgo:'{n} soat oldin',dAgo:'{n} kun oldin',auction:'Auksion',aucLive:'Hozir davom etmoqda',aucLeft:'{t} qoldi',aucStart:'start {x}',aucMin:'minimum {x}',aucNext:'Keyingi pasayish',aucMinReached:'Eng past narx',aucBuy:'{x} so‘mga olish',aucOfferBtn:'O‘z narxingizni taklif qilish',aucHeldOther:'Lotni xaridor rasmiylashtirmoqda · {t}',aucContinue:'Rasmiylashtirishni davom ettirish · {t}',aucNextIn:'Keyingi lotgacha',aucSoon:'Tez orada yangi lot',aucAbout:'Har soatda savdoga idishlar to‘plami chiqadi. Narx kimdir sotib olguncha pasayib boradi.',aucRemind:'Lot haqida eslatish',aucReminded:'Eslatma yoqildi',aucRemindNote:'Bot boshlanishidan 5 daqiqa oldin xabar yuboradi',aucNeedAccess:'Eslatma olish uchun botga sizga yozishga ruxsat bering',aucSoldFor:'{x} ga sotildi',aucYouWon:'Bu lot sizniki',aucCheckout:'Auksiondan xarid',aucLocked:'Narx siz uchun yana {t} saqlanadi',aucConfirm:'Xaridni tasdiqlash',aucExpired:'Vaqt tugadi, auksion davom etmoqda',aucHeld:'Lotni boshqa xaridor rasmiylashtirmoqda',aucTooMany:'Urinishlar ko‘p, {t} dan keyin',aucEnded:'Bu lot bo‘yicha auksion yakunlandi',aucErr:'Bo‘lmadi, qayta urinib ko‘ring',aucWonT:'Lot sizniki!',aucWonS:'Buyurtma {n}, {x}. Menejer ish kuni davomida siz bilan bog‘lanadi.',aucOfferT:'O‘z narxingiz',aucOfferPrice:'Sizning narxingiz, so‘m',aucOfferNote:'Narx bizga mos kelsa, menejer bog‘lanadi va bot javob yuboradi.',aucOfferSend:'Taklifni yuborish',aucOfferSent:'Taklif yuborildi',aucLow:'Bu lot uchun narx juda past',aucBuyInstead:'Narxingiz joriy narxdan past emas — lotni sotib oling',aucHowT:'Bu qanday ishlaydi',aucHow1:'Narx har soniyada pasayadi — qancha kutsangiz, shuncha arzon, lekin lotni boshqasi olib qo‘yishi mumkin',aucLastChance:'Eng past narx — so‘nggi imkoniyat',aucCat:'katalogda',aucAlertBtn:'Narx tushganda xabar berish…',aucAlertSet:'Narx {x} ga tushganda xabar beramiz',aucAlertT:'Narx haqida xabar',aucAlertPrice:'Qaysi narxda xabar berish, so‘m',aucAlertMinus:'−{n}%',aucAlertMin:'Minimum',aucAlertNote:'Narx shu summaga tushishi bilan bot sizga yozadi. Lotni oldinroq sotib olishlari mumkin — xabarnoma narxni band qilmaydi.',aucAlertSave:'Xabarnomani saqlash',aucAlertDone:'Xabarnoma yoqildi',aucAlertLow:'Minimumdan past emas: {x}',aucAlertLowS:'Minimumdan past emas',aucAlertHigh:'Joriy narxdan pastroq narx kiriting',aucHow2:'Narx ma’qul bo‘lganda «Olish»ni bosing',aucHow3:'Formani to‘ldirguningizcha narx 2 daqiqa siz uchun saqlanadi',enterPrice:'Narxni kiriting',aucTag:'Auksion',aucNow:'Hozir',aucStartsAt:'Start {d}',aucAgo:'sotildi {t}',aucSoonTab:'Tez orada',aucNoSoon:'Keyingi lot e’loni bu yerda va kanalda startdan 5 daqiqa oldin chiqadi',aucStartsIn:'{t} dan keyin',aucFalls:'narx har soniyada pasayadi',aucStartL:'start',aucMinL:'minimum',aucOfferShort:'O‘z narxim',aucAlertShort:'Xabar berish',aucAlertSetS:'{x} gacha',aucSave:'−{n}%',aucSales:'So‘nggi sotuvlar',aucShareT:'Maison Forfè auksioni: {n} — hozir {x}',aucCopied:'Havola nusxalandi',aucOfferWait:'Narxni auksion boshlanganda taklif qilish mumkin'}
 };
 
 /* Uzbek Latin -> Cyrillic */
@@ -613,7 +831,9 @@ const I={
  sparkle:'<path d="M12 3.5l1.8 5 5 1.8-5 1.8-1.8 5-1.8-5-5-1.8 5-1.8z"/>',
  gavel:'<path d="M13.5 4.5l6 6M10.5 7.5l6 6M12 6l-4 4 6 6 4-4z"/><path d="M10 12l-6 6.5"/><path d="M3.5 21h8"/>',
  bell:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
- lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>'
+ lock:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+ eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+ share:'<path d="M12 14.5V3.5M8 7.5l4-4 4 4"/><path d="M8 10.5H6.5A1.5 1.5 0 0 0 5 12v7a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-7a1.5 1.5 0 0 0-1.5-1.5H16"/>'
 };
 const ic=(n,cls='',extra='')=>`<svg class="i ${cls}" viewBox="0 0 24 24" ${extra}>${I[n]}</svg>`;
 
@@ -856,12 +1076,11 @@ function renderGrid(reset){
   const ra=$('resetAll');if(ra)ra.onclick=resetFilters;
   $('catEmpty').innerHTML=list.length?'':`<div class="empty"><div class="ic">${ic('sparkle')}</div><h3>${esc(tr('nothing'))}</h3><p>${esc(tr('nothingS'))}</p><button class="btn sm press" id="emptyReset">${esc(tr('resetAll'))}</button></div>`;
   const er=$('emptyReset');if(er)er.onclick=resetFilters;
+  const left=list.length-show.length,mw=$('moreWrap');mw.hidden=left<=0;
+  if(left>0){$('moreBtn').textContent=tr('showMore')+' · '+num(Math.min(PAGE,left));$('moreBtn').onclick=()=>{hap();S.shown+=PAGE;renderGrid();};}
 }
 function resetFilters(){hap();S.type='all';S.band='all';S.search='';$('search').value='';$('searchWrap').classList.remove('has');S.shown=PAGE;renderChips();renderGrid(true);}
-function setupInfinite(){
-  io=new IntersectionObserver(es=>{if(es[0].isIntersecting&&S.tab==='catalog'&&S.loaded){const n=filtered().length;if(S.shown<n){S.shown+=PAGE;renderGrid();}}},{rootMargin:'600px'});
-  io.observe($('sentinel'));
-}
+function setupInfinite(){}
 function skeleton(){$('grid').innerHTML=Array.from({length:6},()=>`<div class="skel"><div class="t"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div>`).join('');}
 
 /* FAV */
@@ -1094,7 +1313,7 @@ setInterval(()=>{if(!document.hidden&&S.loaded)loadFeed();},120000);
 
 
 /* ================= АУКЦИОН ================= */
-const AUC={data:null,off:0,phase:'',lastPrice:0};
+const AUC={data:null,off:0,phase:'',lastPrice:0,seg:'now',sig:'',lw:0,raf:0,shown:null};
 const nowS=()=>Date.now()+AUC.off;
 /* та же формула, что в netlify/lib/auction.mjs — меняйте вместе */
 function aucPrice(lot,now){
@@ -1106,7 +1325,7 @@ function aucPrice(lot,now){
   if(elapsed<0)return{phase:'scheduled',price:lot.start,startsAt:lot.startAt+paused};
   if(elapsed>=durMs&&!holdActive)return{phase:'ended',price:lot.min};
   const frac=Math.min(1,Math.floor(elapsed/1000)*1000/declineMs);
-  const price=frac>=1?lot.min:Math.max(lot.min,Math.round((lot.start-(lot.start-lot.min)*frac)/100)*100);
+  const price=frac>=1?lot.min:Math.max(lot.min,Math.round(lot.start-(lot.start-lot.min)*frac));
   return{phase:holdActive?'held':'live',price,atMin:frac>=1,endAt:lot.startAt+paused+durMs};
 }
 const mmss=ms=>{ms=Math.max(0,ms);const t=Math.ceil(ms/1000),h=Math.floor(t/3600),m=Math.floor(t%3600/60),sec=t%60;return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;};
@@ -1114,76 +1333,126 @@ async function aucApi(action,extra={}){
   try{const r=await fetch('/api/auction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,initData:(tg&&tg.initData)||'',...extra})});return await r.json();}catch(e){return{ok:false,error:'network'};}
 }
 async function loadAuction(){
-  const j=await aucApi('state');
+  const w=S.tab==='auction'&&!document.hidden&&Date.now()-AUC.lw>18000;if(w)AUC.lw=Date.now();
+  const j=await aucApi('state',w?{watch:1}:{});
   if(j&&j.ok){const had=!!(AUC.data&&AUC.data.current);AUC.data=j;AUC.off=j.now-Date.now();if(S.tab==='auction')renderAuction();if(had!==!!j.current)renderNav();}
 }
 function aucThumb(id,cls='thumb'){const it=S.byId[id];return `<div class="${cls}">${it&&photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div>`;}
-function renderAuction(){
+function renderAuction(force){
   const el=$('v-auction');const d=AUC.data;
-  if(!d){el.innerHTML=`<div class="pad"><div class="skel" style="border-radius:26px"><div class="t" style="aspect-ratio:4/3"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div></div>`;return;}
-  const lot=d.current;let h='<div class="pad">';
-  if(lot){
+  if(!d){AUC.sig='';el.innerHTML=`<div class="pad"><div class="skel" style="border-radius:28px"><div class="t" style="aspect-ratio:1"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div></div>`;return;}
+  const lot=d.current,up=d.upcoming||[];
+  if(!AUC.seg)AUC.seg='now';
+  const sig=[AUC.seg,S.lang,lot?lot.id+(lot.alert||''):'',d.next?d.next.id:'',up.map(u=>u.id).join(','),(d.sales||[]).length?1:0].join('|');
+  if(!force&&sig===AUC.sig&&el.firstChild){aucLight();aucTick();return;}
+  AUC.sig=sig;AUC.shown=null;
+  let h=`<div class="pad"><div class="ax-seg"><button data-seg="now" class="${AUC.seg==='now'?'on':''}">${esc(tr('aucNow'))}${lot?'<i class="ax-dot"></i>':''}</button><button data-seg="soon" class="${AUC.seg==='soon'?'on':''}">${esc(tr('aucSoonTab'))}${up.length?`<b>${up.length}</b>`:''}</button></div>`;
+  if(AUC.seg==='soon'){
+    h+=up.length?`<div class="card2 ax-list">${up.map(u=>{const it=S.byId[u.itemId];const rem=LS.get('mf_remind_'+u.id,0);return `<div class="ax-row">${aucThumb(u.itemId)}<div class="ax-rt"><div class="t">${esc(it?it.name:u.itemName)}</div><div class="m">${esc(tr('aucStartsAt',{d:dtShort(u.startAt)}))} · <span data-cd="${u.startAt}"></span></div><div class="m">${num(u.start)} → ${num(u.min)} ${esc(tr('sum'))}</div></div><button class="ax-bell${rem?' on':''}" data-rem="${esc(u.id)}" aria-label="${esc(tr('aucRemind'))}">${ic(rem?'check':'bell')}</button></div>`;}).join('')}</div>`
+      :`<div class="card2 center" style="padding:30px 18px"><div class="empty" style="padding:0"><div class="ic">${ic('clock')}</div></div><div class="auc-h" style="font-size:18px">${esc(tr('aucSoon'))}</div><p class="lead" style="font-size:14px">${esc(tr('aucNoSoon'))}</p></div>`;
+  }else if(lot){
     const it=S.byId[lot.itemId];const p=aucPrice(lot,nowS());AUC.phase=p.phase;AUC.lastPrice=p.price;
-    h+=`<div class="auc">
-      <div class="auc-top"><span class="pill live"><i></i>${esc(tr('aucLive'))}</span><span class="auc-end" id="aEnd"></span></div>
-      <div class="auc-ph" data-open="${esc(lot.itemId)}">${it&&photo(it)?`<img alt="" src="${esc(photo(it))}">`:''}</div>
-      <div class="auc-name">${esc(it?it.name:lot.itemName)}</div>
-      <div class="auc-meta">${it?esc(trType(it.type))+(it.qty?', '+it.qty+' '+esc(tr('pcs')):''):''}</div>
-      <div class="auc-price"><b id="aP">${num(p.price)}</b><span>${esc(tr('sum'))}</span></div>
-      <div class="auc-disc" id="aDisc"></div>
-      <div class="bar auc-bar"><i id="aBar" style="width:${Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)}%"></i></div>
-      <div class="auc-lim"><span>${esc(tr('aucStart',{x:num(lot.start)}))}</span><span>${esc(tr('aucMin',{x:num(lot.min)}))}</span></div>
-      <div class="auc-next" id="aMin" hidden><span>${ic('sparkle')}${esc(tr('aucLastChance'))}</span></div>
-      <div style="height:14px"></div>
-      <button class="btn full" id="aBuy"></button>
-      <button class="btn ghost full" id="aOffer">${esc(tr('aucOfferBtn'))}</button>
-      <button class="auc-alert" id="aAlert">${ic('bell')}<span>${esc(lot.alert?tr('aucAlertSet',{x:money(lot.alert)}):tr('aucAlertBtn'))}</span></button>
+    h+=`<div class="ax">
+      <div class="ax-top"><span class="ax-live"><i></i>LIVE</span><div class="ax-r"><span class="ax-eye" id="aEye"${d.watching?'':' hidden'}>${ic('eye')}<b>${d.watching||''}</b></span><button class="ax-sh press" id="aShare" aria-label="share">${ic('share')}</button></div></div>
+      <div class="ax-ph" data-open="${esc(lot.itemId)}">${it&&photo(it)?`<img alt="" src="${esc(photo(it))}">`:''}</div>
+      <div class="ax-name">${esc(it?it.name:lot.itemName)}</div>
+      <div class="ax-meta">${it?esc(trType(it.type))+(it.qty?' · '+it.qty+' '+esc(tr('pcs')):''):''}</div>
+      <div class="ax-chips" id="aChips"></div>
+      <div class="ax-price"><b id="aP">${num(p.price)}</b><span>${esc(tr('sum'))}</span></div>
+      <div class="ax-sub" id="aSub">${esc(tr('aucFalls'))}</div>
+      <div class="ax-bar"><i id="aBar" style="width:${aucPct(lot,p.price)}%"></i></div>
+      <div class="ax-lim"><div>${esc(tr('aucStartL'))}<b>${num(lot.start)}</b></div><div class="c"><span id="aEnd"></span></div><div>${esc(tr('aucMinL'))}<b>${num(lot.min)}</b></div></div>
+      <div class="ax-min" id="aMin" hidden>${ic('sparkle')}${esc(tr('aucLastChance'))}</div>
+      <button class="ax-buy press" id="aBuy"></button>
+      <div class="ax-sec"><button class="press" id="aOffer">${ic('send')}${esc(tr('aucOfferShort'))}</button><button class="press" id="aAlert">${ic('bell')}<span>${esc(lot.alert?tr('aucAlertSetS',{x:num(lot.alert)}):tr('aucAlertShort'))}</span></button></div>
     </div>`;
   }else{
-    if(d.recentSold){const r=d.recentSold;h+=`<div class="card2 auc-sold">${aucThumb(r.itemId)}<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">${esc((S.byId[r.itemId]||{}).name||r.itemName)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(r.sold.mine?tr('aucYouWon'):tr('aucSoldFor',{x:money(r.sold.price)}))} · ${esc(ago(r.sold.at))}</div></div></div>`;}
-    const nx=d.next;const reminded=LS.get('mf_remind_'+(nx?nx.id:'next'),0);
-    h+=`<div class="auc center" style="padding:26px 18px 20px">
-      <div class="empty" style="padding:0"><div class="ic" style="margin-bottom:6px">${ic('clock')}</div></div>
-      ${nx?`<div class="auc-h">${esc(tr('aucNextIn'))}</div><div class="auc-count" id="aCount"></div>`:`<div class="auc-h" style="font-size:20px">${esc(tr('aucSoon'))}</div>`}
-      <p class="lead" style="font-size:14px">${esc(tr('aucAbout'))}</p>
-      ${nx?`<div class="auc-prev">${aucThumb(nx.itemId)}<div style="min-width:0"><div style="font-weight:600;font-size:15px">${esc((S.byId[nx.itemId]||{}).name||nx.itemName)}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">${esc(tr('aucStart',{x:money(nx.start)}))}</div></div></div>`:''}
-      <button class="btn full${reminded?' ghost':''}" id="aRemind" style="margin-top:16px">${ic(reminded?'check':'bell')}${esc(tr(reminded?'aucReminded':'aucRemind'))}</button>
-      <div style="font-size:12.5px;color:var(--muted);margin-top:10px">${esc(tr('aucRemindNote'))}</div>
+    const nx=d.next;const reminded=LS.get('mf_remind_'+(nx?nx.id:'next'),0);const nit=nx&&S.byId[nx.itemId];
+    h+=`<div class="ax ax-wait">
+      ${nx?`<div class="ax-ph sm" data-open="${esc(nx.itemId)}">${nit&&photo(nit)?`<img alt="" src="${esc(photo(nit))}">`:''}</div><div class="ax-name">${esc(nit?nit.name:nx.itemName)}</div><div class="ax-meta">${num(nx.start)} → ${num(nx.min)} ${esc(tr('sum'))}</div>
+        <div class="ax-sub" style="margin-top:18px">${esc(tr('aucNextIn'))}</div><div class="ax-count" id="aCount"></div>`
+      :`<div class="ax-ic">${ic('gavel')}</div><div class="ax-name">${esc(tr('aucSoon'))}</div>`}
+      <div class="ax-sub" style="margin-top:12px">${esc(tr('aucAbout'))}</div>
+      <button class="ax-buy press${reminded?' wait':''}" id="aRemind">${ic(reminded?'check':'bell')}${esc(tr(reminded?'aucReminded':'aucRemind'))}</button>
+      <div class="ax-sub" style="font-size:12.5px;margin-top:10px">${esc(tr('aucRemindNote'))}</div>
     </div>`;
   }
-    h+=`<div class="sec-t">${esc(tr('aucHowT'))}</div><div class="card2"><div class="steps">${[tr('aucHow1'),tr('aucHow2'),tr('aucHow3')].map((x,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(x)}</div></div>`).join('')}</div></div><div style="height:30px"></div></div>`;
+  h+=`<div id="aSales"></div>`;
+  if(AUC.seg==='now')h+=`<div class="sec-t">${esc(tr('aucHowT'))}</div><div class="card2"><div class="steps">${[tr('aucHow1'),tr('aucHow2'),tr('aucHow3')].map((x,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(x)}</div></div>`).join('')}</div></div>`;
+  h+=`<div style="height:30px"></div></div>`;
   el.innerHTML=h;
-  const ph=el.querySelector('.auc-ph');if(ph)ph.onclick=()=>openProduct(ph.dataset.open);
-  const bb=$('aBuy');if(bb)bb.onclick=()=>aucBuy(lot);
-  const ob=$('aOffer');if(ob)ob.onclick=()=>aucOffer(lot);
-  const al=$('aAlert');if(al)al.onclick=()=>aucAlert(lot);
+  el.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{if(AUC.seg===b.dataset.seg)return;hap('sel');AUC.seg=b.dataset.seg;renderAuction(true);});
+  el.querySelectorAll('[data-open]').forEach(ph=>ph.onclick=()=>openProduct(ph.dataset.open));
+  el.querySelectorAll('[data-rem]').forEach(b=>b.onclick=()=>aucRemind(b.dataset.rem));
+  const cur=()=>AUC.data&&AUC.data.current;
+  const bb=$('aBuy');if(bb)bb.onclick=()=>cur()&&aucBuy(cur());
+  const ob=$('aOffer');if(ob)ob.onclick=()=>cur()&&aucOffer(cur());
+  const al=$('aAlert');if(al)al.onclick=()=>cur()&&aucAlert(cur());
+  const sb=$('aShare');if(sb)sb.onclick=aucShare;
   const rb=$('aRemind');if(rb)rb.onclick=()=>aucRemind(d.next?d.next.id:'');
-  aucTick();
+  aucLight();aucTick();
+}
+const aucPct=(lot,price)=>Math.max(3,Math.min(100,(lot.start-price)/(lot.start-lot.min)*100));
+const dtShort=ms=>{const x=new Date(ms),t=new Date(nowS());const hm=x.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});return x.toDateString()===t.toDateString()?hm:x.toLocaleDateString(S.lang==='ru'?'ru-RU':'uz-UZ',{day:'numeric',month:'short'})+', '+hm;};
+/* то, что меняется без перерисовки: «смотрят сейчас» и последние продажи */
+function aucLight(){
+  const d=AUC.data;if(!d)return;
+  const E=$('aEye');if(E){E.hidden=!d.watching;E.querySelector('b').textContent=d.watching||'';}
+  const S2=$('aSales');if(!S2)return;const sl=(d.sales||[]).slice(0,6);
+  S2.innerHTML=sl.length?`<div class="ax-h">${esc(tr('aucSales'))}</div><div class="card2 ax-list">${sl.map(x=>{const it=S.byId[x.itemId];return `<div class="ax-row" data-open="${esc(x.itemId)}">${aucThumb(x.itemId)}<div class="ax-rt"><div class="t">${esc(it?it.name:x.itemName)}</div><div class="m">${esc(x.mine?tr('aucYouWon'):ago(x.at))}</div></div><div class="p">${num(x.price)}<span>${esc(tr('sum'))}</span></div></div>`;}).join('')}</div>`:'';
+  S2.querySelectorAll('[data-open]').forEach(r=>r.onclick=()=>openProduct(r.dataset.open));
+}
+/* «бегущие» цифры: за долю секунды прокручиваем от прошлой цены до новой */
+function aucRoll(el,from,to){
+  cancelAnimationFrame(AUC.raf);
+  if(!from||from===to||Math.abs(from-to)>(AUC.data&&AUC.data.current?(AUC.data.current.start-AUC.data.current.min)/20:1e9)||matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=num(to);return;}
+  const t0=performance.now(),D=700;
+  const f=t=>{const k=Math.min(1,(t-t0)/D);el.textContent=num(Math.round(from+(to-from)*k));if(k<1)AUC.raf=requestAnimationFrame(f);};
+  AUC.raf=requestAnimationFrame(f);
 }
 function aucTick(){
   if(S.tab!=='auction'||!AUC.data)return;
   const d=AUC.data,now=nowS();
+  document.querySelectorAll('#v-auction [data-cd]').forEach(x=>{x.textContent=tr('aucStartsIn',{t:mmss(+x.dataset.cd-now)});});
+  if(AUC.seg==='soon')return;
   if(d.current){
     const lot=d.current,p=aucPrice(lot,now);
     if(p.phase!==AUC.phase){AUC.phase=p.phase;loadAuction();return;}
     const P=$('aP');if(!P)return;
-    if(p.price!==AUC.lastPrice){AUC.lastPrice=p.price;P.textContent=num(p.price);
-      $('aBar').style.width=Math.max(2,(lot.start-p.price)/(lot.start-lot.min)*100)+'%';}
+    if(p.price!==AUC.lastPrice){aucRoll(P,AUC.lastPrice,p.price);AUC.lastPrice=p.price;$('aBar').style.width=aucPct(lot,p.price)+'%';}
     $('aEnd').textContent=p.endAt?tr('aucLeft',{t:mmss(p.endAt-now)}):'';
-    $('aMin').hidden=!p.atMin;
-    const it=S.byId[lot.itemId],cp=it?it.price_uzs:0,D=$('aDisc');
-    if(D){const pct=cp?Math.floor((1-p.price/cp)*100):0;D.innerHTML=pct>=1?`<b>−${pct}%</b><span>${esc(tr('aucCat'))} <s>${num(cp)}</s></span>`:'';}
+    $('aMin').hidden=!p.atMin;$('aSub').hidden=!!p.atMin;
+    const it=S.byId[lot.itemId],cp=(it&&it.price_uzs)||lot.catalogPrice||0,C=$('aChips');
+    if(C){const pct=cp?Math.floor((1-p.price/cp)*100):0;const k=cp+'|'+pct;if(AUC.shown!==k){AUC.shown=k;C.innerHTML=cp?`<span class="ax-chip">${ic('store')}${esc(tr('aucCat'))} <s>${num(cp)}</s></span>${pct>=1?`<span class="ax-chip ok">${esc(tr('aucSave',{n:pct}))}</span>`:''}`:'';}}
     const bb=$('aBuy');
-    if(p.phase==='held'&&lot.hold&&lot.hold.mine){bb.className='btn full';bb.textContent=tr('aucContinue',{t:mmss(lot.hold.until-now)});}
-    else if(p.phase==='held'){bb.className='btn full wait';bb.innerHTML=ic('lock')+esc(tr('aucHeldOther',{t:mmss(lot.hold.until-now)}));}
-    else{bb.className='btn full';bb.textContent=tr('aucBuy',{x:money(p.price)});}
+    if(p.phase==='held'&&lot.hold&&lot.hold.mine){bb.className='ax-buy press';bb.textContent=tr('aucContinue',{t:mmss(lot.hold.until-now)});}
+    else if(p.phase==='held'){bb.className='ax-buy press wait';bb.innerHTML=ic('lock')+esc(tr('aucHeldOther',{t:mmss(lot.hold.until-now)}));}
+    else{bb.className='ax-buy press';bb.textContent=tr('aucBuy',{x:num(p.price)});}
   }else if(d.next){
     const c=$('aCount');if(c){const ms=d.next.startAt-now;if(ms<=0){loadAuction();return;}c.textContent=mmss(ms);}
   }
 }
+function aucShare(){
+  const d=AUC.data,lot=d&&d.current;if(!lot)return;hap();
+  const it=S.byId[lot.itemId];const link=d.appLink?d.appLink+'?startapp=auction':'';
+  const text=tr('aucShareT',{n:(it?it.name:lot.itemName),x:money(aucPrice(lot,nowS()).price)});
+  if(link&&tg&&tg.openTelegramLink){tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(link)+'&text='+encodeURIComponent(text));return;}
+  try{navigator.clipboard.writeText(text+(link?' '+link:''));toast(tr('aucCopied'),'check');}catch(e){}
+}
 setInterval(aucTick,1000);
 setInterval(()=>{if(!document.hidden&&S.tab==='auction')loadAuction();},5000);
 setInterval(()=>{if(!document.hidden&&S.tab!=='auction'&&S.loaded)loadAuction();},45000);
+
+/* ссылки из канала: ?startapp=auction | cat | i_<товар> | remind_<лот> | offer_<лот> */
+function whenAuction(cb,n=0){if(AUC.data){cb(AUC.data);return;}if(n<40)setTimeout(()=>whenAuction(cb,n+1),250);}
+function handleStart(){
+  const sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
+  if(location.hash==='#auction'||sp==='auction'){go('auction');return;}
+  let m;
+  if((m=sp.match(/^i_(.+)$/))&&S.byId[m[1]]){openProduct(m[1]);return;}
+  if((m=sp.match(/^remind_(.+)$/))){go('auction');whenAuction(d=>{if(d.current&&d.current.id===m[1])return;if(!d.current){AUC.seg=(d.next&&d.next.id===m[1])?'now':'soon';renderAuction(true);}aucRemind(m[1]);});return;}
+  if((m=sp.match(/^offer_(.+)$/))){go('auction');whenAuction(d=>{if(d.current&&d.current.id===m[1])aucOffer(d.current);else toast(tr(d.current?'aucEnded':'aucOfferWait'),'clock');});return;}
+}
 
 async function aucBuy(lot){
   if(!tgUser){toast(tr('guestS'),'x');return;}
@@ -1191,7 +1460,7 @@ async function aucBuy(lot){
   if(p.phase==='held'&&!(lot.hold&&lot.hold.mine)){hap('err');toast(tr('aucHeld'),'lock');return;}
   hap('medium');const bb=$('aBuy');bb.disabled=true;
   const j=await aucApi('hold',{id:lot.id});bb.disabled=false;
-  if(!j.ok){hap('err');toast(tr({held:'aucHeld',too_many:'aucTooMany',ended:'aucEnded',sold:'aucEnded',cancelled:'aucEnded'}[j.error]||'aucErr'),'x');loadAuction();return;}
+  if(!j.ok){hap('err');toast(tr({held:'aucHeld',too_many:'aucTooMany',ended:'aucEnded',sold:'aucEnded',cancelled:'aucEnded'}[j.error]||'aucErr',{t:mmss(j.retryIn||0)}),j.error==='too_many'?'clock':'x');loadAuction();return;}
   AUC.off=j.now-Date.now();loadAuction();openAucCheckout(lot,j.price,j.until);
 }
 function openAucCheckout(lot,price,until){
@@ -1238,7 +1507,7 @@ function aucOffer(lot){
     if(!price)return err(tr('enterPrice'));if(!ph)return err(tr('ePhoneF'));
     const btn=e.currentTarget;btn.disabled=true;
     const j=await aucApi('offer',{id:lot.id,price,phone:ph,name:S.form.name||(tgUser&&tgUser.first_name)||''});btn.disabled=false;
-    if(!j.ok)return err(tr({low:'aucLow',buy_instead:'aucBuyInstead',ended:'aucEnded',sold:'aucEnded'}[j.error]||'aucErr'));
+    if(!j.ok)return err(tr({low:'aucLow',buy_instead:'aucBuyInstead',ended:'aucEnded',sold:'aucEnded',not_started:'aucOfferWait'}[j.error]||'aucErr'));
     S.form.phone=ph;save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});
     hap('ok');closeSheet();toast(tr('aucOfferSent'),'send');
   };
@@ -1316,7 +1585,7 @@ function openAdminCreate(){
   ['adStart','adMin','adFloor'].forEach(id=>$$(id).addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v?num(+v):'';prev();}));
   ['adDur','adAt'].forEach(id=>$$(id).addEventListener('change',prev));
   function prev(){const st=val('adStart'),mn=val('adMin'),du=+$$('adDur').value;const dec=du*0.9;
-    $$('adPrev').querySelector('span').textContent=st>mn&&mn>0?`Цена снижается каждую секунду, примерно на ${num(Math.max(100,Math.round((st-mn)/(dec*60)/100)*100))} сум в секунду (${num(Math.round((st-mn)/dec/1000)*1000)} сум в минуту). Минимум — через ${Math.round(dec)} мин, последние ${Math.round(du-dec)} мин лот стоит по минимальной цене.`:'Старт должен быть больше минимума';}
+    $$('adPrev').querySelector('span').textContent=st>mn&&mn>0?`Цена снижается каждую секунду, примерно на ${num(Math.max(1,Math.round((st-mn)/(dec*60))))} сум в секунду, цифры бегут без округления (${num(Math.round((st-mn)/dec/1000)*1000)} сум в минуту). Минимум — через ${Math.round(dec)} мин, последние ${Math.round(du-dec)} мин лот стоит по минимальной цене.`:'Старт должен быть больше минимума';}
   $$('adQ').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();const r=$$('adRes');
     if(q.length<2){r.hidden=true;return;}
     const list=S.items.filter(i=>i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)).slice(0,12);
@@ -1384,7 +1653,18 @@ function welcome(){
   document.documentElement.lang=S.lang==='ru'?'ru':'uz';
   applyTheme();renderTop();renderNav();skeleton();
   const sync=Promise.all([pullCloud(),syncCert()]);
-  fetch(BASE+'data.json').then(r=>r.json()).then(async items=>{
+  const CACHE_K='mf_items_cache_v1';
+  const cached=LS.get(CACHE_K,null);let booted=false;
+  const fresh=fetch(BASE+'data.json',{cache:'no-cache'}).then(r=>r.json()).then(items=>{
+    const s=JSON.stringify(items);
+    if(booted&&cached&&JSON.stringify(cached)===s)return null;
+    try{localStorage.setItem(CACHE_K,s)}catch(e){}
+    if(booted){items.sort((x,y)=>(!x.photo)-(!y.photo));S.items=items;S.byId={};items.forEach(i=>S.byId[i.id]=i);renderChips();renderGrid(true);renderHero();return null;}
+    return items;
+  });
+  if(cached)fresh.catch(()=>{});
+  (cached?Promise.resolve(cached):fresh).then(async items=>{
+    if(!items)return;booted=true;
     items.sort((x,y)=>(!x.photo)-(!y.photo));S.items=items;items.forEach(i=>S.byId[i.id]=i);S.loaded=true;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     $('grid').innerHTML='';renderChips();renderGrid(true);renderHero();renderNav();setupInfinite();
@@ -1392,9 +1672,9 @@ function welcome(){
     await sync;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     applyTheme();refreshLang();if(S.tab==='profile')renderProfile();Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
-    if(location.hash==='#auction'||(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param==='auction'))go('auction');
+    handleStart();
     setTimeout(welcome,500);
-  }).catch(()=>{$('grid').innerHTML='';$('catEmpty').innerHTML=`<div class="empty"><div class="ic">${ic('x')}</div><h3>Нет соединения</h3><p>Проверьте интернет и откройте каталог ещё раз.</p></div>`;});
+  }).catch(()=>{if(booted)return;$('grid').innerHTML='';$('catEmpty').innerHTML=`<div class="empty"><div class="ic">${ic('x')}</div><h3>Нет соединения</h3><p>Проверьте интернет и откройте каталог ещё раз.</p></div>`;});
 })();
 </script>
 </body>

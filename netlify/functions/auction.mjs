@@ -1,8 +1,22 @@
 // Аукцион: состояние лота, бронь цены, покупка, предложения цены, напоминания и админ-управление.
 // Все действия — POST /api/auction с полем action. Управлять лотами могут только ADMIN_IDS.
 import { getStore } from '@netlify/blobs';
-import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum, channelSold } from '../lib/tg.mjs';
-import { HOLD_MS, norm, priceAt } from '../lib/auction.mjs';
+import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum } from '../lib/tg.mjs';
+import { HOLD_MS, HOLD_LIMIT, HOLD_WINDOW_MS, norm, priceAt } from '../lib/auction.mjs';
+import { channelNow, appBase } from '../lib/channel.mjs';
+
+// «Смотрят сейчас»: открытое приложение отмечается раз в ~20 секунд, считаем последние 30–60 секунд.
+const SEEN_MS = 30000;
+async function viewers(s, lotId, uid, watch, now) {
+  const bucket = Math.floor(now / SEEN_MS);
+  if (uid && watch) await s.set(`seen/${lotId}/${bucket}/${uid}`, '1').catch(() => {});
+  const ids = new Set();
+  for (const b of [bucket, bucket - 1]) {
+    const { blobs } = await s.list({ prefix: `seen/${lotId}/${b}/` }).catch(() => ({ blobs: [] }));
+    for (const x of blobs) ids.add(x.key.split('/').pop());
+  }
+  return ids.size;
+}
 
 const store = () => getStore({ name: STORE_NAME, consistency: 'strong' });
 const str = (v, max = 200) => String(v == null ? '' : v).trim().slice(0, max);
@@ -51,7 +65,7 @@ function publicView(lot, now, uid) {
   const p = priceAt(lot, now);
   return {
     id: lot.id, itemId: lot.itemId, itemName: lot.itemName, start: lot.start, min: lot.min,
-    startAt: lot.startAt, durationMin: lot.durationMin, stepMin: lot.stepMin, paused: lot.paused || 0,
+    startAt: lot.startAt, durationMin: lot.durationMin, catalogPrice: lot.catalogPrice || 0, stepMin: lot.stepMin, paused: lot.paused || 0,
     hold: lot.hold ? { since: lot.hold.since, until: lot.hold.until, mine: lot.hold.uid === uid, price: lot.hold.uid === uid ? lot.hold.price : undefined } : null,
     status: lot.status, phase: p.phase, price: p.price,
     sold: lot.sold ? { price: lot.sold.price, at: lot.sold.at, mine: lot.sold.uid === uid } : null,
@@ -82,7 +96,12 @@ export default async (req) => {
     const current = views.find((v) => v.phase === 'live' || v.phase === 'held') || null;
     const next = views.filter((v) => v.phase === 'scheduled').sort((a, b) => a.startAt - b.startAt)[0] || null;
     const recentSold = views.filter((v) => v.phase === 'sold' && v.sold && now - v.sold.at < 60 * 60000).sort((a, b) => b.sold.at - a.sold.at)[0] || null;
-    return json(200, { ok: true, now, current, next, recentSold, holdMs: HOLD_MS }, { 'Cache-Control': 'no-store' });
+    const upcoming = views.filter((v) => v.phase === 'scheduled').sort((a, b) => a.startAt - b.startAt).slice(0, 10);
+    const sales = views.filter((v) => v.phase === 'sold' && v.sold).sort((a, b) => b.sold.at - a.sold.at).slice(0, 8)
+      .map((v) => ({ id: v.id, itemId: v.itemId, itemName: v.itemName, price: v.sold.price, at: v.sold.at, mine: v.sold.mine }));
+    const watching = current ? await viewers(s, current.id, uid, !!body.watch, now) : 0;
+    const link = await appBase().catch(() => '');
+    return json(200, { ok: true, now, current, next, upcoming, sales, recentSold, watching, appLink: link, holdMs: HOLD_MS }, { 'Cache-Control': 'no-store' });
   }
 
   if (!user) return json(403, { ok: false, error: 'not_telegram' });
@@ -94,13 +113,16 @@ export default async (req) => {
       if (lot.hold && lot.hold.uid === uid && p.phase === 'held') return { price: lot.hold.price, until: lot.hold.until };
       if (p.phase === 'held') return { err: 'held' };
       if (p.phase !== 'live') return { err: p.phase };
+      // не больше HOLD_LIMIT нажатий «Купить» за HOLD_WINDOW_MS (защита от «нажал — закрыл»)
       lot.holds = lot.holds || {};
-      if ((lot.holds[uid] || 0) >= 3) return { err: 'too_many' };
-      lot.holds[uid] = (lot.holds[uid] || 0) + 1;
+      const tries = (Array.isArray(lot.holds[uid]) ? lot.holds[uid] : []).filter((t) => now - t < HOLD_WINDOW_MS);
+      if (tries.length >= HOLD_LIMIT) return { err: 'too_many', retryIn: tries[0] + HOLD_WINDOW_MS - now };
+      tries.push(now);
+      lot.holds[uid] = tries;
       lot.hold = { uid, since: now, until: now + HOLD_MS, price: p.price };
       return { price: p.price, until: now + HOLD_MS };
     });
-    if (r.err) return json(200, { ok: false, error: r.err });
+    if (r.err) return json(200, { ok: false, error: r.err, retryIn: r.retryIn || 0 });
     return json(200, { ok: true, price: r.price, until: r.until, now });
   }
 
@@ -148,7 +170,7 @@ export default async (req) => {
       return json(502, { ok: false, error: 'telegram' });
     }
     if (!/т[еe]ст|test/i.test(form.comment)) await addToFeed(s, lot.itemId).catch(() => {});
-    await channelSold(lot, r.price).catch(() => {});
+    await channelNow(lot);
     return json(200, { ok: true, no, price: r.price });
   }
 
@@ -161,7 +183,7 @@ export default async (req) => {
     let lotName = '';
     const r = await updateLot(s, id, (lot) => {
       const p = priceAt(lot, now);
-      if (!['live', 'held', 'scheduled'].includes(p.phase)) return { err: p.phase };
+      if (!['live', 'held'].includes(p.phase)) return { err: p.phase === 'scheduled' ? 'not_started' : p.phase };
       if (price < (lot.floor || lot.min)) return { err: 'low' };
       if (price >= p.price && p.phase === 'live') return { err: 'buy_instead' };
       lot.offers = (lot.offers || []).filter((o) => o.uid !== uid);
@@ -237,6 +259,7 @@ export default async (req) => {
       if (['sold', 'ended', 'cancelled'].includes(ph)) {
         await s.delete('lot/' + l.id).catch(() => {});
         await s.delete('remind/' + l.id).catch(() => {});
+        await s.delete('remindDone/' + l.id).catch(() => {});
         removed++;
       }
     }
@@ -250,6 +273,7 @@ export default async (req) => {
       lot.hold = null;
       return {};
     });
+    if (!r.err) await channelNow(r.lot);
     return json(200, r.err ? { ok: false, error: r.err } : { ok: true });
   }
 
@@ -284,7 +308,7 @@ export default async (req) => {
       ].join('\n'));
       await tgSend(ouid, `🎉 Ваше предложение ${sum(offer.price)} за «${lot.itemName}» принято! Менеджер свяжется с вами в течение рабочего дня.`);
       await addToFeed(s, lot.itemId).catch(() => {});
-      await channelSold(lot, offer.price).catch(() => {});
+      await channelNow(lot);
     } else {
       await tgSend(ouid, `К сожалению, предложение ${sum(offer.price)} за «${lot.itemName}» не принято. Следите за новыми лотами в каталоге Maison Forfè.`);
     }
