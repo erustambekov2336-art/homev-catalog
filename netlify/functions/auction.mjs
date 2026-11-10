@@ -4,6 +4,7 @@ import { getStore } from '@netlify/blobs';
 import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum } from '../lib/tg.mjs';
 import { HOLD_MS, HOLD_LIMIT, HOLD_WINDOW_MS, norm, priceAt } from '../lib/auction.mjs';
 import { channelNow, appBase } from '../lib/channel.mjs';
+import { recordOrder } from '../lib/stats.mjs';
 
 // «Смотрят сейчас»: открытое приложение отмечается раз в ~20 секунд, считаем последние 30–60 секунд.
 const SEEN_MS = 30000;
@@ -169,7 +170,10 @@ export default async (req) => {
       await s.setJSON('lot/' + id, { ...snapshot, hold: { ...snapshot.hold, until: Date.now() + 2 * 60000 } }).catch(() => {});
       return json(502, { ok: false, error: 'telegram' });
     }
-    if (!/т[еe]ст|test/i.test(form.comment)) await addToFeed(s, lot.itemId).catch(() => {});
+    if (!/т[еe]ст|test/i.test(form.comment)) {
+      await addToFeed(s, lot.itemId).catch(() => {});
+      await recordOrder(s, { items: [[lot.itemId, 1]], total: r.price, source: 'auction' }).catch((e) => console.error('stats failed', e));
+    }
     await channelNow(lot);
     return json(200, { ok: true, no, price: r.price });
   }

@@ -11,6 +11,7 @@
 //   • добавляет заказанные наборы в ленту «Недавно заказали» (без имён и телефонов).
 import { getStore } from '@netlify/blobs';
 import { json, verifyInitData, STORE_NAME } from '../lib/tg.mjs';
+import { recordOrder } from '../lib/stats.mjs';
 
 const CERT_AMOUNT = 500000;
 const CERT_MIN = 3000000;
@@ -28,8 +29,9 @@ async function addToFeed(store, items) {
     const prev = cur && Array.isArray(cur.data) ? cur.data : [];
     const list = [...add, ...prev].slice(0, 30);
     const res = await store.setJSON('feed', list, cur ? { onlyIfMatch: cur.etag } : { onlyIfNew: true });
-    if (res.modified) return;
+    if (!res || res.modified !== false) return; // старые версии Blobs не сообщают modified — считаем, что записано
   }
+  throw new Error('feed: conflict after 4 tries');
 }
 
 export default async (req) => {
@@ -49,6 +51,25 @@ export default async (req) => {
 
   let store = null;
   try { store = getStore({ name: STORE_NAME, consistency: 'strong' }); } catch { store = null; }
+
+  // --- защита от дублей: телефон повторяет отправку при обрыве связи с тем же oid.
+  // Если заказ с этим oid уже ушёл в группу — второй раз не отправляем, просто отвечаем «ок».
+  const oid = typeof meta.oid === 'string' && /^[a-z0-9-]{8,64}$/i.test(meta.oid) ? meta.oid : '';
+  const lockKey = oid ? `order/${oid}` : null;
+  let locked = false;
+  if (lockKey && store) {
+    try {
+      const res = await store.setJSON(lockKey, { state: 'sending', at: Date.now() }, { onlyIfNew: true });
+      if (res && res.modified === false) {
+        const prev = await store.get(lockKey, { type: 'json' }).catch(() => null);
+        if (prev?.state === 'sent') return json(200, { ok: true, dup: true, certOk: prev.certOk !== false, feed: prev.feed || 'added' });
+        if (prev && Date.now() - Number(prev.at || 0) < 60000) return json(409, { ok: false, error: 'in_progress' });
+        await store.setJSON(lockKey, { state: 'sending', at: Date.now() }); // прошлая попытка оборвалась на середине
+      }
+      locked = true;
+    } catch { locked = false; }
+  }
+  const unlock = () => (locked && store ? store.delete(lockKey).catch(() => {}) : null);
 
   // --- проверка сертификата
   const notes = [];
@@ -99,15 +120,31 @@ export default async (req) => {
   if (!sent) {
     // заказ не ушёл — сертификат не считаем использованным
     if (reservedKey && store) await store.delete(reservedKey).catch(() => {});
+    await unlock();
     return json(502, { ok: false, error: 'telegram' });
   }
 
   // --- лента «Недавно заказали»: только подтверждённые заказы из Telegram, без тестовых
-  if (user && store && !meta.test && Array.isArray(meta.items)) {
-    await addToFeed(store, meta.items).catch(() => {});
+  // --- статистика для владельца (тестовые заказы не считаем)
+  if (store && !meta.test) {
+    const certOk = notes.length === 0;
+    const total = Math.max(0, subtotal - (certOk ? discount : 0)) || subtotal;
+    await recordOrder(store, { items: meta.items, total, source: 'cart' }).catch((e) => console.error('stats failed', e));
   }
 
-  return json(200, { ok: true, certOk: notes.length === 0 });
+  // feed — почему заказ попал или не попал в ленту (видно в консоли браузера и логах Netlify)
+  let feed = 'added';
+  if (!user) feed = 'not_telegram';
+  else if (meta.test) feed = 'test';
+  else if (!store) feed = 'no_store';
+  else if (!Array.isArray(meta.items) || !meta.items.length) feed = 'no_items';
+  else {
+    try { await addToFeed(store, meta.items); } catch (e) { feed = 'store_error'; console.error('feed write failed', e); }
+  }
+  if (feed !== 'added') console.log('feed skipped:', feed, meta.no || '');
+  if (locked) await store.setJSON(lockKey, { state: 'sent', at: Date.now(), no: String(meta.no || '').slice(0, 40), certOk: notes.length === 0, feed }).catch(() => {});
+
+  return json(200, { ok: true, certOk: notes.length === 0, feed });
 };
 
 export const config = { path: '/api/order' };

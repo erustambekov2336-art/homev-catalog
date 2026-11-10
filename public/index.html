@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="light">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
 <title>Maison Forfè</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -695,17 +695,229 @@ html.lite .card.enter{animation-duration:.45s}
 .ax-bell svg{width:19px;height:19px}
 html.lite .ax::before{display:none}
 </style>
+<style id="ux-a11y">
+/* ===== UX и доступность: контраст, фокус, состояния, зоны нажатия, иерархия ===== */
+/* контраст: вторичный текст и золотая кнопка дотягивают до WCAG AA (4.5:1) в светлой теме */
+html[data-theme="light"]{--muted:#6F675A;--accent:#8A6A32;--accent-press:#745829;--accent-soft:rgba(138,106,50,.13);--focus:#8A6A32}
+html[data-theme="dark"]{--focus:#A9C2F0}
+.sheet:focus{outline:none}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+h1.title{margin:0}
+
+/* видимый фокус с клавиатуры (Telegram Desktop, внешняя клавиатура) */
+:where(button,a,[role="button"],[tabindex]):focus{outline:none}
+:where(button,a,[role="button"],[tabindex]):focus-visible{outline:2.5px solid var(--focus);outline-offset:2px}
+.card:focus-within{box-shadow:inset 0 0 0 1.5px var(--focus),var(--shadow-1)}
+.ax :focus-visible,.giftcard :focus-visible{outline-color:#fff}
+.search input:focus-visible,.inp:focus-visible{outline:none}
+
+/* состояния: наведение (только мышь), нажатие, недоступно, загрузка */
+@media (hover:hover) and (pointer:fine){
+  .btn:not([disabled]):hover{background:var(--accent-press)}
+  .btn.ghost:not([disabled]):hover{background:var(--surface3)}
+  .cbtn:hover{background:var(--accent-press)}
+  .chip:not(.on):hover{background:var(--surface2)}
+  .card{transition:box-shadow .3s var(--ease),transform .45s var(--spring)}
+  .card:hover{box-shadow:inset 0 0 0 1px var(--line),var(--shadow-2)}
+  .mrow:hover,.opt:not(.on):hover,.ad-res button:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+  .nav button:not(.on):hover{color:var(--ink)}
+  .rbtn:hover,.sheet .close:hover,.x:hover{background:var(--surface2)}
+  .fav:hover{color:#C0563F}
+  .link:hover,.meta-row button:hover{text-decoration:underline;text-underline-offset:3px}
+  .c-name:hover{color:var(--accent)}
+  .ax-sec button:hover,.ax-sh:hover{background:rgba(255,255,255,.16)}
+}
+.cbtn:active,.add:active{background:var(--accent-press)}
+.btn[disabled],.ax-buy:disabled,.cbtn[disabled]{opacity:.55;box-shadow:none;cursor:not-allowed;transform:none}
+.btn.loading{opacity:.85;cursor:progress}
+.btn.loading::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* зоны нажатия не меньше 40–44 px, не меняя внешний вид */
+.fav{width:36px;height:36px}
+.x{width:36px;height:36px}
+.search .clr{width:40px;height:40px;right:4px}
+.step{height:36px}
+.step button{width:36px;height:36px}
+.add{width:38px;height:38px}
+.chip{height:40px}
+.chip.icon{width:40px}
+.fav::after,.x::after,.add::after,.step button::after,.ax-bell::after{content:"";position:absolute;inset:-6px}
+.x,.add,.step button,.ax-bell{position:relative}
+.meta-row button{min-height:40px;padding:0 4px}
+#welLater{min-height:44px}
+
+/* галерея фото в карточке товара */
+.gal{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.gal-s{flex:0 0 100%;height:100%;position:relative;scroll-snap-align:center;scroll-snap-stop:always;cursor:zoom-in;border-radius:0}
+.gal-s img{position:absolute;inset:5%;width:90%;height:90%;object-fit:contain;mix-blend-mode:var(--blend)}
+.gal-s:focus-visible{outline-offset:-4px}
+.gal-zoom{position:absolute;left:12px;bottom:12px;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.9);color:#5E574D;box-shadow:0 1px 3px rgba(0,0,0,.08);pointer-events:none}
+.gal-zoom svg{width:17px;height:17px}
+.gal-dots{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:6px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,.75);pointer-events:none}
+.gal-dots i{width:6px;height:6px;border-radius:3px;background:rgba(34,31,27,.28);transition:width .3s var(--ease),background .3s}
+.gal-dots i.on{width:16px;background:#221F1B}
+.gal-n{position:absolute;right:12px;bottom:12px;height:28px;padding:0 10px;border-radius:999px;display:flex;align-items:center;background:rgba(255,255,255,.9);color:#221F1B;font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;pointer-events:none}
+.tile .npho{position:absolute;left:8px;bottom:8px;height:22px;padding:0 8px;border-radius:999px;display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.88);color:#221F1B;font-size:11.5px;font-weight:600;pointer-events:none}
+.tile .npho svg{width:13px;height:13px}
+/* просмотр на весь экран: щипок, двойной тап, свайпы, клавиши */
+.pv{position:fixed;inset:0;z-index:80;background:#F3EDE3;display:flex;flex-direction:column;opacity:0;transition:opacity .25s var(--ease);touch-action:none}
+.pv.in{opacity:1}
+.pv-top{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--safe-top) + 10px) 14px 10px;color:#221F1B;transition:opacity .25s}
+.pv-top b{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;max-width:60%;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-btn{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.85);color:#221F1B;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.pv-btn svg{width:20px;height:20px;stroke-width:2.2}
+.pv-btn:focus-visible{outline:2.5px solid #8A6A32;outline-offset:2px}
+.pv-st{position:absolute;inset:0;overflow:hidden}
+.pv-st img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;transform-origin:50% 50%;will-change:transform;user-select:none;-webkit-user-drag:none}
+.pv-st img.anim{transition:transform .3s var(--ease-out),opacity .25s}
+.pv-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2}
+.pv-nav.p{left:14px}.pv-nav.n{right:14px}
+.pv-nav[hidden]{display:none}
+.pv-hint{position:absolute;left:50%;bottom:calc(var(--safe-bot) + 18px);transform:translateX(-50%);z-index:2;font-size:12.5px;color:#5E574D;background:rgba(255,255,255,.8);padding:6px 12px;border-radius:999px;white-space:nowrap;transition:opacity .4s}
+.pv.zoomed .pv-hint,.pv.zoomed .pv-nav{opacity:0;pointer-events:none}
+@media (hover:none){.pv-nav{display:none}}
+
+/* «Поделиться» справа в шапке карточки товара */
+.sheet .hd .share{left:auto;right:16px}
+.sheet .hd .share svg{width:18px;height:18px;stroke-width:2}
+
+/* статистика владельца */
+.st-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.st-t{background:var(--surface2);border-radius:14px;padding:12px;min-width:0}
+.st-t span{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.st-t b{display:block;font-size:24px;font-weight:700;letter-spacing:-.6px;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.st-t small{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-note{font-size:12.5px;color:var(--muted);line-height:1.45;margin:14px 2px 0}
+.st-card{margin-top:14px;padding:14px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.st-ch-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.st-ch-h h3{margin:0;font-size:15px;font-weight:700}
+.st-mt{display:flex;padding:3px;border-radius:10px;background:var(--surface2)}
+.st-mt button{height:30px;padding:0 10px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink2)}
+.st-mt button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.st-chart{position:relative;height:170px;margin-top:22px;padding-left:46px}
+.st-grid{position:absolute;inset:0 0 18px 46px}
+.st-grid span{position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.st-grid span:last-child{border-top-color:color-mix(in srgb,var(--ink) 18%,transparent)}
+.st-grid i{position:absolute;right:calc(100% + 6px);top:-7px;font-style:normal;font-size:10.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.st-bars{position:absolute;inset:0 0 0 46px;display:flex;gap:2px;align-items:stretch}
+.st-b{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:18px;border-radius:6px}
+.st-b i{display:block;margin:0 auto;width:min(14px,70%);background:color-mix(in srgb,var(--accent) 55%,transparent);border-radius:4px 4px 0 0;transition:background .2s}
+.st-b.on i{background:var(--accent)}
+.st-b em{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-size:10.5px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+.st-b.on em{color:var(--ink);font-weight:700}
+@media (hover:hover) and (pointer:fine){.st-b:hover i{background:var(--accent)}}
+.st-sel{display:flex;flex-direction:column;gap:2px;margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+.st-sel b{font-size:13.5px;font-weight:600}
+.st-sel b::first-letter{text-transform:uppercase}
+.st-sel span{font-size:13px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.st-tbl{margin-top:10px}
+.st-tbl summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--accent);padding:6px 0;min-height:32px}
+.st-tbl table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.st-tbl th,.st-tbl td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right;font-weight:500}
+.st-tbl th:first-child,.st-tbl thead th:first-child{text-align:left}
+.st-tbl thead th{color:var(--muted);font-weight:600}
+.st-list{padding:2px 0}
+.st-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 14px}
+.st-row+.st-row{border-top:1px solid var(--line)}
+.st-row .thumb{width:44px;height:44px;border-radius:10px}
+.st-rt{flex:1;min-width:0}
+.st-rt b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-rt small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.st-n{font-size:15px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* кнопка перенесена в MainButton Telegram */
+.mb-hidden{display:none!important}
+.sheet .ft:has(> .mb-hidden:only-child){display:none}
+
+/* похожие товары в карточке */
+.sim{margin-top:22px}
+.sim-h{font-size:15px;font-weight:700;color:var(--ink);margin:0 2px 10px}
+.sim-row{display:flex;gap:10px;overflow-x:auto;margin:0 calc(-1 * var(--gx));padding:2px var(--gx) 6px;scroll-snap-type:x proximity;scroll-padding-inline:var(--gx);overscroll-behavior-x:contain}
+.sim-c{flex:0 0 136px;display:flex;flex-direction:column;align-items:stretch;text-align:left;scroll-snap-align:start;padding:6px 6px 10px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.sim-ph{position:relative;display:flex;align-items:center;justify-content:center;aspect-ratio:1;border-radius:12px;background:var(--tile);overflow:hidden;color:#9A9285}
+.sim-ph img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain;mix-blend-mode:var(--blend)}
+.sim-n{font-size:13.5px;font-weight:600;line-height:1.25;margin:8px 4px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.5em}
+.sim-m{font-size:11.5px;color:var(--muted);margin:2px 4px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sim-p{font-size:14px;font-weight:700;margin:6px 4px 0;letter-spacing:-.2px;white-space:nowrap}
+.sim-p small{font-size:11.5px;font-weight:500;color:var(--muted)}
+@media (hover:hover) and (pointer:fine){.sim-c:hover{box-shadow:inset 0 0 0 1px var(--line),var(--shadow-2)}.sim-c:hover .sim-n{color:var(--accent)}}
+
+/* очередь заказов и нет сети */
+.pill.ost{height:22px;padding:0 8px;font-size:11.5px;vertical-align:2px;margin-left:6px;background:var(--accent-soft);color:var(--accent)}
+.pill.ost.off{background:rgba(180,69,58,.12);color:var(--bad)}
+.netbar{position:fixed;left:50%;top:calc(var(--safe-top) + 10px);z-index:85;transform:translate(-50%,-160%);max-width:calc(100% - 32px);padding:9px 14px;border-radius:14px;background:#3A332B;color:#FBF6EC;font-size:13px;font-weight:600;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .45s var(--ease-out);pointer-events:none}
+.netbar.in{transform:translate(-50%,0)}
+
+/* сортировка каталога */
+.meta-row{gap:8px}
+.meta-row>span{min-width:0}
+.meta-row #resetAll{min-height:0;padding:6px 2px}
+.sortbtn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 10px 0 12px!important;border-radius:999px;background:var(--surface);color:var(--ink)!important;font-size:13px!important;font-weight:600;box-shadow:inset 0 0 0 1px var(--line);white-space:nowrap;flex:none}
+.sortbtn svg{width:16px;height:16px}
+.sortbtn svg:last-child{width:14px;height:14px;color:var(--muted)}
+.sortbtn.on{background:var(--accent-soft);color:var(--accent)!important;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent)}
+@media (hover:hover) and (pointer:fine){.sortbtn:hover{background:var(--surface2);text-decoration:none!important}.sortbtn.on:hover{background:var(--accent-soft)}}
+
+/* масштаб: щипок разрешён, двойной тап не зумит, поля ≥16 px — iOS не приближает при вводе */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.search input,.inp,input,textarea,select{font-size:16px}
+
+/* кнопка «Оформить заказ» не закрывает поле, в котором пишут */
+#v-cart .inp{scroll-margin:96px 0 calc(170px + var(--safe-bot))}
+.dock,.nav{transition:opacity .25s var(--ease),transform .3s var(--ease)}
+body.typing .dock,body.typing .nav{opacity:0;pointer-events:none;transform:translateY(16px)}
+body.typing .nav{transform:translate(-50%,16px)}
+body.typing .dock .btn{pointer-events:none}
+
+/* иерархия */
+.c-meta,.card .c-meta{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.35}
+.sec-t{font-size:18px;font-weight:700;margin:28px 4px 10px}
+.p-name{margin-top:18px}
+.p-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:8px}
+.p-head b{font-size:26px;font-weight:700;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.p-head span{font-size:14px;color:var(--muted)}
+.p-head small{font-size:14px;color:var(--muted);margin-left:auto}
+.p-price{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.p-price b{font-variant-numeric:tabular-nums}
+.badges img{height:64px}
+.fld label{color:var(--ink2);font-weight:600}
+.fld .req{color:var(--bad);margin:0 auto 0 3px}
+.err{display:flex;gap:5px;align-items:center;font-weight:500}
+.err::before{content:"!";flex:none;width:16px;height:16px;border-radius:50%;background:var(--bad);color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.order .dt{color:var(--muted)}
+
+/* ошибка загрузки аукциона */
+.state{text-align:center;padding:36px 22px}
+.state .ic{width:64px;height:64px;border-radius:20px;margin:0 auto 14px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.state .ic svg{width:28px;height:28px}
+.state h3{margin:0;font-size:18px;font-weight:700;letter-spacing:-.3px}
+.state p{margin:6px auto 18px;max-width:290px;color:var(--muted);font-size:14.5px;line-height:1.45}
+
+/* узкие экраны (320–359 px): карточки и кнопки не ломаются */
+@media (max-width:359px){
+  .grid{gap:8px;padding-left:12px;padding-right:12px}
+  .card .c-name{font-size:13.5px}
+  .c-price{font-size:15px}
+  .c-price small{display:none}
+  .cbtn{font-size:13px;gap:5px}
+  .cbtn svg{display:none}
+  .title{font-size:24px}
+  .nav button{min-width:58px;padding:0 8px}
+  .specs{grid-template-columns:1fr 1fr}
+}
+</style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="app" id="app">
   <header class="top" id="top">
     <div class="top-row">
-      <div class="title" id="title"></div>
+      <h1 class="title" id="title"></h1>
       <button class="rbtn lg press" id="themeBtn" aria-label="Тема"></button>
     </div>
-    <div class="search" id="searchWrap">
-      <svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <div class="search" id="searchWrap" role="search">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
       <input id="search" type="text" inputmode="search" autocomplete="off" enterkeyhint="search">
       <button class="clr" id="searchClr" aria-label="Очистить"><svg class="i" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
@@ -728,8 +940,8 @@ html.lite .ax::before{display:none}
 </div>
 
 <div class="dock" id="dock" hidden></div>
-<nav class="nav lg" id="nav"><div class="ind" id="ind"></div></nav>
-<div class="toast" id="toast"><div class="ti"></div><span></span></div>
+<nav class="nav lg" id="nav" aria-label="Menu"><div class="ind" id="ind" aria-hidden="true"></div></nav>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"><div class="ti" aria-hidden="true"></div><span></span></div>
 
 <script>
 'use strict';
@@ -806,6 +1018,19 @@ function toCyr(s){
     return part.replace(/[a-zA-Z]/g,ch=>{const l=ch.toLowerCase();const c=M[l]||ch;return ch===l?c:c.toUpperCase();});
   }).join('');
 }
+/* подписи для экранных дикторов и состояния ошибок */
+Object.assign(T.ru,{favAddA:'Добавить в избранное',favDelA:'Убрать из избранного',inc:'Добавить ещё одну',dec:'Убрать одну',remove:'Убрать',qtyA:'Количество',menu:'Меню',themeA:'Сменить тему',certA:'Применить сертификат',req:'обязательно',openA:'Открыть товар',shareA:'Поделиться',retry:'Повторить',aucLoadT:'Аукцион не загрузился',aucLoadS:'Проверьте интернет и попробуйте ещё раз.'});
+Object.assign(T.uz,{favAddA:'Sevimlilarga qo‘shish',favDelA:'Sevimlilardan olib tashlash',inc:'Yana bitta qo‘shish',dec:'Bittasini olib tashlash',remove:'Olib tashlash',qtyA:'Miqdor',menu:'Menyu',themeA:'Mavzuni almashtirish',certA:'Sertifikatni qo‘llash',req:'majburiy',openA:'Mahsulotni ochish',shareA:'Ulashish',retry:'Qayta urinish',aucLoadT:'Auksion yuklanmadi',aucLoadS:'Internetni tekshirib, qayta urinib ko‘ring.'});
+Object.assign(T.ru,{sort:'Сортировка',s_def:'Рекомендуем',s_asc:'Сначала дешевле',s_desc:'Сначала дороже',s_qty:'Больше предметов'});
+Object.assign(T.uz,{sort:'Saralash',s_def:'Tavsiya etamiz',s_asc:'Avval arzonlari',s_desc:'Avval qimmatlari',s_qty:'Ko‘proq buyumlar'});
+Object.assign(T.ru,{photoOf:'Фото {i} из {n}',zoomA:'Открыть фото на весь экран',prevP:'Предыдущее фото',nextP:'Следующее фото',zoomHint:'Двойной тап или щипок — увеличить',nPhoto:'{n} фото'});
+Object.assign(T.uz,{photoOf:'Rasm {i} / {n}',zoomA:'Rasmni to‘liq ekranda ochish',prevP:'Oldingi rasm',nextP:'Keyingi rasm',zoomHint:'Kattalashtirish uchun ikki marta bosing',nPhoto:'{n} ta rasm'});
+Object.assign(T.ru,{queuedT:'Заказ сохранён',queuedS:'Сейчас нет связи. Заказ {n} отправится сам, как только появится интернет. Если закроете приложение — отправим при следующем открытии.',queuedSent:'Заказ {n} отправлен',queuedFail:'Заказ {n} не отправился — напишите менеджеру',stPending:'Ждёт отправки',stFailed:'Не отправлен',sendNow:'Отправить сейчас',offline:'Нет интернета',offlineQ:'Нет интернета — заказ отправится, когда связь вернётся'});
+Object.assign(T.uz,{queuedT:'Buyurtma saqlandi',queuedS:'Hozir aloqa yo‘q. Buyurtma {n} internet paydo bo‘lishi bilan o‘zi yuboriladi. Ilovani yopsangiz — keyingi ochilganda yuboramiz.',queuedSent:'Buyurtma {n} yuborildi',queuedFail:'Buyurtma {n} yuborilmadi — menejerga yozing',stPending:'Yuborilishini kutmoqda',stFailed:'Yuborilmadi',sendNow:'Hozir yuborish',offline:'Internet yo‘q',offlineQ:'Internet yo‘q — buyurtma aloqa tiklanganda yuboriladi'});
+Object.assign(T.ru,{simSeries:'Из этой серии',simSets:'Похожие наборы',simItems:'Похожие товары'});
+Object.assign(T.uz,{simSeries:'Shu seriyadan',simSets:'O‘xshash to‘plamlar',simItems:'O‘xshash mahsulotlar'});
+Object.assign(T.ru,{shareT:'{n} — {x} · фарфор Maison Forfè',linkCopied:'Ссылка скопирована',linkCopyFail:'Не удалось скопировать ссылку',linkManual:'Скопируйте ссылку и отправьте её в чат — она откроет каталог сразу на этом товаре.',copy:'Скопировать',linkSelect:'Выделите текст и скопируйте вручную'});
+Object.assign(T.uz,{shareT:'{n} — {x} · Maison Forfè chinnisi',linkCopied:'Havola nusxalandi',linkCopyFail:'Havolani nusxalab bo‘lmadi',linkManual:'Havolani nusxalab chatga yuboring — u katalogni shu mahsulotda ochadi.',copy:'Nusxalash',linkSelect:'Matnni belgilab, qo‘lda nusxalang'});
 T.uzc={};Object.keys(T.uz).forEach(k=>T.uzc[k]=toCyr(T.uz[k]));
 const TYPE_UZC={};Object.keys(TYPE_UZ).forEach(k=>TYPE_UZC[k]=toCyr(TYPE_UZ[k]));
 
@@ -835,7 +1060,13 @@ const I={
  eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
  share:'<path d="M12 14.5V3.5M8 7.5l4-4 4 4"/><path d="M8 10.5H6.5A1.5 1.5 0 0 0 5 12v7a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19v-7a1.5 1.5 0 0 0-1.5-1.5H16"/>'
 };
-const ic=(n,cls='',extra='')=>`<svg class="i ${cls}" viewBox="0 0 24 24" ${extra}>${I[n]}</svg>`;
+I.sortA='<path d="M7 4v16M3.5 7.5L7 4l3.5 3.5M17 20V4M13.5 16.5L17 20l3.5-3.5"/>';
+I.chevD='<path d="M6 9l6 6 6-6"/>';
+I.chart='<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>';
+I.chevL='<path d="M15 6l-6 6 6 6"/>';I.chevR='<path d="M9 6l6 6-6 6"/>';
+I.expand='<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>';
+I.img='<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/>';
+const ic=(n,cls='',extra='')=>`<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false" ${extra}>${I[n]}</svg>`;
 
 /* telegram */
 const tg=window.Telegram&&window.Telegram.WebApp;
@@ -900,7 +1131,7 @@ function applyCloud(n,v){
 }
 
 const S={
- items:[],byId:{},loaded:false,tab:'catalog',search:'',type:'all',band:'all',shown:PAGE,
+ items:[],byId:{},loaded:false,tab:'catalog',search:'',type:'all',band:'all',sort:LS.get('mf_sort','def'),shown:PAGE,
  favs:LS.get('mf_favorites_v1',[]),cart:LS.get('mf_cart_v1',{}),
  lang:LS.get('mf_lang',null),themePref:LS.get('mf_theme','auto'),
  orders:LS.get('mf_orders_v1_'+UID,[]),cert:LS.get('mf_cert_v1_'+UID,null),certOn:true,
@@ -916,6 +1147,8 @@ const num=n=>Math.round(n).toLocaleString('ru-RU').replace(/[\s,\u202f]/g,'\u00a
 const money=n=>num(n)+'\u00a0'+tr('sum');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const photo=it=>it&&it.photo?BASE+'photos/'+it.photo:'';
+/* все фото товара: поле "photos" в data.json (необязательно), иначе одно "photo" */
+const photosOf=it=>{if(!it)return[];const a=[];if(it.photo)a.push(it.photo);if(Array.isArray(it.photos))it.photos.forEach(p=>{if(p&&typeof p==='string'&&!a.includes(p))a.push(p);});return a.map(p=>/^(https?:)?\/\//.test(p)?p:BASE+'photos/'+p);};
 const $=id=>document.getElementById(id);
 
 /* theme */
@@ -924,8 +1157,21 @@ function applyTheme(){
   const t=resolvedTheme();document.documentElement.dataset.theme=t;
   const bg=t==='dark'?'#0C111C':'#F6F1E9';
   try{tg&&tg.setHeaderColor&&tg.setHeaderColor(bg);tg&&tg.setBackgroundColor&&tg.setBackgroundColor(bg);tg&&tg.setBottomBarColor&&tg.setBottomBarColor(bg);}catch(e){}
-  $('themeBtn').innerHTML=ic(t==='dark'?'sun':'moon');
+  syncMain();$('themeBtn').innerHTML=ic(t==='dark'?'sun':'moon');$('themeBtn').setAttribute('aria-label',tr('themeA'));
 }
+/* role="button" на не-кнопках: Enter и пробел работают как нажатие */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'&&e.key!==' ')return;const t=e.target;
+  if(t&&t.getAttribute&&t.getAttribute('role')==='button'&&t.tagName!=='BUTTON'){e.preventDefault();t.click();}
+});
+/* на телефоне, пока открыта клавиатура в форме корзины, прячем меню и кнопку заказа — они не закрывают поле */
+(()=>{const touch=matchMedia('(pointer:coarse)');let t;
+  const isField=el=>el&&el.closest&&el.closest('#v-cart')&&/^(INPUT|TEXTAREA)$/.test(el.tagName);
+  document.addEventListener('focusin',e=>{if(!touch.matches||!isField(e.target))return;clearTimeout(t);document.body.classList.add('typing');
+    setTimeout(()=>{try{e.target.scrollIntoView({block:'nearest',behavior:'smooth'});}catch(_){}},300);});
+  document.addEventListener('focusout',()=>{clearTimeout(t);t=setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove('typing');},120);});
+})();
+const asBtn=label=>`role="button" tabindex="0"${label?` aria-label="${esc(label)}"`:''}`;
 $('themeBtn').onclick=()=>{hap();S.themePref=resolvedTheme()==='dark'?'light':'dark';save('theme',S.themePref);applyTheme();if(S.tab==='profile')renderProfile();};
 if(tg)tg.onEvent&&tg.onEvent('themeChanged',()=>{if(S.themePref==='auto')applyTheme();});
 matchMedia('(prefers-color-scheme: dark)').addEventListener&&matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(S.themePref==='auto')applyTheme();});
@@ -952,11 +1198,12 @@ function onCartChange(id){
 const TABS=[['catalog','grid'],['auction','gavel'],['cart','bag'],['profile','user']];
 let lastCount=0;
 function renderNav(bump){
-  const nav=$('nav');const c=cartCount();
+  const nav=$('nav');const c=cartCount();nav.setAttribute('aria-label',tr('menu'));
   nav.querySelectorAll('button').forEach(b=>b.remove());
   TABS.forEach(([k,icn])=>{
-    const b=document.createElement('button');b.className='press'+((S.tab==='favs'?'profile':S.tab)===k?' on':'');b.dataset.tab=k;
-    b.innerHTML=ic(icn,'fillable')+'<span>'+esc(tr(k))+'</span>'+(k==='cart'&&c?`<b class="bdg${bump&&c!==lastCount?' pop':''}">${c}</b>`:'')+(k==='auction'&&AUC.data&&AUC.data.current?'<i class="ldot"></i>':'');
+    const b=document.createElement('button');const on=(S.tab==='favs'?'profile':S.tab)===k;b.className='press'+(on?' on':'');b.dataset.tab=k;
+    if(on)b.setAttribute('aria-current','page');
+    b.innerHTML=ic(icn,'fillable')+'<span>'+esc(tr(k))+'</span>'+(k==='cart'&&c?`<b class="bdg${bump&&c!==lastCount?' pop':''}"><span class="sr-only">, </span>${c}<span class="sr-only"> ${esc(tr('qtyU'))}</span></b>`:'')+(k==='auction'&&AUC.data&&AUC.data.current?'<i class="ldot"></i>':'');
     b.onclick=()=>go(k);nav.appendChild(b);
   });
   lastCount=c;
@@ -978,7 +1225,7 @@ function renderTop(){
   const titles={catalog:'Maison Forfè',auction:tr('auction'),favs:tr('favs'),cart:tr('cart'),profile:tr('profile')};
   $('title').innerHTML=esc(titles[S.tab])+(S.tab==='catalog'?`<span class="sub">${esc(tr('brandSub'))}</span>`:'');
   $('searchWrap').style.display=S.tab==='catalog'?'':'none';
-  $('search').placeholder=tr('search');
+  $('search').placeholder=tr('search');$('search').setAttribute('aria-label',tr('search'));$('searchClr').setAttribute('aria-label',tr('reset'));
 }
 addEventListener('scroll',()=>$('top').classList.toggle('scrolled',scrollY>6),{passive:true});
 addEventListener('resize',moveInd);
@@ -996,7 +1243,7 @@ function renderHero(){
   const sub=cartSub(),pct=Math.min(100,sub/CERT_MIN*100);
   const s=sub>=CERT_MIN?tr('heroReady'):sub>0?tr('heroNeed',{x:money(CERT_MIN-sub)}):tr('heroStart');
   if(!el.firstChild){
-    el.innerHTML=`<div class="hero press" id="heroCard"><div class="hero-ic">${ic('gift')}</div><div class="hero-b"><div class="hero-k"></div><div class="hero-t"></div><div class="bar"><i></i></div><div class="hero-s"></div></div></div>`;
+    el.innerHTML=`<div class="hero press" id="heroCard" ${asBtn()}><div class="hero-ic">${ic('gift')}</div><div class="hero-b"><div class="hero-k"></div><div class="hero-t"></div><div class="bar"><i></i></div><div class="hero-s"></div></div></div>`;
     $('heroCard').onclick=()=>go('profile');
   }
   el.querySelector('.hero-k').textContent=tr('heroK');el.querySelector('.hero-t').textContent=tr('heroT');
@@ -1010,24 +1257,37 @@ function typeList(){const c={};S.items.forEach(i=>c[i.type]=(c[i.type]||0)+1);re
 function renderChips(){
   const el=$('chips');
   let h=`<button class="chip icon press" id="fBtn" aria-label="${esc(tr('filters'))}">${ic('sliders')}${S.band!=='all'?'<i class="dot"></i>':''}</button>`;
-  h+=`<button class="chip${S.type==='all'?' on':''}" data-t="all">${esc(tr('all'))} <span class="n">${S.items.length}</span></button>`;
-  typeList().forEach(([t,n])=>{h+=`<button class="chip${S.type===t?' on':''}" data-t="${esc(t)}">${CAT_ICONS[TYPE_ICON[t]]||''}${esc(trType(t))} <span class="n">${n}</span></button>`;});
+  h+=`<button class="chip${S.type==='all'?' on':''}" data-t="all" aria-pressed="${S.type==='all'}">${esc(tr('all'))} <span class="n">${S.items.length}</span></button>`;
+  typeList().forEach(([t,n])=>{h+=`<button class="chip${S.type===t?' on':''}" data-t="${esc(t)}" aria-pressed="${S.type===t}">${CAT_ICONS[TYPE_ICON[t]]||''}${esc(trType(t))} <span class="n">${n}</span></button>`;});
   el.innerHTML=h;
   el.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{hap('sel');S.type=b.dataset.t;S.shown=PAGE;renderChips();renderGrid(true);b.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});});
   $('fBtn').onclick=openFilter;
 }
 function openFilter(){
   hap();let pick=S.band;
-  const body=()=>`<div class="lbl">${esc(tr('price'))}</div><div class="opts">${BANDS.map(([k])=>`<button class="opt${pick===k?' on':''}" data-b="${k}"><span>${esc(tr('b_'+k))}</span><span class="ck">${ic('check')}</span></button>`).join('')}</div>`;
+  const body=()=>`<div class="lbl">${esc(tr('price'))}</div><div class="opts" role="group" aria-label="${esc(tr('price'))}">${BANDS.map(([k])=>`<button class="opt${pick===k?' on':''}" data-b="${k}" aria-pressed="${pick===k}"><span>${esc(tr('b_'+k))}</span><span class="ck">${ic('check')}</span></button>`).join('')}</div>`;
   const sh=openSheet({title:tr('filters'),body:body(),foot:`<div style="display:flex;gap:10px"><button class="btn ghost" id="fReset" style="flex:0 0 auto">${esc(tr('reset'))}</button><button class="btn full" id="fApply">${esc(tr('apply'))}</button></div>`});
-  const bind=()=>sh.bd.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{hap('sel');pick=b.dataset.b;sh.bd.innerHTML=body();bind();});
+  const bind=()=>sh.bd.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{hap('sel');pick=b.dataset.b;sh.bd.innerHTML=body();bind();const f=sh.bd.querySelector(`[data-b="${pick}"]`);f&&f.focus();});
   bind();
   sh.el.querySelector('#fReset').onclick=()=>{pick='all';sh.bd.innerHTML=body();bind();};
   sh.el.querySelector('#fApply').onclick=()=>{S.band=pick;S.shown=PAGE;closeSheet();renderChips();renderGrid(true);};
 }
 function filtered(){
   const q=S.search.trim().toLowerCase(),b=BANDS.find(x=>x[0]===S.band)||BANDS[0];
-  return S.items.filter(i=>(S.type==='all'||i.type===S.type)&&i.price_uzs>=b[1]&&i.price_uzs<b[2]&&(!q||i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)));
+  const list=S.items.filter(i=>(S.type==='all'||i.type===S.type)&&i.price_uzs>=b[1]&&i.price_uzs<b[2]&&(!q||i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)));
+  const cmp=SORTS[S.sort];return cmp?list.slice().sort(cmp):list;
+}
+/* сортировка: «Рекомендуем» — исходный порядок (сначала с фото); при равной цене — сначала с фото */
+const byPhoto=(a,b)=>(!a.photo)-(!b.photo);
+const SORTS={def:null,asc:(a,b)=>a.price_uzs-b.price_uzs||byPhoto(a,b),desc:(a,b)=>b.price_uzs-a.price_uzs||byPhoto(a,b),qty:(a,b)=>(b.qty||0)-(a.qty||0)||byPhoto(a,b)||a.price_uzs-b.price_uzs};
+if(!(S.sort in SORTS))S.sort='def';
+function openSort(){
+  hap();
+  const body=`<div class="opts" role="group" aria-label="${esc(tr('sort'))}">${Object.keys(SORTS).map(k=>`<button class="opt${S.sort===k?' on':''}" data-s="${k}" aria-pressed="${S.sort===k}"><span>${esc(tr('s_'+k))}</span><span class="ck">${ic('check')}</span></button>`).join('')}</div>`;
+  const sh=openSheet({title:tr('sort'),body});
+  sh.bd.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{hap('sel');S.sort=b.dataset.s;LS.set('mf_sort',S.sort);S.shown=PAGE;closeSheet();renderGrid(true);
+    setTimeout(()=>{const sb=$('sortBtn');if(sb)try{sb.focus({preventScroll:true});}catch(e){}},20);
+    const g=$('chips');g&&window.scrollY>g.offsetTop&&window.scrollTo({top:Math.max(0,g.offsetTop-80),behavior:'smooth'});});
 }
 
 /* CARDS (cached per id so photos persist) */
@@ -1037,7 +1297,7 @@ function cardEl(it){
   let el=cardCache[it.id];
   if(!el){
     el=document.createElement('article');el.className='card';el.dataset.id=it.id;
-    el.innerHTML=`<div class="tile" data-a="open">${imgTag(it)}<button class="fav" data-a="fav" aria-label="fav">${ic('heart')}</button></div><div class="c-name" data-a="open"></div><div class="c-meta"></div><div class="c-foot"><div class="c-price"></div><div class="c-act"></div></div>`;
+    el.innerHTML=`<div class="tile" data-a="open">${imgTag(it)}<button class="fav" data-a="fav">${ic('heart')}</button></div><h3 class="c-name" data-a="open" role="button" tabindex="0"></h3><div class="c-meta"></div><div class="c-foot"><div class="c-price"></div><div class="c-act"></div></div>`;
     el.addEventListener('click',e=>{const a=e.target.closest('[data-a]');if(!a)return;const act=a.dataset.a;e.stopPropagation();
       if(act==='open')openProduct(it.id);else if(act==='fav')toggleFav(it.id,a);else if(act==='add'){hap('medium');setQty(it.id,1);toast(tr('added'),'bag');}
       else if(act==='inc'){hap();setQty(it.id,(S.cart[it.id]||0)+1);}else if(act==='dec'){hap();setQty(it.id,(S.cart[it.id]||0)-1);}});
@@ -1046,7 +1306,9 @@ function cardEl(it){
   el.querySelector('.c-name').textContent=it.name;
   el.querySelector('.c-meta').textContent=trType(it.type)+(it.qty?', '+it.qty+' '+tr('pcs'):'');
   el.querySelector('.c-price').innerHTML=`${num(it.price_uzs)}<span>${esc(tr('sum'))}</span><small>$${it.price_usd}</small>`;
-  el.querySelector('.fav').classList.toggle('on',S.favs.includes(it.id));
+  setFavBtn(el.querySelector('.fav'),S.favs.includes(it.id),it.name);
+  const np=photosOf(it).length;let nb=el.querySelector('.npho');
+  if(np>1){if(!nb){nb=document.createElement('span');nb.className='npho';el.querySelector('.tile').appendChild(nb);}nb.innerHTML=ic('img')+esc(tr('nPhoto',{n:np}));}else if(nb)nb.remove();
   updateCardAction(it.id);
   return el;
 }
@@ -1056,7 +1318,7 @@ function updateCardAction(id){
   if(box.dataset.m===want&&q){box.querySelector('span').textContent=q+' '+tr('qtyU');return;}
   if(box.dataset.m===want)return;
   box.dataset.m=want;
-  box.innerHTML=q?`<div class="cstep"><button data-a="dec" aria-label="-">${ic('minus')}</button><span>${q} ${esc(tr('qtyU'))}</span><button data-a="inc" aria-label="+">${ic('plus')}</button></div>`:`<button class="cbtn press" data-a="add">${ic('bag')}${esc(tr('addToCart'))}</button>`;
+  box.innerHTML=q?`<div class="cstep" role="group" aria-label="${esc(tr('qtyA'))}"><button data-a="dec" aria-label="${esc(tr('dec'))}">${ic('minus')}</button><span aria-live="polite">${q} ${esc(tr('qtyU'))}</span><button data-a="inc" aria-label="${esc(tr('inc'))}">${ic('plus')}</button></div>`:`<button class="cbtn press" data-a="add">${ic('bag')}${esc(tr('addToCart'))}</button>`;
 }
 let firstPaint=true,io;
 function renderGrid(reset){
@@ -1072,7 +1334,8 @@ function renderGrid(reset){
     show.slice(existing.size).forEach(it=>{const e=cardEl(it);e.classList.remove('enter');e.style.animationDelay='0ms';void e.offsetWidth;e.classList.add('enter');grid.appendChild(e);});
   }
   firstPaint=false;
-  $('metaRow').innerHTML=`<span>${esc(tr('found',{n:num(list.length)}))}</span>${(S.type!=='all'||S.band!=='all'||S.search)?`<button id="resetAll">${esc(tr('reset'))}</button>`:''}`;
+  $('metaRow').innerHTML=`<span aria-live="polite">${esc(tr('found',{n:num(list.length)}))}${(S.type!=='all'||S.band!=='all'||S.search)?` · <button id="resetAll">${esc(tr('reset'))}</button>`:''}</span><button class="sortbtn${S.sort!=='def'?' on':''}" id="sortBtn" aria-haspopup="dialog" aria-label="${esc(tr('sort')+': '+tr('s_'+S.sort))}">${ic('sortA')}<span>${esc(tr('s_'+S.sort))}</span>${ic('chevD')}</button>`;
+  $('sortBtn').onclick=openSort;
   const ra=$('resetAll');if(ra)ra.onclick=resetFilters;
   $('catEmpty').innerHTML=list.length?'':`<div class="empty"><div class="ic">${ic('sparkle')}</div><h3>${esc(tr('nothing'))}</h3><p>${esc(tr('nothingS'))}</p><button class="btn sm press" id="emptyReset">${esc(tr('resetAll'))}</button></div>`;
   const er=$('emptyReset');if(er)er.onclick=resetFilters;
@@ -1084,32 +1347,172 @@ function setupInfinite(){}
 function skeleton(){$('grid').innerHTML=Array.from({length:6},()=>`<div class="skel"><div class="t"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div>`).join('');}
 
 /* FAV */
+function setFavBtn(b,on,name){if(!b)return;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);b.setAttribute('aria-label',tr(on?'favDelA':'favAddA')+(name?': '+name:''));}
 function toggleFav(id,btn){
   const on=!S.favs.includes(id);
   S.favs=on?S.favs.concat([id]):S.favs.filter(x=>x!==id);save('favs',S.favs);
   hap(on?'medium':'light');toast(tr(on?'favAdd':'favDel'),'heart');
-  const c=cardCache[id];if(c){const f=c.querySelector('.fav');f.classList.toggle('on',on);f.classList.remove('pop');void f.offsetWidth;if(on)f.classList.add('pop');}
-  if(btn&&!btn.closest('.card')){btn.classList.toggle('on',on);btn.classList.remove('pop');void btn.offsetWidth;if(on)btn.classList.add('pop');}
+  const nm=S.byId[id]&&S.byId[id].name;
+  const c=cardCache[id];if(c){const f=c.querySelector('.fav');setFavBtn(f,on,nm);f.classList.remove('pop');void f.offsetWidth;if(on)f.classList.add('pop');}
+  if(btn&&!btn.closest('.card')){setFavBtn(btn,on,nm);btn.classList.remove('pop');void btn.offsetWidth;if(on)btn.classList.add('pop');}
   if(S.tab==='favs')renderFavs();
+}
+
+/* ПОХОЖИЕ: «Из этой серии» — тот же рисунок (первое слово названия: Saman, Blue Stone → blue …),
+   чтобы докупить к сервизу чайник или пиалы; «Похожие наборы» — тот же тип, ближе по цене и числу предметов */
+/* если название начинается с цвета («White Rose», «Pastel Gray»), серия — первые два слова */
+const FAM_GENERIC=new Set(['white','pastel','silver','gold','golden','blue','black','rose','pink','gray','grey','green','red','orange','happy','royal','classic']);
+const famKey=it=>{const w=((it&&it.name)||'').toLowerCase().split(/\s+/).filter(x=>x&&!/\d/.test(x));if(!w.length)return'';return FAM_GENERIC.has(w[0])&&w[1]?w[0]+' '+w[1]:w[0];};
+function similar(it){
+  const fam=famKey(it),pool=S.items.filter(x=>x.id!==it.id&&x.in_stock!==false);
+  const series=fam.length>=3?pool.filter(x=>famKey(x)===fam)
+    .sort((a,b)=>(!a.photo)-(!b.photo)||(a.type===it.type)-(b.type===it.type)||a.price_uzs-b.price_uzs).slice(0,10):[];
+  const seen=new Set(series.map(x=>x.id));
+  const dist=x=>Math.abs(Math.log((x.price_uzs||1)/(it.price_uzs||1)))+(x.qty&&it.qty?Math.abs(x.qty-it.qty)/Math.max(x.qty,it.qty):.5)+(x.photo?0:2);
+  const like=pool.filter(x=>x.type===it.type&&!seen.has(x.id)).map(x=>[x,dist(x)]).sort((a,b)=>a[1]-b[1]).slice(0,10).map(a=>a[0]);
+  return{series,like};
+}
+function simRow(title,list){
+  if(!list.length)return'';
+  return `<section class="sim" aria-label="${esc(title)}"><div class="lbl sim-h">${esc(title)}</div><div class="sim-row">${list.map(x=>{const p=photo(x);
+    return `<button class="sim-c press" data-sim="${esc(x.id)}" aria-label="${esc(x.name+', '+money(x.price_uzs))}"><span class="sim-ph">${p?`<img alt="" loading="lazy" decoding="async" src="${esc(p)}">`:(CAT_ICONS[TYPE_ICON[x.type]]||'')}</span><span class="sim-n">${esc(x.name)}</span><span class="sim-m">${esc(trType(x.type))}</span><b class="sim-p">${num(x.price_uzs)} <small>${esc(tr('sum'))}</small></b></button>`;}).join('')}</div></section>`;
+}
+function simHtml(it){const {series,like}=similar(it);return simRow(tr('simSeries'),series)+simRow(tr(/набор/i.test(it.type)?'simSets':'simItems'),like);}
+
+/* ПОДЕЛИТЬСЯ ТОВАРОМ
+   Ссылка открывает мини-приложение сразу на этом товаре: https://t.me/<бот>?startapp=i_<id>
+   (основу ссылки сервер аукциона отдаёт как appLink — из MINIAPP_LINK или имени бота).
+   В Telegram — окно выбора чата, в мобильном браузере — системное «Поделиться», иначе — копируем ссылку. */
+function productLink(it){
+  const app=(AUC.data&&AUC.data.appLink)||LS.get('mf_applink','');
+  if(app)return app+(app.includes('?')?'&':'?')+'startapp=i_'+encodeURIComponent(it.id);
+  return location.origin+location.pathname+'#i_'+encodeURIComponent(it.id);
+}
+async function shareProduct(it){
+  hap();
+  const url=productLink(it),text=tr('shareT',{n:it.name,x:money(it.price_uzs)});
+  if(tg&&tg.openTelegramLink&&tg.platform&&tg.platform!=='unknown'&&/^https:\/\/t\.me\//.test(url)){
+    try{tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text));return;}catch(e){}
+  }
+  if(navigator.share&&matchMedia('(pointer:coarse)').matches){
+    try{await navigator.share({title:it.name,text,url});return;}catch(e){if(e&&e.name==='AbortError')return;}
+  }
+  const ok=await copyText(text+'\n'+url);
+  if(ok){toast(tr('linkCopied'),'check');return;}
+  /* буфер обмена недоступен (так бывает в некоторых окнах Telegram) — показываем ссылку, её можно выделить и скопировать */
+  const back=it.id;
+  const sh=openSheet({title:tr('shareA'),body:`<p class="lead" style="margin:0 0 12px;text-align:left;max-width:none">${esc(tr('linkManual'))}</p>
+    <label class="sr-only" for="shLink">${esc(tr('shareA'))}</label><textarea class="inp" id="shLink" rows="3" readonly>${esc(text+'\n'+url)}</textarea>`,
+    foot:`<div style="display:flex;gap:10px"><button class="btn ghost" id="shBack" style="flex:0 0 auto">${esc(tr('close'))}</button><button class="btn full" id="shCopy" style="flex:1">${esc(tr('copy'))}</button></div>`});
+  const ta=sh.el.querySelector('#shLink');setTimeout(()=>{try{ta.focus({preventScroll:true});ta.select();}catch(e){}},350);
+  sh.el.querySelector('#shCopy').onclick=async()=>{ta.select();const ok2=await copyText(ta.value);toast(tr(ok2?'linkCopied':'linkSelect'),ok2?'check':'x');if(ok2)openProduct(back);};
+  sh.el.querySelector('#shBack').onclick=()=>openProduct(back);
+}
+async function copyText(s){
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(s);return true;}}catch(e){}
+  try{const t=document.createElement('textarea');t.value=s;t.setAttribute('readonly','');t.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();return ok;}catch(e){return false;}
 }
 
 /* PRODUCT SHEET */
 function openProduct(id){
-  const it=S.byId[id];if(!it)return;hap();
+  const it=S.byId[id];if(!it)return;hap();trackView(id);
   let q=S.cart[id]||1;const inCart=!!S.cart[id];const p=photo(it);
-  const body=`<div class="p-photo">${p?`<img alt="" src="${esc(p)}">`:`<div class="tile" style="position:absolute;inset:0">${imgTag(it)}</div>`}<button class="fav press${S.favs.includes(id)?' on':''}" id="pFav">${ic('heart')}</button></div>
-   <div class="p-name">${esc(it.name)}</div>
+  const ph=photosOf(it),n=ph.length;
+  const gal=n?`<div class="gal" id="pGal">${ph.map((u,i)=>`<button class="gal-s" data-i="${i}" aria-label="${esc(tr('zoomA')+(n>1?' · '+tr('photoOf',{i:i+1,n}):'')+': '+it.name)}"><img alt="" src="${esc(u)}"${i?' loading="lazy"':''} decoding="async"></button>`).join('')}</div>
+     <span class="gal-zoom" aria-hidden="true">${ic('expand')}</span>${n>1?`<div class="gal-dots" aria-hidden="true">${ph.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div><span class="gal-n" id="pGalN" aria-hidden="true">1/${n}</span>`:''}`
+    :`<div class="tile" style="position:absolute;inset:0">${imgTag(it)}</div>`;
+  const body=`<div class="p-photo">${gal}<button class="fav press" id="pFav">${ic('heart')}</button></div>
+   <h3 class="p-name" id="pName">${esc(it.name)}</h3>
+   <div class="p-head"><b>${num(it.price_uzs)}</b><span>${esc(tr('sum'))}</span></div>
    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap"><span class="pill${it.in_stock===false?' off':''}"><i></i>${esc(tr(it.in_stock===false?'outStock':'inStock'))}</span><span class="p-sub" style="margin:0">${esc(trType(it.type))}</span></div>
    <div class="specs"><div class="spec"><div class="k">${esc(tr('collection'))}</div><div class="v">${esc(it.collection||'—')}</div></div><div class="spec"><div class="k">${esc(tr('items'))}</div><div class="v">${it.qty||'—'}</div></div><div class="spec"><div class="k">USD</div><div class="v">$${it.price_usd}</div></div></div>
    ${(it.badges||[]).length?`<div class="lbl" style="margin-top:18px">${esc(tr('care'))}</div><div class="badges">${it.badges.map(b=>`<img alt="" src="${BASE}badges/${esc(b)}">`).join('')}</div>`:''}
-   <div class="p-price"><b id="pTot">${num(q*it.price_uzs)}</b><span>${esc(tr('sum'))}</span><span id="pEach" style="margin-left:auto"></span></div>`;
-  const foot=()=>`<div class="buybar"><div class="qty"><button id="qm" aria-label="-">${ic('minus')}</button><span id="qv">${q}</span><button id="qp" aria-label="+">${ic('plus')}</button></div><button class="btn" id="pAdd">${ic('bag')}${esc(tr(inCart?'updCart':'addToCart'))}</button></div>`;
+   <div class="p-price" id="pTotRow"><span style="color:var(--ink2);font-weight:600">${esc(tr('total'))}</span><b id="pTot">${num(q*it.price_uzs)}</b><span>${esc(tr('sum'))}</span><span id="pEach" style="margin-left:auto"></span></div>${simHtml(it)}`;
+  const foot=()=>`<div class="buybar"><div class="qty" role="group" aria-label="${esc(tr('qtyA'))}"><button id="qm" aria-label="${esc(tr('dec'))}">${ic('minus')}</button><span id="qv" aria-live="polite">${q}</span><button id="qp" aria-label="${esc(tr('inc'))}">${ic('plus')}</button></div><button class="btn" id="pAdd">${ic('bag')}${esc(tr(inCart?'updCart':'addToCart'))}</button></div>`;
   const sh=openSheet({title:it.collection||trType(it.type),body,foot:foot()});
-  const upd=()=>{sh.el.querySelector('#qv').textContent=q;sh.el.querySelector('#pTot').textContent=num(q*it.price_uzs);sh.el.querySelector('#pEach').textContent=q>1?num(it.price_uzs)+' × '+q:'';};upd();
+  setFavBtn(sh.el.querySelector('#pFav'),S.favs.includes(id),it.name);sh.el.setAttribute('aria-labelledby','pName');
+  sh.el.querySelector('.hd').insertAdjacentHTML('beforeend',`<button class="close share press" id="pShare" aria-label="${esc(tr('shareA')+': '+it.name)}">${ic('share')}</button>`);
+  sh.el.querySelector('#pShare').onclick=()=>shareProduct(it);
+  sh.el.querySelectorAll('[data-sim]').forEach(b=>b.onclick=()=>{hap('sel');openProduct(b.dataset.sim);});
+  const G=sh.el.querySelector('#pGal');
+  if(G){
+    G.querySelectorAll('.gal-s').forEach(b=>b.onclick=()=>openViewer(ph,+b.dataset.i,it.name,i=>{G.scrollTo({left:i*G.clientWidth});}));
+    if(n>1){let raf=0;G.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{const i=Math.round(G.scrollLeft/G.clientWidth);
+      sh.el.querySelectorAll('.gal-dots i').forEach((d,k)=>d.classList.toggle('on',k===i));const c=sh.el.querySelector('#pGalN');if(c)c.textContent=(i+1)+'/'+n;});},{passive:true});}
+  }
+  const upd=()=>{sh.el.querySelector('#qm').disabled=q<=1;sh.el.querySelector('#pTotRow').style.display=q>1?'':'none';sh.el.querySelector('#qv').textContent=q;sh.el.querySelector('#pTot').textContent=num(q*it.price_uzs);sh.el.querySelector('#pEach').textContent=q>1?num(it.price_uzs)+' × '+q:'';};upd();
   sh.el.querySelector('#qm').onclick=()=>{if(q>1){q--;hap('sel');upd();}};
   sh.el.querySelector('#qp').onclick=()=>{q++;hap('sel');upd();};
   sh.el.querySelector('#pAdd').onclick=()=>{hap('medium');setQty(id,q);closeSheet();toast(tr('added'),'bag');};
   sh.el.querySelector('#pFav').onclick=e=>toggleFav(id,e.currentTarget);
+}
+
+/* ПРОСМОТР ФОТО НА ВЕСЬ ЭКРАН: щипок и колесо — масштаб, двойной тап — ×2.5, перетаскивание при увеличении,
+   свайп влево/вправо — соседнее фото, свайп вниз или Esc — закрыть, стрелки и +/− на клавиатуре */
+let PV=null;
+function openViewer(list,start,name,onIndex){
+  if(PV)PV.close();
+  const n=list.length;let i=start||0,s=1,tx=0,ty=0;
+  const el=document.createElement('div');el.className='pv';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label',name);
+  el.innerHTML=`<div class="pv-top"><button class="pv-btn" data-a="x" aria-label="${esc(tr('close'))}">${ic('x')}</button><b aria-live="polite"></b><span style="width:44px"></span></div>
+    <div class="pv-st"><img alt="" draggable="false"></div>
+    <button class="pv-btn pv-nav p" data-a="p" aria-label="${esc(tr('prevP'))}"${n>1?'':' hidden'}>${ic('chevL')}</button>
+    <button class="pv-btn pv-nav n" data-a="n" aria-label="${esc(tr('nextP'))}"${n>1?'':' hidden'}>${ic('chevR')}</button>
+    <div class="pv-hint">${esc(tr('zoomHint'))}</div>`;
+  document.body.appendChild(el);
+  const st=el.querySelector('.pv-st'),img=st.querySelector('img'),cap=el.querySelector('.pv-top b'),hint=el.querySelector('.pv-hint');
+  const sheet=cur&&cur.el;if(sheet)sheet.inert=true;
+  const opener=document.activeElement;
+  setTimeout(()=>{hint.style.opacity='0';},2600);
+  const box=()=>{const W=st.clientWidth,H=st.clientHeight,nw=img.naturalWidth||W,nh=img.naturalHeight||H,r=Math.min(W/nw,H/nh);return{W,H,cw:nw*r,ch:nh*r};};
+  const clamp=()=>{const b=box(),mx=Math.max(0,(b.cw*s-b.W)/2),my=Math.max(0,(b.ch*s-b.H)/2);tx=Math.min(mx,Math.max(-mx,tx));ty=Math.min(my,Math.max(-my,ty));};
+  const apply=(anim)=>{img.classList.toggle('anim',!!anim);img.style.transform=`translate3d(${tx}px,${ty}px,0) scale(${s})`;el.classList.toggle('zoomed',s>1.01);};
+  const reset=(anim)=>{s=1;tx=0;ty=0;img.style.opacity='';apply(anim);};
+  const show=k=>{i=(k+n)%n;img.src=list[i];reset(false);cap.textContent=n>1?tr('photoOf',{i:i+1,n}):name;
+    [list[(i+1)%n],list[(i-1+n)%n]].forEach(u=>{if(u){const x=new Image();x.src=u;}});onIndex&&onIndex(i);};
+  const zoomAt=(px,py,ns)=>{const r=st.getBoundingClientRect(),p={x:px-r.left-r.width/2,y:py-r.top-r.height/2};
+    const c={x:(p.x-tx)/s,y:(p.y-ty)/s};s=Math.min(4,Math.max(1,ns));tx=p.x-s*c.x;ty=p.y-s*c.y;if(s<=1.01){s=1;tx=0;ty=0;}clamp();};
+  /* жесты */
+  const pts=new Map();let g=null,lastTap=0;
+  st.addEventListener('pointerdown',e=>{st.setPointerCapture(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){const [a,b]=[...pts.values()];g={pinch:1,d0:Math.hypot(a.x-b.x,a.y-b.y),s0:s,m0:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},tx0:tx,ty0:ty};}
+    else if(pts.size===1)g={x0:e.clientX,y0:e.clientY,tx0:tx,ty0:ty,t0:performance.now(),moved:0};});
+  st.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId)||!g)return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(g.pinch&&pts.size>=2){const [a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y),m={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
+      const r=st.getBoundingClientRect(),c0={x:(g.m0.x-r.left-r.width/2-g.tx0)/g.s0,y:(g.m0.y-r.top-r.height/2-g.ty0)/g.s0};
+      s=Math.min(4,Math.max(.8,g.s0*d/g.d0));tx=m.x-r.left-r.width/2-s*c0.x;ty=m.y-r.top-r.height/2-s*c0.y;apply(false);return;}
+    if(g.pinch)return;
+    const dx=e.clientX-g.x0,dy=e.clientY-g.y0;g.moved=Math.max(g.moved,Math.hypot(dx,dy));
+    if(s>1.01){tx=g.tx0+dx;ty=g.ty0+dy;clamp();apply(false);return;}
+    if(!g.dir&&g.moved>8)g.dir=Math.abs(dx)>Math.abs(dy)?'x':'y';
+    if(g.dir==='x'&&n>1){tx=dx;apply(false);}
+    else if(g.dir==='y'&&dy>0){ty=dy;img.style.opacity=String(Math.max(.35,1-dy/400));apply(false);}});
+  const up=e=>{if(!pts.has(e.pointerId))return;pts.delete(e.pointerId);if(!g)return;
+    if(g.pinch){if(pts.size===0){if(s<1.05)reset(true);else{clamp();apply(true);}g=null;}return;}
+    const dx=e.clientX-g.x0,dy=e.clientY-g.y0,dt=performance.now()-g.t0;
+    if(g.moved<10&&dt<300){const now=performance.now();
+      if(now-lastTap<320){lastTap=0;if(s>1.01)reset(true);else{zoomAt(e.clientX,e.clientY,2.5);apply(true);}hap('sel');}
+      else lastTap=now;g=null;return;}
+    if(s<=1.01){if(g.dir==='x'&&n>1&&Math.abs(dx)>60){hap('sel');show(i+(dx<0?1:-1));}
+      else if(g.dir==='y'&&dy>110){close();}
+      else reset(true);}
+    g=null;};
+  st.addEventListener('pointerup',up);st.addEventListener('pointercancel',up);
+  st.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,s*(e.deltaY<0?1.15:1/1.15));apply(false);},{passive:false});
+  el.addEventListener('click',e=>{const a=e.target.closest('[data-a]');if(!a)return;hap('sel');
+    if(a.dataset.a==='x')close();else show(i+(a.dataset.a==='n'?1:-1));});
+  const key=e=>{if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();close();}
+    else if(e.key==='ArrowRight'&&n>1)show(i+1);else if(e.key==='ArrowLeft'&&n>1)show(i-1);
+    else if(e.key==='+'||e.key==='='){const r=st.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,s*1.5);apply(true);}
+    else if(e.key==='-'){const r=st.getBoundingClientRect();zoomAt(r.left+r.width/2,r.top+r.height/2,s/1.5);apply(true);}
+    else if(e.key==='Tab'){const f=[...el.querySelectorAll('button:not([hidden])')].filter(x=>x.offsetParent);if(!f.length)return;const a=f[0],z=f[f.length-1];
+      if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}};
+  document.addEventListener('keydown',key,true);
+  function close(){if(!PV)return;PV=null;document.removeEventListener('keydown',key,true);el.classList.remove('in');if(sheet)sheet.inert=false;
+    setTimeout(()=>el.remove(),260);syncMain();try{opener&&opener.focus&&opener.focus({preventScroll:true});}catch(_){}updateBack();}
+  PV={close};show(i);syncMain();
+  requestAnimationFrame(()=>{el.classList.add('in');el.querySelector('[data-a="x"]').focus({preventScroll:true});});
+  updateBack();
 }
 
 /* SHEETS */
@@ -1117,10 +1520,16 @@ let cur=null;
 function openSheet({title,body,foot,onClose,noClose}){
   if(cur)closeSheet(true);
   const scrim=document.createElement('div');scrim.className='scrim';
-  const el=document.createElement('div');el.className='sheet';el.setAttribute('role','dialog');
-  el.innerHTML=`<div class="grab"><i></i></div><div class="hd">${noClose?'':`<button class="close press" aria-label="${esc(tr('close'))}">${ic('x')}</button>`}<h2>${esc(title||'')}</h2></div><div class="bd">${body}</div>${foot?`<div class="ft">${foot}</div>`:''}`;
+  const el=document.createElement('div');el.className='sheet';el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');
+  const hid='sh'+Date.now();
+  el.innerHTML=`<div class="grab" aria-hidden="true"><i></i></div><div class="hd">${noClose?'':`<button class="close press" aria-label="${esc(tr('close'))}">${ic('x')}</button>`}<h2 id="${hid}">${esc(title||'')}</h2></div><div class="bd">${body}</div>${foot?`<div class="ft">${foot}</div>`:''}`;
   document.body.append(scrim,el);document.body.classList.add('locked');
-  requestAnimationFrame(()=>{scrim.classList.add('in');el.classList.add('in');});
+  if(title)el.setAttribute('aria-labelledby',hid);else{const h=el.querySelector('.bd h1,.bd h2,.bd h3,.bd .h1');if(h){h.id=hid+'b';el.setAttribute('aria-labelledby',h.id);}}
+  /* фон недоступен для клавиатуры и экранного диктора, пока открыто окно */
+  const back=[$('app'),$('nav'),$('dock')];back.forEach(n=>n&&(n.inert=true));
+  const opener=document.activeElement;
+  requestAnimationFrame(()=>{scrim.classList.add('in');el.classList.add('in');
+    el.tabIndex=-1;const f=el.querySelector('.close')||el.querySelector('.ft button')||el;try{f&&f.focus({preventScroll:true});}catch(e){}});
   scrim.onclick=()=>!noClose&&closeSheet();
   const cb=el.querySelector('.close');if(cb)cb.onclick=()=>closeSheet();
   // drag to dismiss
@@ -1129,24 +1538,32 @@ function openSheet({title,body,foot,onClose,noClose}){
   const move=e=>{if(y0==null)return;dy=Math.max(0,e.touches[0].clientY-y0);if(dy>0&&e.cancelable&&e.currentTarget!==bd)e.preventDefault();if(dy>0)el.style.transform=`translateY(${dy}px)`;};
   const end=()=>{if(y0==null)return;y0=null;el.style.transition='';if(dy>110)closeSheet();else el.style.transform='';};
   [el.querySelector('.grab'),el.querySelector('.hd'),bd].forEach(z=>{z.addEventListener('touchstart',start,{passive:true});z.addEventListener('touchmove',move,{passive:false});z.addEventListener('touchend',end);});
-  cur={el,scrim,onClose,bd};updateBack();
+  cur={el,scrim,onClose,bd,noClose,opener,back};updateBack();syncMain();
   return cur;
 }
+document.addEventListener('keydown',e=>{
+  if(!cur)return;
+  if(e.key==='Escape'&&!cur.noClose){e.preventDefault();closeSheet();return;}
+  if(e.key==='Tab'){const f=[...cur.el.querySelectorAll('button:not([disabled]),input,textarea,select,[tabindex="0"]')].filter(x=>x.offsetParent!==null);if(!f.length)return;
+    const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}
+});
 function closeSheet(instant){
-  if(!cur)return;const {el,scrim,onClose}=cur;cur=null;
+  if(!cur)return;const {el,scrim,onClose,opener,back}=cur;cur=null;
+  back.forEach(n=>n&&(n.inert=false));
+  setTimeout(()=>{if(!cur&&opener&&document.contains(opener)&&opener.focus)try{opener.focus({preventScroll:true});}catch(e){}},0);
   if(instant){el.remove();scrim.remove();}else{el.style.transform='translateY(100%)';scrim.classList.remove('in');setTimeout(()=>{el.remove();scrim.remove();},420);}
   if(!document.querySelector('.sheet.in:not([style*="100%"])'))document.body.classList.remove('locked');
   setTimeout(()=>{if(!cur)document.body.classList.remove('locked');},10);
-  onClose&&onClose();updateBack();
+  onClose&&onClose();updateBack();syncMain();
 }
-function updateBack(){if(!tg||!tg.BackButton)return;(cur||S.tab!=='catalog')?tg.BackButton.show():tg.BackButton.hide();}
-if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{if(cur){if(!cur.el.querySelector('.close'))return;closeSheet();}else go(S.tab==='favs'?'profile':'catalog');});
+function updateBack(){if(!tg||!tg.BackButton)return;(PV||cur||S.tab!=='catalog')?tg.BackButton.show():tg.BackButton.hide();}
+if(tg&&tg.BackButton)tg.BackButton.onClick(()=>{if(PV){PV.close();return;}if(cur){if(!cur.el.querySelector('.close'))return;closeSheet();}else go(S.tab==='favs'?'profile':'catalog');});
 
 /* FAVS VIEW */
 function renderFavs(){
   const el=$('v-favs');const list=S.favs.map(id=>S.byId[id]).filter(Boolean);
   if(!list.length){el.innerHTML=`<div class="empty"><div class="ic">${ic('heart')}</div><h3>${esc(tr('favEmptyT'))}</h3><p>${esc(tr('favEmptyS'))}</p><button class="btn sm press" data-go="catalog">${esc(tr('goCatalog'))}</button></div>`;bindGo(el);return;}
-  el.innerHTML=`<div class="pad"><div class="group">${list.map(it=>`<div class="row" data-id="${esc(it.id)}"><div class="thumb" data-a="open">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div class="b" data-a="open"><div class="n">${esc(it.name)}</div><div class="m">${esc(trType(it.type))}${it.qty?', '+it.qty+' '+esc(tr('pcs')):''}</div><div class="p">${money(it.price_uzs)}</div></div><div class="side"><button class="x press" data-a="unfav" aria-label="remove">${ic('x')}</button>${S.cart[it.id]?`<span class="pill" style="height:24px">${ic('check','','style="width:13px;height:13px;stroke-width:2.6"')}${S.cart[it.id]}</span>`:`<button class="add press" data-a="add" aria-label="+">${ic('plus')}</button>`}</div></div>`).join('')}</div></div>`;
+  el.innerHTML=`<div class="pad"><div class="group">${list.map(it=>`<div class="row" data-id="${esc(it.id)}"><div class="thumb" data-a="open">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div class="b" data-a="open" ${asBtn()}><div class="n">${esc(it.name)}</div><div class="m">${esc(trType(it.type))}${it.qty?', '+it.qty+' '+esc(tr('pcs')):''}</div><div class="p">${money(it.price_uzs)}</div></div><div class="side"><button class="x press" data-a="unfav" aria-label="${esc(tr('favDelA')+': '+it.name)}">${ic('x')}</button>${S.cart[it.id]?`<span class="pill" style="height:24px">${ic('check','','style="width:13px;height:13px;stroke-width:2.6"')}${S.cart[it.id]}<span class="sr-only"> ${esc(tr('inCartN'))}</span></span>`:`<button class="add press" data-a="add" aria-label="${esc(tr('addToCart')+': '+it.name)}">${ic('plus')}</button>`}</div></div>`).join('')}</div></div>`;
   el.querySelectorAll('.row').forEach(r=>r.onclick=e=>{const a=e.target.closest('[data-a]');if(!a)return;const id=r.dataset.id;
     if(a.dataset.a==='open')openProduct(id);else if(a.dataset.a==='unfav')toggleFav(id);else if(a.dataset.a==='add'){hap('medium');setQty(id,1);toast(tr('added'),'bag');renderFavs();}});
 }
@@ -1157,36 +1574,70 @@ function renderCart(){
   const el=$('v-cart');const ids=cartIds();
   if(!ids.length){el.innerHTML=`<div class="empty"><div class="ic">${ic('bag')}</div><h3>${esc(tr('cartEmptyT'))}</h3><p>${esc(tr('cartEmptyS'))}</p><button class="btn sm press" data-go="catalog">${esc(tr('goCatalog'))}</button></div>`;bindGo(el);renderDock();return;}
   const t=totals();const f=S.form,er=S.errors;
+  const reqM=`<span class="req" aria-hidden="true">*</span><span class="sr-only">, ${esc(tr('req'))}</span>`;
+  const errA=k=>er[k]?`aria-invalid="true" aria-describedby="e-${k}"`:'';
+  const errD=k=>er[k]?`<div class="err" id="e-${k}">${esc(er[k])}</div>`:'';
   let certHtml='';
   if(certAvail()){
     const s=t.eligible?(t.applied?tr('certReady'):tr('certOff')):tr('certNeed',{x:money(CERT_MIN-t.sub)});
-    certHtml=`<div class="card2"><div class="cert"><div class="ic">${ic('gift')}</div><div style="flex:1;min-width:0"><div class="t">${esc(tr('certT'))}</div><div class="s">${esc(s)}</div></div>${t.eligible?`<button class="toggle${S.certOn?' on':''}" id="certTg" aria-label="cert"></button>`:''}</div>${t.eligible?'':`<div class="bar" style="margin-top:12px;background:var(--surface2)"><i style="width:${Math.max(3,t.sub/CERT_MIN*100)}%"></i></div>`}</div>`;
+    certHtml=`<div class="card2"><div class="cert"><div class="ic">${ic('gift')}</div><div style="flex:1;min-width:0"><div class="t">${esc(tr('certT'))}</div><div class="s">${esc(s)}</div></div>${t.eligible?`<button class="toggle${S.certOn?' on':''}" id="certTg" role="switch" aria-checked="${!!S.certOn}" aria-label="${esc(tr('certA'))}"></button>`:''}</div>${t.eligible?'':`<div class="bar" style="margin-top:12px;background:var(--surface2)"><i style="width:${Math.max(3,t.sub/CERT_MIN*100)}%"></i></div>`}</div>`;
   }
   el.innerHTML=`<div class="pad">
-   <div class="group">${ids.map(id=>{const it=S.byId[id],q=S.cart[id];return `<div class="row" data-id="${esc(id)}"><div class="thumb" data-a="open">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div class="b"><div class="n" data-a="open">${esc(it.name)}</div><div class="m">${money(it.price_uzs)} × ${q}</div><div class="p">${money(q*it.price_uzs)}</div></div><div class="side"><button class="x press" data-a="rm" aria-label="remove">${ic('x')}</button><div class="step" style="animation:none"><button data-a="dec">${ic('minus')}</button><span>${q}</span><button data-a="inc">${ic('plus')}</button></div></div></div>`;}).join('')}</div>
+   <div class="group">${ids.map(id=>{const it=S.byId[id],q=S.cart[id];return `<div class="row" data-id="${esc(id)}"><div class="thumb" data-a="open">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div class="b"><div class="n" data-a="open" ${asBtn()}>${esc(it.name)}</div><div class="m">${money(it.price_uzs)} × ${q}</div><div class="p">${money(q*it.price_uzs)}</div></div><div class="side"><button class="x press" data-a="rm" aria-label="${esc(tr('remove')+': '+it.name)}">${ic('x')}</button><div class="step" style="animation:none" role="group" aria-label="${esc(tr('qtyA')+': '+it.name)}"><button data-a="dec" aria-label="${esc(tr('dec'))}">${ic('minus')}</button><span>${q}</span><button data-a="inc" aria-label="${esc(tr('inc'))}">${ic('plus')}</button></div></div></div>`;}).join('')}</div>
    <div style="margin-top:12px">${certHtml}
    <div class="card2"><div class="sum-row"><span>${esc(tr('subtotal'))}</span><span>${money(t.sub)}</span></div>${t.applied?`<div class="sum-row disc"><span>${esc(tr('disc'))}</span><span>− ${money(t.discount)}</span></div>`:''}<div class="sum-row tot"><span>${esc(tr('total'))}</span><span>${money(t.total)}</span></div></div></div>
    <div class="sec-t">${esc(tr('contacts'))}</div>
    <div class="card2">
-    <div class="fld"><label>${esc(tr('name'))}</label><input class="inp${er.name?' bad':''}" id="fName" autocomplete="name" placeholder="${esc(tr('nameP'))}" value="${esc(f.name)}">${er.name?`<div class="err">${esc(er.name)}</div>`:''}</div>
-    <div class="fld"><label>${esc(tr('phone'))}</label><div class="inline"><input class="inp${er.phone?' bad':''}" id="fPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+998 90 123 45 67" value="${esc(f.phone)}">${tg&&tg.requestContact?`<button class="tgbtn press" id="fromTg">${ic('send')}${esc(tr('fromTg'))}</button>`:''}</div>${er.phone?`<div class="err">${esc(er.phone)}</div>`:''}</div>
-    <div class="fld"><label>${esc(tr('addr'))}</label><textarea class="inp${er.addr?' bad':''}" id="fAddr" rows="2" placeholder="${esc(tr('addrP'))}">${esc(f.addr)}</textarea>${er.addr?`<div class="err">${esc(er.addr)}</div>`:''}</div>
-    <div class="fld" style="margin-bottom:4px"><label>${esc(tr('comment'))}<em>${esc(tr('opt'))}</em></label><textarea class="inp" id="fCom" rows="2" placeholder="${esc(tr('commentP'))}">${esc(f.comment)}</textarea></div>
+    <div class="fld"><label for="fName">${esc(tr('name'))}${reqM}</label><input class="inp${er.name?' bad':''}" id="fName" autocomplete="name" required ${errA('name')} placeholder="${esc(tr('nameP'))}" value="${esc(f.name)}">${errD('name')}</div>
+    <div class="fld"><label for="fPhone">${esc(tr('phone'))}${reqM}</label><div class="inline"><input class="inp${er.phone?' bad':''}" id="fPhone" type="tel" inputmode="tel" autocomplete="tel" required ${errA('phone')} placeholder="+998 90 123 45 67" value="${esc(f.phone)}">${tg&&tg.requestContact?`<button class="tgbtn press" id="fromTg">${ic('send')}${esc(tr('fromTg'))}</button>`:''}</div>${errD('phone')}</div>
+    <div class="fld"><label for="fAddr">${esc(tr('addr'))}${reqM}</label><textarea class="inp${er.addr?' bad':''}" id="fAddr" rows="2" autocomplete="street-address" required ${errA('addr')} placeholder="${esc(tr('addrP'))}">${esc(f.addr)}</textarea>${errD('addr')}</div>
+    <div class="fld" style="margin-bottom:4px"><label for="fCom">${esc(tr('comment'))}<em>${esc(tr('opt'))}</em></label><textarea class="inp" id="fCom" rows="2" placeholder="${esc(tr('commentP'))}">${esc(f.comment)}</textarea></div>
    </div>
    <div class="note" style="margin:16px 0 0">${ic('truck')}<span>${esc(tr('payNote'))}</span></div>
    <div style="height:84px"></div></div>`;
   el.querySelectorAll('.row').forEach(r=>r.onclick=e=>{const a=e.target.closest('[data-a]');if(!a)return;const id=r.dataset.id;const q=S.cart[id]||0;
     if(a.dataset.a==='open')openProduct(id);else if(a.dataset.a==='rm'){hap();setQty(id,0);}else if(a.dataset.a==='inc'){hap('sel');setQty(id,q+1);}else if(a.dataset.a==='dec'){hap('sel');setQty(id,q-1);}});
   const ct=$('certTg');if(ct)ct.onclick=()=>{hap('sel');S.certOn=!S.certOn;renderCart();};
-  const bindF=(id,k)=>$(id).addEventListener('input',e=>{S.form[k]=e.target.value;if(S.errors[k]){S.errors[k]='';e.target.classList.remove('bad');const n=e.target.parentElement.querySelector('.err')||e.target.parentElement.parentElement.querySelector('.err');n&&n.remove();}save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});});
+  const bindF=(id,k)=>$(id).addEventListener('input',e=>{S.form[k]=e.target.value;if(S.errors[k]){S.errors[k]='';e.target.classList.remove('bad');e.target.removeAttribute('aria-invalid');e.target.removeAttribute('aria-describedby');const n=e.target.parentElement.querySelector('.err')||e.target.parentElement.parentElement.querySelector('.err');n&&n.remove();}save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});});
   bindF('fName','name');bindF('fPhone','phone');bindF('fAddr','addr');bindF('fCom','comment');
   $('fPhone').addEventListener('blur',e=>{const v=fmtPhone(e.target.value);if(v){e.target.value=v;S.form.phone=v;save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});}});
   const ft=$('fromTg');if(ft)ft.onclick=()=>{hap();try{tg.requestContact((ok,res)=>{const ph=ok&&res&&res.responseUnsafe&&res.responseUnsafe.contact&&res.responseUnsafe.contact.phone_number;if(ph){S.form.phone=fmtPhone(ph)||ph;S.errors.phone='';renderCart();save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});}});}catch(e){}};
   renderDock();
 }
 function fmtPhone(v){let d=String(v||'').replace(/\D/g,'');if(d.startsWith('998'))d=d.slice(3);if(d.length!==9)return '';return `+998 ${d.slice(0,2)} ${d.slice(2,5)} ${d.slice(5,7)} ${d.slice(7)}`;}
+/* ===== MAIN BUTTON TELEGRAM =====
+   Внутри Telegram главные действия — «Оформить заказ», «Подтвердить заказ», «Хорошо» — показывает сам Telegram
+   родной кнопкой внизу экрана: она держится над клавиатурой и показывает индикатор отправки.
+   В обычном браузере остаются наши кнопки. */
+const mbOK=()=>!!(tg&&tg.MainButton&&tg.platform&&tg.platform!=='unknown'&&(!tg.isVersionAtLeast||tg.isVersionAtLeast('6.1')));
+let mbHandler=null,mbKey='';
+function mainButtonState(){
+  if(PV)return null;
+  if(cur)return cur.main||null;
+  if(S.tab==='cart'&&cartIds().length)return{text:tr('checkout')+' · '+money(totals().total),onClick:requestConfirm};
+  return null;
+}
+function syncMain(){
+  if(!mbOK())return;const MB=tg.MainButton,st=mainButtonState();
+  try{
+    if(mbHandler){MB.offClick(mbHandler);mbHandler=null;}
+    if(!st){if(MB.isVisible)MB.hide();mbKey='';return;}
+    const dark=document.documentElement.dataset.theme==='dark';
+    const p={text:st.text,color:dark?'#86A6E3':'#8A6A32',text_color:dark?'#0C111C':'#FFFFFF',is_active:st.active!==false,is_visible:true};
+    if(tg.isVersionAtLeast&&tg.isVersionAtLeast('7.10'))p.has_shine_effect=!!st.shine;
+    const k=JSON.stringify(p);if(k!==mbKey){MB.setParams(p);mbKey=k;}
+    mbHandler=()=>{hap('medium');st.onClick();};MB.onClick(mbHandler);
+  }catch(e){}
+}
+function mbProgress(on){if(!mbOK())return;try{on?tg.MainButton.showProgress(false):tg.MainButton.hideProgress();}catch(e){}}
+/* кнопку окна переносим в MainButton: своя прячется, нажатие MainButton нажимает её */
+function useMain(sh,sel,extra){
+  const b=sh.el.querySelector(sel);if(!b||!mbOK())return;
+  b.classList.add('mb-hidden');sh.main=Object.assign({text:b.textContent.trim(),onClick:()=>b.click()},extra||{});syncMain();
+}
 function renderDock(){
   const d=$('dock');
+  if(mbOK()){d.hidden=true;d.innerHTML='';syncMain();return;}
   if(S.tab==='cart'&&cartIds().length){d.hidden=false;const t=totals();d.innerHTML=`<button class="btn" id="checkout">${esc(tr('checkout'))} <span class="amt">· ${num(t.total)}</span></button>`;$('checkout').onclick=requestConfirm;}
   else{d.hidden=true;d.innerHTML='';}
 }
@@ -1200,14 +1651,14 @@ function validate(){
 }
 function requestConfirm(){
   hap();
-  if(!validate()){hap('err');renderCart();toast(tr('checkF'),'x');const b=document.querySelector('#v-cart .inp.bad');b&&b.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  if(!validate()){hap('err');renderCart();toast(tr('checkF'),'x');const b=document.querySelector('#v-cart .inp.bad');if(b){b.scrollIntoView({behavior:'smooth',block:'center'});try{b.focus({preventScroll:true});}catch(e){}}return;}
   const t=totals();
   const body=`<div class="summary">${cartIds().map(id=>`<div class="it"><span>${esc(S.byId[id].name)} × ${S.cart[id]}</span><span>${num(S.cart[id]*S.byId[id].price_uzs)}</span></div>`).join('')}</div>
    <div class="card2" style="background:var(--surface2);box-shadow:none;margin-top:12px"><div class="sum-row"><span>${esc(tr('subtotal'))}</span><span>${money(t.sub)}</span></div>${t.applied?`<div class="sum-row disc"><span>${esc(tr('disc'))}</span><span>− ${money(t.discount)}</span></div>`:''}<div class="sum-row tot"><span>${esc(tr('total'))}</span><span>${money(t.total)}</span></div></div>
    <div class="mrow" style="padding:14px 4px 0">${'<div class="mi">'+ic('user')+'</div>'}<div class="mt">${esc(S.form.name)}<small>${esc(S.form.phone)}</small></div></div>
    <div class="mrow" style="padding:12px 4px 0">${'<div class="mi">'+ic('truck')+'</div>'}<div class="mt" style="font-size:14.5px">${esc(S.form.addr)}${S.form.comment?`<small>${esc(S.form.comment)}</small>`:''}</div></div>`;
   const sh=openSheet({title:tr('confirmT'),body,foot:`<button class="btn full" id="doSend">${esc(tr('confirm'))}</button>`});
-  sh.el.querySelector('#doSend').onclick=e=>sendOrder(e.currentTarget);
+  sh.el.querySelector('#doSend').onclick=e=>sendOrder(e.currentTarget);useMain(sh,'#doSend',{shine:true});
 }
 function orderNo(){const d=new Date();return 'MF-'+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0')+'-'+String(Date.now()).slice(-4);}
 const ru=n=>num(n)+' сум';
@@ -1226,23 +1677,93 @@ function orderText(no,t){
   return L.join('\n');
 }
 async function sendOrder(btn){
-  if(S.sending)return;S.sending=true;btn.disabled=true;btn.textContent=tr('sending');
+  if(S.sending)return;S.sending=true;mbProgress(true);btn.disabled=true;btn.classList.add('loading');btn.setAttribute('aria-busy','true');btn.textContent=tr('sending');
   const no=orderNo(),t=totals(),text=orderText(no,t);
-  let ok=false;
-  try{const r=await fetch(ORDER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,initData:(tg&&tg.initData)||'',meta:{no,items:cartIds().map(id=>[id,S.cart[id]]),sub:t.sub,discount:t.discount,cert:S.cert.code,test:/т[еe]ст|test/i.test(S.form.comment||'')}})});const j=await r.json().catch(()=>({}));ok=r.ok&&j.ok!==false;}catch(e){ok=false;}
-  S.sending=false;
+  const p={oid:newOid(),no,text,initData:(tg&&tg.initData)||'',at:Date.now(),tries:0,next:0,
+    meta:{no,items:cartIds().map(id=>[id,S.cart[id]]),sub:t.sub,discount:t.discount,cert:S.cert.code,test:/т[еe]ст|test/i.test(S.form.comment||'')}};
+  p.meta.oid=p.oid;
+  const res=navigator.onLine===false?{ok:false,retry:true}:await postOrder(p);
+  const ok=res.ok,feedSt=res.feed||'';
+  S.sending=false;mbProgress(false);
+  btn.classList.remove('loading');btn.removeAttribute('aria-busy');
+  /* нет связи или сервер временно недоступен — сохраняем заказ и отправим сами, как только появится интернет */
+  if(!ok&&res.retry){hap('ok');p.tries=1;p.next=Date.now()+5000;outboxPut(p);finishOrder(p,t,{pending:true});return;}
   if(!ok){hap('err');btn.disabled=false;btn.textContent=tr('confirm');toast(tr('sendErr').split('.')[0],'x');
-    const n=document.createElement('div');n.className='err';n.style.cssText='text-align:center;margin:0 0 10px';n.textContent=tr('sendErr');const old=btn.parentElement.querySelector('.err');old&&old.remove();btn.before(n);return;}
+    const n=document.createElement('div');n.className='err';n.setAttribute('role','alert');n.style.cssText='justify-content:center;margin:0 0 10px';n.textContent=tr('sendErr');const old=btn.parentElement.querySelector('.err');old&&old.remove();btn.before(n);return;}
   hap('ok');
-  S.orders.unshift({no,date:Date.now(),items:cartIds().map(id=>({id,q:S.cart[id],p:S.byId[id].price_uzs,n:S.byId[id].name})),total:t.total,discount:t.discount});
+  finishOrder(p,t,{feed:feedSt});
+}
+/* общий финал заказа: история, сертификат, лента, очистка корзины, экран «Заказ принят» / «Заказ сохранён» */
+function finishOrder(p,t,{pending,feed}){
+  const no=p.no;
+  S.orders.unshift({no,oid:p.oid,st:pending?'pending':'',date:Date.now(),items:cartIds().map(id=>({id,q:S.cart[id],p:S.byId[id].price_uzs,n:S.byId[id].name})),total:t.total,discount:t.discount,cert:t.applied?1:0});
   S.orders=S.orders.slice(0,30);save('orders',S.orders);
   if(t.applied){S.cert.used=true;S.cert.usedOn=no;LS.set('mf_cert_v1_'+UID,S.cert);}
-  setTimeout(loadFeed,1500);
+  if(!pending)feedAfterOrder(feed,cartIds());
   S.cart={};saveCart();S.form.comment='';
   Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
-  const sh=openSheet({title:'',noClose:true,body:`<div class="center"><div class="done-ic">${ic('check')}</div><div class="h1">${esc(tr('doneT'))}</div><p class="lead">${esc(tr('doneS',{n:no}))}</p></div>`,foot:`<button class="btn full" id="doneOk">${esc(tr('ok'))}</button>`});
-  sh.el.querySelector('#doneOk').onclick=()=>{closeSheet();go('catalog');};
+  const sh=openSheet({title:'',noClose:true,body:pending
+      ?`<div class="center"><div class="done-ic" style="background:var(--accent-soft);color:var(--accent)">${ic('clock')}</div><div class="h1">${esc(tr('queuedT'))}</div><p class="lead">${esc(tr('queuedS',{n:no}))}</p></div>`
+      :`<div class="center"><div class="done-ic">${ic('check')}</div><div class="h1">${esc(tr('doneT'))}</div><p class="lead">${esc(tr('doneS',{n:no}))}</p></div>`,
+    foot:`<button class="btn full" id="doneOk">${esc(tr('ok'))}</button>`});
+  sh.el.querySelector('#doneOk').onclick=()=>{closeSheet();go('catalog');};useMain(sh,'#doneOk');
   if(S.tab==='cart')renderCart();
+}
+/* сервер добавил заказ в ленту — показываем сразу, не дожидаясь хранилища */
+function feedAfterOrder(feedSt,ids){
+  if(feedSt==='added'){const at=Date.now();feedLocal=ids.slice(0,3).filter(id=>S.byId[id]).map(id=>({id,at}));feedItems=[...feedLocal,...feedItems].slice(0,12);renderFeed();}
+  else if(feedSt)console.info('[feed] заказ не попал в «Недавно заказали»:',feedSt);
+  setTimeout(loadFeed,4000);
+}
+
+/* ===== ОЧЕРЕДЬ ЗАКАЗОВ: повтор отправки при обрыве связи =====
+   Заказ хранится на телефоне и уходит сам: при появлении сети, при возврате в приложение и по таймеру
+   (5 с, 10 с, 20 с … до 5 минут). У каждого заказа свой oid — сервер не отправит его в группу дважды. */
+const OUTBOX='mf_outbox_v1_'+UID;
+const newOid=()=>{try{if(crypto.randomUUID)return crypto.randomUUID();}catch(e){}return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,12);};
+const outboxGet=()=>LS.get(OUTBOX,[]);
+const outboxPut=p=>{const a=outboxGet().filter(x=>x.oid!==p.oid);a.push(p);LS.set(OUTBOX,a);};
+const outboxDel=oid=>LS.set(OUTBOX,outboxGet().filter(x=>x.oid!==oid));
+async function postOrder(p){
+  const ctl=typeof AbortController!=='undefined'?new AbortController():null;const tm=setTimeout(()=>ctl&&ctl.abort(),15000);
+  try{
+    const r=await fetch(ORDER_URL,{method:'POST',headers:{'Content-Type':'application/json'},signal:ctl&&ctl.signal,
+      body:JSON.stringify({text:p.text,initData:(tg&&tg.initData)||p.initData||'',meta:p.meta})});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok&&j.ok!==false)return{ok:true,feed:j.feed||'',dup:!!j.dup};
+    /* 5xx, 409 «уже отправляется», 429 и ответ не от нашей функции — временно, пробуем ещё */
+    return{ok:false,retry:r.status>=500||r.status===409||r.status===429||r.status===0,error:j.error||r.status};
+  }catch(e){return{ok:false,retry:true,error:'network'};}
+  finally{clearTimeout(tm);}
+}
+let flushing=false;
+async function flushOutbox(force){
+  if(flushing||navigator.onLine===false)return;const box=outboxGet();if(!box.length)return;
+  flushing=true;
+  try{
+    for(const p of box){
+      if(!force&&p.next>Date.now())continue;
+      const res=await postOrder(p);
+      const o=S.orders.find(x=>x.oid===p.oid);
+      if(res.ok){outboxDel(p.oid);if(o){o.st='';save('orders',S.orders);}hap('ok');toast(tr('queuedSent',{n:p.no}),'check');
+        feedAfterOrder(res.feed,(p.meta.items||[]).map(x=>x[0]));}
+      else if(res.retry){p.tries=(p.tries||0)+1;p.next=Date.now()+Math.min(300000,5000*2**Math.min(6,p.tries-1));outboxPut(p);}
+      else{outboxDel(p.oid);if(o){o.st='failed';save('orders',S.orders);}
+        if(o&&o.cert&&S.cert.usedOn===p.no){S.cert.used=false;S.cert.usedOn='';LS.set('mf_cert_v1_'+UID,S.cert);}
+        hap('err');toast(tr('queuedFail',{n:p.no}),'x');}
+    }
+  }finally{flushing=false;}
+  if(S.tab==='profile')renderProfile();
+}
+addEventListener('online',()=>{netBar();flushOutbox(true);});
+addEventListener('offline',netBar);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)flushOutbox(true);});
+setInterval(()=>flushOutbox(false),4000);
+function netBar(){
+  let b=$('netbar');const off=navigator.onLine===false;
+  if(!b){b=document.createElement('div');b.id='netbar';b.className='netbar';b.setAttribute('role','status');b.setAttribute('aria-live','polite');document.body.appendChild(b);}
+  const q=outboxGet().length;
+  b.textContent=off?tr(q?'offlineQ':'offline'):'';b.classList.toggle('in',off);
 }
 
 /* PROFILE */
@@ -1252,21 +1773,22 @@ function renderProfile(){
   const initial=(nm||'M').trim().charAt(0).toUpperCase();
   const segL=[['ru','Рус'],['uz','O‘zb'],['uzc','Ўзб']],segT=[['auto',tr('auto')],['light',tr('light')],['dark',tr('dark')]];
   const c=S.cert;
-  el.innerHTML=`<div class="prof"><div class="ava">${u&&u.photo_url?`<img alt="" src="${esc(u.photo_url)}">`:esc(initial)}</div><h2>${esc(nm)}</h2><div class="u">${u?(u.username?'@'+esc(u.username):''):esc(tr('guestS'))}</div></div>
+  el.innerHTML=`<div class="prof"><div class="ava" aria-hidden="true">${u&&u.photo_url?`<img alt="" src="${esc(u.photo_url)}">`:esc(initial)}</div><h2>${esc(nm)}</h2><div class="u">${u?(u.username?'@'+esc(u.username):''):esc(tr('guestS'))}</div></div>
   <div class="pad">
    <div class="sec-t">${esc(tr('gifts'))}</div>
    <div class="giftcard${c.used?' used':''}"><div><div class="k">${esc(tr('giftK'))}</div><div class="amt">${num(CERT_AMOUNT)} ${esc(tr('sum'))}</div></div><div class="f"><span>${esc(c.used?tr('giftUsedF'):tr('giftF'))}</span><span class="code">${esc(c.code)}</span></div></div>
    <div class="sec-t">${esc(tr('myOrders'))}</div>
-   <div class="group">${S.orders.length?S.orders.map((o,ix)=>`<div class="order"><div class="h"><span class="no">${esc(o.no)}</span><span class="dt">${new Date(o.date).toLocaleDateString(S.lang==='ru'?'ru-RU':'uz-UZ',{day:'numeric',month:'long'})}</span></div><div class="its">${o.items.map(i=>esc(i.n)+' × '+i.q).join(', ')}</div><div class="f"><b>${money(o.total)}</b><button class="btn ghost sm press" data-rep="${ix}" style="height:36px;font-size:13.5px">${ic('repeat','','style="width:16px;height:16px"')}${esc(tr('repeat'))}</button></div></div>`).join(''):`<div class="mrow"><div class="mi">${ic('clock')}</div><div class="mt" style="color:var(--muted);font-size:14.5px">${esc(tr('noOrders'))}</div></div>`}</div>
+   <div class="group">${S.orders.length?S.orders.map((o,ix)=>`<div class="order"><div class="h"><span class="no">${esc(o.no)}${o.st==='pending'?` <span class="pill ost">${ic('clock','','style="width:12px;height:12px"')}${esc(tr('stPending'))}</span>`:o.st==='failed'?` <span class="pill off ost">${esc(tr('stFailed'))}</span>`:''}</span><span class="dt">${new Date(o.date).toLocaleDateString(S.lang==='ru'?'ru-RU':'uz-UZ',{day:'numeric',month:'long'})}</span></div><div class="its">${o.items.map(i=>esc(i.n)+' × '+i.q).join(', ')}</div><div class="f"><b>${money(o.total)}</b><button class="btn ghost sm press" data-rep="${ix}" style="height:36px;font-size:13.5px">${ic('repeat','','style="width:16px;height:16px"')}${esc(tr('repeat'))}</button></div></div>`).join(''):`<div class="mrow"><div class="mi">${ic('clock')}</div><div class="mt" style="color:var(--muted);font-size:14.5px">${esc(tr('noOrders'))}</div></div>`}</div>
    <div class="sec-t">${esc(tr('lang'))}</div>
-   <div class="seg" id="segL">${segL.map(([k,l])=>`<button data-k="${k}" class="${S.lang===k?'on':''}">${l}</button>`).join('')}</div>
+   <div class="seg" id="segL" role="group" aria-label="${esc(tr('lang'))}">${segL.map(([k,l])=>`<button data-k="${k}" class="${S.lang===k?'on':''}" aria-pressed="${S.lang===k}" lang="${k==='ru'?'ru':'uz'}">${l}</button>`).join('')}</div>
    <div class="sec-t">${esc(tr('theme'))}</div>
-   <div class="seg" id="segT">${segT.map(([k,l])=>`<button data-k="${k}" class="${S.themePref===k?'on':''}">${esc(l)}</button>`).join('')}</div>
+   <div class="seg" id="segT" role="group" aria-label="${esc(tr('theme'))}">${segT.map(([k,l])=>`<button data-k="${k}" class="${S.themePref===k?'on':''}" aria-pressed="${S.themePref===k}">${esc(l)}</button>`).join('')}</div>
    <div class="sec-t">${esc(tr('how'))}</div>
    <div class="card2"><div class="steps">${['st1','st2','st3','st4'].map((k,i)=>`<div class="stp"><div class="n">${i+1}</div><div class="tx">${esc(tr(k))}</div></div>`).join('')}</div></div>
    <div class="group" id="wholeBox" style="margin-top:26px"><div class="mrow"><div class="mi">${ic('store')}</div><div class="mt">${esc(tr('whole'))}<small>${esc(tr('wholeS'))}</small></div></div></div>
    <div class="group" style="margin-top:12px">
     <button class="mrow press" id="mgr"><div class="mi">${ic('send')}</div><div class="mt">${esc(tr('manager'))}<small>@${MANAGER}</small></div><div class="mv">${ic('chev')}</div></button>
+    ${S.isAdmin?`<button class="mrow press" id="statsBtn"><div class="mi">${ic('chart')}</div><div class="mt">Статистика<small>Заказы, выручка и просмотры</small></div><div class="mv">${ic('chev')}</div></button>`:''}
     ${S.isAdmin?`<button class="mrow press" id="adminBtn"><div class="mi">${ic('gavel')}</div><div class="mt">Управление аукционом<small>Лоты и предложения цены</small></div><div class="mv">${ic('chev')}</div></button>`:''}
     <button class="mrow press" data-go="favs"><div class="mi">${ic('heart')}</div><div class="mt">${esc(tr('favs'))}</div><div class="mv">${S.favs.length||''}${ic('chev')}</div></button>
    </div>
@@ -1276,6 +1798,7 @@ function renderProfile(){
   el.querySelectorAll('#segT button').forEach(b=>b.onclick=()=>{hap('sel');S.themePref=b.dataset.k;save('theme',S.themePref);applyTheme();renderProfile();});
   el.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{const o=S.orders[+b.dataset.rep];hap('medium');o.items.forEach(i=>{if(S.byId[i.id])S.cart[i.id]=(S.cart[i.id]||0)+i.q;});saveCart();Object.keys(cardCache).forEach(updateCardAction);renderNav(true);renderHero();toast(tr('repeated'),'bag');});
   const ab=$('adminBtn');if(ab)ab.onclick=()=>{hap();openAdmin();};
+  const sb=$('statsBtn');if(sb)sb.onclick=()=>{hap();openStats();};
   $('mgr').onclick=()=>{hap();const url='https://t.me/'+MANAGER;try{tg&&tg.openTelegramLink?tg.openTelegramLink(url):open(url,'_blank');}catch(e){open(url,'_blank');}};
   bindGo(el);
   wholesale();
@@ -1295,16 +1818,20 @@ function refreshLang(){
 }
 
 /* FEED: недавние заказы (только настоящие, без имён и телефонов) */
-let feedItems=[],feedSeen=new Set();
+let feedItems=[],feedSeen=new Set(),feedLocal=[];
 function ago(ts){const m=Math.max(0,Math.round((Date.now()-ts)/60000));if(m<2)return tr('justNow');if(m<60)return tr('minAgo',{n:m});const h=Math.round(m/60);if(h<24)return tr('hAgo',{n:h});return tr('dAgo',{n:Math.max(1,Math.round(h/24))});}
 async function loadFeed(){
-  try{const r=await fetch('/api/feed',{cache:'no-store'});if(!r.ok)return;const j=await r.json();feedItems=(j.items||[]).filter(x=>S.byId[x.id]).slice(0,12);renderFeed();}catch(e){}
+  try{const r=await fetch('/api/feed',{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+    const srv=(j.items||[]).filter(x=>S.byId[x.id]);
+    /* свой только что отправленный заказ держим в ленте, пока сервер его не вернёт (до 3 минут) */
+    feedLocal=feedLocal.filter(x=>Date.now()-x.at<180000&&!srv.some(s=>s.id===x.id&&Math.abs(s.at-x.at)<120000));
+    feedItems=[...feedLocal,...srv].slice(0,12);renderFeed();}catch(e){}
 }
 function renderFeed(){
   const el=$('feed');if(!el)return;
   if(!feedItems.length){el.innerHTML='';return;}
-  el.innerHTML=`<div class="feed"><div class="feed-h"><i class="live"></i>${esc(tr('feedT'))}</div><div class="feed-row">${feedItems.map(x=>{const it=S.byId[x.id],key=x.id+x.at,isNew=!feedSeen.has(key);feedSeen.add(key);
-    return `<button class="fd press${isNew?' new':''}" data-id="${esc(x.id)}"><div class="fd-ph">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div><b>${esc(it.name)}</b><small>${esc(ago(x.at))}</small></div></button>`;}).join('')}</div></div>`;
+  el.innerHTML=`<div class="feed"><div class="feed-h"><i class="live" aria-hidden="true"></i>${esc(tr('feedT'))}</div><div class="feed-row">${feedItems.map(x=>{const it=S.byId[x.id],key=x.id+x.at,isNew=!feedSeen.has(key);feedSeen.add(key);
+    return `<button class="fd press${isNew?' new':''}" data-id="${esc(x.id)}" aria-label="${esc(it.name+', '+ago(x.at))}"><div class="fd-ph">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div><b>${esc(it.name)}</b><small>${esc(ago(x.at))}</small></div></button>`;}).join('')}</div></div>`;
   el.querySelectorAll('.fd').forEach(b=>b.onclick=()=>openProduct(b.dataset.id));
 }
 setInterval(()=>{if(S.tab==='catalog'&&feedItems.length)el_feed_tick();},60000);
@@ -1332,29 +1859,42 @@ const mmss=ms=>{ms=Math.max(0,ms);const t=Math.ceil(ms/1000),h=Math.floor(t/3600
 async function aucApi(action,extra={}){
   try{const r=await fetch('/api/auction',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,initData:(tg&&tg.initData)||'',...extra})});return await r.json();}catch(e){return{ok:false,error:'network'};}
 }
-async function loadAuction(){
+/* аукцион показываем сразу из последнего сохранённого состояния (цена считается на телефоне по формуле),
+   а свежие данные с сервера подтягиваются параллельно, не дожидаясь каталога */
+const AUC_CACHE='mf_auc_v1';
+function restoreAuction(){
+  const c=LS.get(AUC_CACHE,null);
+  if(!c||!c.j||!c.at||Date.now()-c.at>30*60000)return;
+  AUC.data=c.j;AUC.off=c.j.now-c.at;AUC.cached=true;
+}
+let aucInflight=null;
+function loadAuction(){if(aucInflight)return aucInflight;aucInflight=loadAuction0().finally(()=>{aucInflight=null;});return aucInflight;}
+async function loadAuction0(){
   const w=S.tab==='auction'&&!document.hidden&&Date.now()-AUC.lw>18000;if(w)AUC.lw=Date.now();
   const j=await aucApi('state',w?{watch:1}:{});
-  if(j&&j.ok){const had=!!(AUC.data&&AUC.data.current);AUC.data=j;AUC.off=j.now-Date.now();if(S.tab==='auction')renderAuction();if(had!==!!j.current)renderNav();}
+  if(!(j&&j.ok)&&!AUC.data){AUC.err=true;if(S.tab==='auction')renderAuction();return;}
+  if(j&&j.ok){AUC.err=false;AUC.cached=false;const had=!!(AUC.data&&AUC.data.current);AUC.data=j;AUC.off=j.now-Date.now();LS.set(AUC_CACHE,{j,at:Date.now()});if(j.appLink)LS.set('mf_applink',j.appLink);if(S.tab==='auction')renderAuction();if(had!==!!j.current)renderNav();}
 }
 function aucThumb(id,cls='thumb'){const it=S.byId[id];return `<div class="${cls}">${it&&photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div>`;}
 function renderAuction(force){
   const el=$('v-auction');const d=AUC.data;
-  if(!d){AUC.sig='';el.innerHTML=`<div class="pad"><div class="skel" style="border-radius:28px"><div class="t" style="aspect-ratio:1"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div></div>`;return;}
+  if(!d&&AUC.err){AUC.sig='';el.innerHTML=`<div class="pad"><div class="card2 state" role="alert"><div class="ic">${ic('gavel')}</div><h3>${esc(tr('aucLoadT'))}</h3><p>${esc(tr('aucLoadS'))}</p><button class="btn sm press" id="aRetry">${ic('repeat')}${esc(tr('retry'))}</button></div></div>`;
+    $('aRetry').onclick=e=>{hap();const b=e.currentTarget;b.disabled=true;b.classList.add('loading');AUC.err=false;loadAuction().then(()=>{if(AUC.err)renderAuction();});};return;}
+  if(!d){AUC.sig='';el.innerHTML=`<div class="pad" aria-busy="true"><div class="skel" style="border-radius:28px"><div class="t" style="aspect-ratio:1"><div class="shimmer"></div></div><div class="l"></div><div class="l s"></div></div></div>`;return;}
   const lot=d.current,up=d.upcoming||[];
   if(!AUC.seg)AUC.seg='now';
   const sig=[AUC.seg,S.lang,lot?lot.id+(lot.alert||''):'',d.next?d.next.id:'',up.map(u=>u.id).join(','),(d.sales||[]).length?1:0].join('|');
   if(!force&&sig===AUC.sig&&el.firstChild){aucLight();aucTick();return;}
   AUC.sig=sig;AUC.shown=null;
-  let h=`<div class="pad"><div class="ax-seg"><button data-seg="now" class="${AUC.seg==='now'?'on':''}">${esc(tr('aucNow'))}${lot?'<i class="ax-dot"></i>':''}</button><button data-seg="soon" class="${AUC.seg==='soon'?'on':''}">${esc(tr('aucSoonTab'))}${up.length?`<b>${up.length}</b>`:''}</button></div>`;
+  let h=`<div class="pad"><div class="ax-seg" role="group" aria-label="${esc(tr('auction'))}"><button data-seg="now" class="${AUC.seg==='now'?'on':''}" aria-pressed="${AUC.seg==='now'}">${esc(tr('aucNow'))}${lot?'<i class="ax-dot"></i>':''}</button><button data-seg="soon" class="${AUC.seg==='soon'?'on':''}" aria-pressed="${AUC.seg==='soon'}">${esc(tr('aucSoonTab'))}${up.length?`<b>${up.length}</b>`:''}</button></div>`;
   if(AUC.seg==='soon'){
     h+=up.length?`<div class="card2 ax-list">${up.map(u=>{const it=S.byId[u.itemId];const rem=LS.get('mf_remind_'+u.id,0);return `<div class="ax-row">${aucThumb(u.itemId)}<div class="ax-rt"><div class="t">${esc(it?it.name:u.itemName)}</div><div class="m">${esc(tr('aucStartsAt',{d:dtShort(u.startAt)}))} · <span data-cd="${u.startAt}"></span></div><div class="m">${num(u.start)} → ${num(u.min)} ${esc(tr('sum'))}</div></div><button class="ax-bell${rem?' on':''}" data-rem="${esc(u.id)}" aria-label="${esc(tr('aucRemind'))}">${ic(rem?'check':'bell')}</button></div>`;}).join('')}</div>`
       :`<div class="card2 center" style="padding:30px 18px"><div class="empty" style="padding:0"><div class="ic">${ic('clock')}</div></div><div class="auc-h" style="font-size:18px">${esc(tr('aucSoon'))}</div><p class="lead" style="font-size:14px">${esc(tr('aucNoSoon'))}</p></div>`;
   }else if(lot){
     const it=S.byId[lot.itemId];const p=aucPrice(lot,nowS());AUC.phase=p.phase;AUC.lastPrice=p.price;
     h+=`<div class="ax">
-      <div class="ax-top"><span class="ax-live"><i></i>LIVE</span><div class="ax-r"><span class="ax-eye" id="aEye"${d.watching?'':' hidden'}>${ic('eye')}<b>${d.watching||''}</b></span><button class="ax-sh press" id="aShare" aria-label="share">${ic('share')}</button></div></div>
-      <div class="ax-ph" data-open="${esc(lot.itemId)}">${it&&photo(it)?`<img alt="" src="${esc(photo(it))}">`:''}</div>
+      <div class="ax-top"><span class="ax-live"><i></i>LIVE</span><div class="ax-r"><span class="ax-eye" id="aEye"${d.watching?'':' hidden'}>${ic('eye')}<b>${d.watching||''}</b></span><button class="ax-sh press" id="aShare" aria-label="${esc(tr('shareA'))}">${ic('share')}</button></div></div>
+      <div class="ax-ph" data-open="${esc(lot.itemId)}" ${asBtn(tr('openA')+': '+(it?it.name:lot.itemName))}>${it&&photo(it)?`<img alt="" src="${esc(photo(it))}">`:''}</div>
       <div class="ax-name">${esc(it?it.name:lot.itemName)}</div>
       <div class="ax-meta">${it?esc(trType(it.type))+(it.qty?' · '+it.qty+' '+esc(tr('pcs')):''):''}</div>
       <div class="ax-chips" id="aChips"></div>
@@ -1369,7 +1909,7 @@ function renderAuction(force){
   }else{
     const nx=d.next;const reminded=LS.get('mf_remind_'+(nx?nx.id:'next'),0);const nit=nx&&S.byId[nx.itemId];
     h+=`<div class="ax ax-wait">
-      ${nx?`<div class="ax-ph sm" data-open="${esc(nx.itemId)}">${nit&&photo(nit)?`<img alt="" src="${esc(photo(nit))}">`:''}</div><div class="ax-name">${esc(nit?nit.name:nx.itemName)}</div><div class="ax-meta">${num(nx.start)} → ${num(nx.min)} ${esc(tr('sum'))}</div>
+      ${nx?`<div class="ax-ph sm" data-open="${esc(nx.itemId)}" ${asBtn(tr('openA')+': '+(nit?nit.name:nx.itemName))}>${nit&&photo(nit)?`<img alt="" src="${esc(photo(nit))}">`:''}</div><div class="ax-name">${esc(nit?nit.name:nx.itemName)}</div><div class="ax-meta">${num(nx.start)} → ${num(nx.min)} ${esc(tr('sum'))}</div>
         <div class="ax-sub" style="margin-top:18px">${esc(tr('aucNextIn'))}</div><div class="ax-count" id="aCount"></div>`
       :`<div class="ax-ic">${ic('gavel')}</div><div class="ax-name">${esc(tr('aucSoon'))}</div>`}
       <div class="ax-sub" style="margin-top:12px">${esc(tr('aucAbout'))}</div>
@@ -1399,7 +1939,7 @@ function aucLight(){
   const d=AUC.data;if(!d)return;
   const E=$('aEye');if(E){E.hidden=!d.watching;E.querySelector('b').textContent=d.watching||'';}
   const S2=$('aSales');if(!S2)return;const sl=(d.sales||[]).slice(0,6);
-  S2.innerHTML=sl.length?`<div class="ax-h">${esc(tr('aucSales'))}</div><div class="card2 ax-list">${sl.map(x=>{const it=S.byId[x.itemId];return `<div class="ax-row" data-open="${esc(x.itemId)}">${aucThumb(x.itemId)}<div class="ax-rt"><div class="t">${esc(it?it.name:x.itemName)}</div><div class="m">${esc(x.mine?tr('aucYouWon'):ago(x.at))}</div></div><div class="p">${num(x.price)}<span>${esc(tr('sum'))}</span></div></div>`;}).join('')}</div>`:'';
+  S2.innerHTML=sl.length?`<div class="ax-h">${esc(tr('aucSales'))}</div><div class="card2 ax-list">${sl.map(x=>{const it=S.byId[x.itemId];return `<div class="ax-row" data-open="${esc(x.itemId)}" ${asBtn()}>${aucThumb(x.itemId)}<div class="ax-rt"><div class="t">${esc(it?it.name:x.itemName)}</div><div class="m">${esc(x.mine?tr('aucYouWon'):ago(x.at))}</div></div><div class="p">${num(x.price)}<span>${esc(tr('sum'))}</span></div></div>`;}).join('')}</div>`:'';
   S2.querySelectorAll('[data-open]').forEach(r=>r.onclick=()=>openProduct(r.dataset.open));
 }
 /* «бегущие» цифры: за долю секунды прокручиваем от прошлой цены до новой */
@@ -1449,7 +1989,8 @@ function handleStart(){
   const sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
   if(location.hash==='#auction'||sp==='auction'){go('auction');return;}
   let m;
-  if((m=sp.match(/^i_(.+)$/))&&S.byId[m[1]]){openProduct(m[1]);return;}
+  /* товар: из Telegram — ?startapp=i_<id>, из браузера — #i_<id> */
+  if((m=(sp||location.hash.slice(1)).match(/^i_(.+)$/))&&S.byId[m[1]]){openProduct(m[1]);return;}
   if((m=sp.match(/^remind_(.+)$/))){go('auction');whenAuction(d=>{if(d.current&&d.current.id===m[1])return;if(!d.current){AUC.seg=(d.next&&d.next.id===m[1])?'now':'soon';renderAuction(true);}aucRemind(m[1]);});return;}
   if((m=sp.match(/^offer_(.+)$/))){go('auction');whenAuction(d=>{if(d.current&&d.current.id===m[1])aucOffer(d.current);else toast(tr(d.current?'aucEnded':'aucOfferWait'),'clock');});return;}
 }
@@ -1604,6 +2145,73 @@ function openAdminCreate(){
   };
 }
 
+/* ===== СТАТИСТИКА =====
+   Просмотры карточек копятся на телефоне и уходят пачкой раз в 15 секунд или когда приложение сворачивают.
+   Никаких имён и телефонов — только id товара и число открытий. Свои просмотры владельца не считаем. */
+let VQ={},vqT=0;
+function trackView(id){if(S.isAdmin)return;VQ[id]=(VQ[id]||0)+1;clearTimeout(vqT);vqT=setTimeout(flushViews,15000);}
+function flushViews(){
+  const v=VQ;if(!Object.keys(v).length)return;VQ={};clearTimeout(vqT);
+  const body=JSON.stringify({action:'views',views:v});
+  try{if(navigator.sendBeacon&&navigator.sendBeacon('/api/stats',new Blob([body],{type:'application/json'})))return;}catch(e){}
+  fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body,keepalive:true}).catch(()=>{});
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)flushViews();});
+addEventListener('pagehide',flushViews);
+
+const plural=(n,f)=>{const a=Math.abs(n)%100,b=a%10;return f[a>10&&a<20?2:b===1?0:b>=2&&b<=4?1:2];};
+const shortMoney=n=>n>=1e6?(Math.round(n/1e5)/10).toString().replace('.',',')+' млн':n>=1e3?Math.round(n/1e3)+' тыс':String(n);
+const dayLbl=(d,o)=>new Date(d+'T12:00:00+05:00').toLocaleDateString('ru-RU',Object.assign({day:'numeric',month:'short',timeZone:'Asia/Tashkent'},o||{}));
+async function openStats(){
+  const sh=openSheet({title:'Статистика',body:`<div class="st-load" aria-busy="true"><div class="skel" style="height:96px;border-radius:16px"></div><div class="skel" style="height:180px;border-radius:16px;margin-top:12px"></div></div>`});
+  let j=null;
+  try{const r=await fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'summary',initData:(tg&&tg.initData)||''})});
+    j=await r.json().catch(()=>null);if(!r.ok&&!j)j={ok:false,error:r.status};}catch(e){j={ok:false,error:'network'};}
+  if(cur!==sh)return;
+  if(!j||!j.ok){sh.bd.innerHTML=`<div class="state" role="alert"><div class="ic">${ic('chart')}</div><h3>${j&&j.error==='forbidden'?'Нет доступа':'Статистика не загрузилась'}</h3><p>${j&&j.error==='forbidden'?'Раздел виден только владельцу.':'Проверьте интернет и попробуйте ещё раз.'}</p><button class="btn sm press" id="stRetry">${ic('repeat')}Повторить</button></div>`;
+    sh.bd.querySelector('#stRetry').onclick=openStats;return;}
+  renderStats(sh,j,{period:'week',metric:'orders',sel:j.series.length-1});
+}
+function renderStats(sh,d,st){
+  const P={today:['Сегодня',d.today],week:['7 дней',d.week],month:['30 дней',d.month]};const t=P[st.period][1];
+  const ser=d.series,key=st.metric,vals=ser.map(x=>x[key]),max=Math.max(1,...vals);
+  const fmtV=v=>key==='orders'?num(v):shortMoney(v);
+  const x=ser[st.sel]||ser[ser.length-1];
+  const lbl=x=>`${dayLbl(x.day,{weekday:'short'})}: ${x.orders} ${plural(x.orders,['заказ','заказа','заказов'])}, ${money(x.revenue)}, ${x.views} ${plural(x.views,['просмотр','просмотра','просмотров'])}`;
+  const row=(r,metric)=>{const it=S.byId[r.id];const p=it&&photo(it);
+    return `<button class="st-row press" data-open="${esc(r.id)}"><span class="thumb">${p?`<img alt="" loading="lazy" src="${esc(p)}">`:''}</span><span class="st-rt"><b>${esc(it?it.name:r.id)}</b><small>${metric==='o'
+      ?`${r.viewed} ${plural(r.viewed,['просмотр','просмотра','просмотров'])}`
+      :`заказали ${r.ordered} шт.${r.viewed?` · ${Math.round(r.ordered/r.viewed*100)}% от просмотров`:''}`}</small></span><span class="st-n">${metric==='o'?`${r.n} шт.`:`${r.n}`}</span></button>`;};
+  const empty=!d.month.orders&&!d.month.views;
+  sh.bd.innerHTML=`
+   <div class="seg" role="group" aria-label="Период">${Object.keys(P).map(k=>`<button data-p="${k}" class="${st.period===k?'on':''}" aria-pressed="${st.period===k}">${P[k][0]}</button>`).join('')}</div>
+   <div class="st-tiles">
+    <div class="st-t"><span>Заказы</span><b>${num(t.orders)}</b><small>${t.auction?`из них аукцион: ${t.auction}`:'&nbsp;'}</small></div>
+    <div class="st-t"><span>Выручка</span><b>${shortMoney(t.revenue)}</b><small>${t.revenue?money(t.revenue):'сум'}</small></div>
+    <div class="st-t"><span>Средний чек</span><b>${t.avg?shortMoney(t.avg):'—'}</b><small>${t.avg?money(t.avg):'&nbsp;'}</small></div>
+    <div class="st-t"><span>Просмотры товаров</span><b>${num(t.views)}</b><small>${t.views&&t.orders?`заказ на каждые ${Math.max(1,Math.round(t.views/t.orders))}`:'&nbsp;'}</small></div>
+   </div>
+   ${empty?`<p class="st-note">Данных пока нет: статистика копится с момента обновления сайта. Тестовые заказы (с «тест» в комментарии) не учитываются.</p>`:''}
+   <div class="st-card">
+    <div class="st-ch-h"><h3>По дням, 14 дней</h3><div class="st-mt" role="group" aria-label="Показатель">${[['orders','Заказы'],['revenue','Выручка']].map(([k,l])=>`<button data-m="${k}" class="${key===k?'on':''}" aria-pressed="${key===k}">${l}</button>`).join('')}</div></div>
+    <div class="st-chart" role="group" aria-label="${key==='orders'?'Заказы':'Выручка'} по дням">
+     <div class="st-grid" aria-hidden="true"><span style="bottom:100%"><i>${fmtV(max)}</i></span><span style="bottom:50%"><i>${fmtV(Math.round(max/2))}</i></span><span style="bottom:0"></span></div>
+     <div class="st-bars">${ser.map((s,i)=>`<button class="st-b${i===st.sel?' on':''}" data-i="${i}" aria-label="${esc(lbl(s))}" aria-pressed="${i===st.sel}"><i style="height:${s[key]?Math.max(3,s[key]/max*100):0}%"></i><em>${+s.day.slice(8)}</em></button>`).join('')}</div>
+    </div>
+    <div class="st-sel" aria-live="polite"><b>${esc(dayLbl(x.day,{weekday:'long'}))}</b><span>${x.orders} ${plural(x.orders,['заказ','заказа','заказов'])} · ${money(x.revenue)} · ${x.views} ${plural(x.views,['просмотр','просмотра','просмотров'])}</span></div>
+    <details class="st-tbl"><summary>Таблица по дням</summary><table><thead><tr><th scope="col">День</th><th scope="col">Заказы</th><th scope="col">Выручка</th><th scope="col">Просмотры</th></tr></thead><tbody>${ser.slice().reverse().map(s=>`<tr><th scope="row">${esc(dayLbl(s.day))}</th><td>${s.orders}</td><td>${num(s.revenue)}</td><td>${s.views}</td></tr>`).join('')}</tbody></table></details>
+   </div>
+   ${d.topOrdered.length?`<div class="sec-t" style="font-size:16px;margin-top:22px">Чаще заказывают · 30 дней</div><div class="group st-list">${d.topOrdered.map(r=>row(r,'o')).join('')}</div>`:''}
+   ${d.topViewed.length?`<div class="sec-t" style="font-size:16px;margin-top:22px">Чаще смотрят · 30 дней</div><div class="group st-list">${d.topViewed.map(r=>row(r,'v')).join('')}</div>`:''}
+   <p class="st-note">${d.since?`Данные с ${esc(dayLbl(d.since))}. `:''}Время ташкентское. Тестовые заказы не учитываются, просмотры владельца тоже.</p>`;
+  const re=p=>{renderStats(sh,d,Object.assign({},st,p));};
+  sh.bd.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{hap('sel');re({period:b.dataset.p});});
+  sh.bd.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{hap('sel');re({metric:b.dataset.m});});
+  sh.bd.querySelectorAll('.st-b').forEach(b=>{b.onclick=()=>{hap('sel');re({sel:+b.dataset.i});setTimeout(()=>{const n=sh.bd.querySelector(`.st-b[data-i="${b.dataset.i}"]`);n&&n.focus({preventScroll:true});},0);};
+    b.onmouseenter=()=>{const s=ser[+b.dataset.i];const e=sh.bd.querySelector('.st-sel');e.querySelector('b').textContent=dayLbl(s.day,{weekday:'long'});e.querySelector('span').textContent=`${s.orders} ${plural(s.orders,['заказ','заказа','заказов'])} · ${money(s.revenue)} · ${s.views} ${plural(s.views,['просмотр','просмотра','просмотров'])}`;};});
+  sh.bd.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openProduct(b.dataset.open));
+}
+
 /* Сертификат: статус берётся с сервера, одинаковый на всех устройствах */
 async function syncCert(){
   if(!tg||!tg.initData||!tgUser)return;
@@ -1651,7 +2259,9 @@ function welcome(){
     if(/^(ios|android)$/.test(tg.platform||'')&&tg.isVersionAtLeast&&tg.isVersionAtLeast('8.0')&&tg.requestFullscreen)tg.requestFullscreen();
   }catch(e){}}
   document.documentElement.lang=S.lang==='ru'?'ru':'uz';
-  applyTheme();renderTop();renderNav();skeleton();
+  applyTheme();renderTop();restoreAuction();renderNav();skeleton();
+  loadAuction();
+  {const sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';if(location.hash==='#auction'||/^(auction|remind_|offer_)/.test(sp))go('auction');}
   const sync=Promise.all([pullCloud(),syncCert()]);
   const CACHE_K='mf_items_cache_v1';
   const cached=LS.get(CACHE_K,null);let booted=false;
@@ -1668,7 +2278,8 @@ function welcome(){
     items.sort((x,y)=>(!x.photo)-(!y.photo));S.items=items;items.forEach(i=>S.byId[i.id]=i);S.loaded=true;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     $('grid').innerHTML='';renderChips();renderGrid(true);renderHero();renderNav();setupInfinite();
-    loadFeed();loadAuction();
+    loadFeed();if(S.tab==='auction')renderAuction(true);
+    netBar();flushOutbox(true);
     await sync;
     Object.keys(S.cart).forEach(id=>{if(!S.byId[id])delete S.cart[id];});
     applyTheme();refreshLang();if(S.tab==='profile')renderProfile();Object.keys(cardCache).forEach(updateCardAction);renderNav();renderHero();
