@@ -125,6 +125,9 @@ export default async (req) => {
   }
 
   // --- лента «Недавно заказали»: только подтверждённые заказы из Telegram, без тестовых
+  // --- заказ оформлен — корзина для напоминания больше не нужна
+  if (user && store) await store.delete(`cart/${user.id}`).catch(() => {});
+
   // --- статистика для владельца (тестовые заказы не считаем)
   if (store && !meta.test) {
     const certOk = notes.length === 0;

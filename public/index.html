@@ -210,6 +210,7 @@ html.lite .fd{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(-
 .skel .l.s{width:50%;margin-top:8px}
 .sentinel{height:1px}
 .more{display:flex;justify-content:center;padding:18px}
+.more[hidden]{display:none}
 .more button{height:44px;padding:0 24px;border-radius:999px;background:var(--surface);box-shadow:0 0 0 1px var(--hair);font-weight:600;font-size:14px}
 
 /* empty */
@@ -782,6 +783,18 @@ h1.title{margin:0}
 .sheet .hd .share{left:auto;right:16px}
 .sheet .hd .share svg{width:18px;height:18px;stroke-width:2}
 
+/* напоминание о корзине */
+.rem{display:flex;gap:12px;align-items:flex-start;margin-top:12px}
+.rem-ic{width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;flex:none}
+.rem-ic svg{width:20px;height:20px}
+.rem-b{flex:1;min-width:0}
+.rem-t{font-size:15px;font-weight:600}
+.rem-s{font-size:13px;color:var(--muted);line-height:1.4;margin-top:3px}
+.rem-a{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.rem-a .btn{height:38px;padding:0 16px}
+.rem-on{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font-size:13px;color:var(--muted)}
+.rem-on svg{width:16px;height:16px;color:var(--accent);flex:none}
+
 /* статистика владельца */
 .st-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
 .st-t{background:var(--surface2);border-radius:14px;padding:12px;min-width:0}
@@ -846,8 +859,12 @@ h1.title{margin:0}
 /* очередь заказов и нет сети */
 .pill.ost{height:22px;padding:0 8px;font-size:11.5px;vertical-align:2px;margin-left:6px;background:var(--accent-soft);color:var(--accent)}
 .pill.ost.off{background:rgba(180,69,58,.12);color:var(--bad)}
-.netbar{position:fixed;left:50%;top:calc(var(--safe-top) + 10px);z-index:85;transform:translate(-50%,-160%);max-width:calc(100% - 32px);padding:9px 14px;border-radius:14px;background:#3A332B;color:#FBF6EC;font-size:13px;font-weight:600;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .45s var(--ease-out);pointer-events:none}
-.netbar.in{transform:translate(-50%,0)}
+.netbar{position:fixed;left:50%;top:calc(var(--safe-top) + 10px);z-index:85;transform:translate(-50%,calc(-100% - var(--safe-top) - 40px));opacity:0;visibility:hidden;max-width:calc(100% - 32px);padding:9px 14px;border-radius:14px;background:#3A332B;color:#FBF6EC;font-size:13px;font-weight:600;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:transform .45s var(--ease-out),opacity .3s,visibility 0s .45s;pointer-events:none}
+.netbar.in{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .45s var(--ease-out),opacity .3s}
+.netbar:empty{display:none}
+/* уведомление: пока не показано — полностью скрыто (иначе мелькает, когда Telegram меняет верхний отступ) */
+.toast{opacity:0;visibility:hidden;transition:transform .55s var(--spring),opacity .25s,visibility 0s .55s}
+.toast.in{opacity:1;visibility:visible;transition:transform .55s var(--spring),opacity .2s}
 
 /* сортировка каталога */
 .meta-row{gap:8px}
@@ -1031,6 +1048,10 @@ Object.assign(T.ru,{simSeries:'Из этой серии',simSets:'Похожие
 Object.assign(T.uz,{simSeries:'Shu seriyadan',simSets:'O‘xshash to‘plamlar',simItems:'O‘xshash mahsulotlar'});
 Object.assign(T.ru,{shareT:'{n} — {x} · фарфор Maison Forfè',linkCopied:'Ссылка скопирована',linkCopyFail:'Не удалось скопировать ссылку',linkManual:'Скопируйте ссылку и отправьте её в чат — она откроет каталог сразу на этом товаре.',copy:'Скопировать',linkSelect:'Выделите текст и скопируйте вручную'});
 Object.assign(T.uz,{shareT:'{n} — {x} · Maison Forfè chinnisi',linkCopied:'Havola nusxalandi',linkCopyFail:'Havolani nusxalab bo‘lmadi',linkManual:'Havolani nusxalab chatga yuboring — u katalogni shu mahsulotda ochadi.',copy:'Nusxalash',linkSelect:'Matnni belgilab, qo‘lda nusxalang'});
+Object.assign(T.ru,{remT:'Напомнить о корзине?',remS:'Если не успеете оформить сейчас, бот пришлёт одно сообщение через сутки. Отключить можно в профиле.',remYes:'Напомнить',remNo:'Не нужно',remOn:'Напомним через сутки, если не оформите заказ',remDone:'Хорошо, напомним через сутки',remDenied:'Без разрешения бот не сможет написать',remOff:'Больше не будем напоминать о корзине',remProf:'Напоминать о корзине',remProfS:'Одно сообщение через сутки'});
+Object.assign(T.uz,{remT:'Savat haqida eslataylikmi?',remS:'Hozir rasmiylashtirishga ulgurmasangiz, bot bir kundan keyin bitta xabar yuboradi. Profilda o‘chirish mumkin.',remYes:'Eslatish',remNo:'Kerak emas',remOn:'Buyurtma bermasangiz, bir kundan keyin eslatamiz',remDone:'Yaxshi, bir kundan keyin eslatamiz',remDenied:'Ruxsatsiz bot yoza olmaydi',remOff:'Savat haqida boshqa eslatmaymiz',remProf:'Savat haqida eslatish',remProfS:'Bir kundan keyin bitta xabar'});
+Object.assign(T.ru,{didYou:'Возможно, вы искали'});
+Object.assign(T.uz,{didYou:'Balki siz qidirgansiz'});
 T.uzc={};Object.keys(T.uz).forEach(k=>T.uzc[k]=toCyr(T.uz[k]));
 const TYPE_UZC={};Object.keys(TYPE_UZ).forEach(k=>TYPE_UZC[k]=toCyr(TYPE_UZ[k]));
 
@@ -1186,7 +1207,42 @@ const cartCount=()=>cartIds().reduce((s,id)=>s+S.cart[id],0);
 const cartSub=()=>cartIds().reduce((s,id)=>s+S.cart[id]*S.byId[id].price_uzs,0);
 const certAvail=()=>S.cert&&!S.cert.used;
 function totals(){const sub=cartSub(),eligible=certAvail()&&sub>=CERT_MIN,applied=eligible&&S.certOn,discount=applied?CERT_AMOUNT:0;return{sub,eligible,applied,discount,total:sub-discount};}
-function saveCart(){save('cart',S.cart);}
+function saveCart(){save('cart',S.cart);syncCartRemote();}
+
+/* ===== НАПОМИНАНИЕ О КОРЗИНЕ =====
+   Только по согласию: в корзине карточка «Напомнить о корзине?». Telegram спрашивает разрешение, чтобы бот мог написать.
+   Тогда корзина (id, кол-во, название, цена — без имени и телефона) хранится на сервере, и через сутки бот пришлёт
+   одно сообщение. Отключить — в профиле или кнопкой «Больше не напоминать» в самом сообщении. */
+const remindAvail=()=>!!(tg&&tgUser&&tg.initData&&tg.platform&&tg.platform!=='unknown');
+S.remind=LS.get('mf_remind_cart_'+UID,null);
+let rcT=0;
+function syncCartRemote(now){
+  if(!remindAvail()||S.remind!==true)return;
+  clearTimeout(rcT);rcT=setTimeout(()=>{
+    const ids=cartIds();
+    fetch('/api/cart',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify({initData:tg.initData,remind:true,lang:S.lang,
+      total:ids.length?totals().total:0,items:ids.map(id=>[id,S.cart[id],S.byId[id].name,S.byId[id].price_uzs])})}).catch(()=>{});
+  },now?0:3000);
+}
+function setRemind(on){
+  S.remind=on;LS.set('mf_remind_cart_'+UID,on);
+  if(on)syncCartRemote(true);
+  else if(remindAvail())fetch('/api/cart',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initData:tg.initData,remind:false})}).catch(()=>{});
+}
+function askRemind(){
+  hap();
+  const done=ok=>{if(ok){setRemind(true);hap('ok');toast(tr('remDone'),'bell');}else toast(tr('remDenied'),'x');if(S.tab==='cart')renderCart();if(S.tab==='profile')renderProfile();};
+  if(tgUser&&tgUser.allows_write_to_pm){done(true);return;}
+  if(tg&&tg.requestWriteAccess){try{tg.requestWriteAccess(ok=>done(!!ok));return;}catch(e){}}
+  done(true);
+}
+function remindCardHtml(){
+  if(!remindAvail())return'';
+  if(S.remind===true)return `<p class="rem-on">${ic('bell')}<span>${esc(tr('remOn'))}</span></p>`;
+  if(S.remind===false)return'';
+  return `<div class="card2 rem" role="group" aria-labelledby="remT"><div class="rem-ic" aria-hidden="true">${ic('bell')}</div><div class="rem-b"><div class="rem-t" id="remT">${esc(tr('remT'))}</div><div class="rem-s">${esc(tr('remS'))}</div>
+    <div class="rem-a"><button class="btn sm press" id="remYes">${esc(tr('remYes'))}</button><button class="btn sm ghost press" id="remNo">${esc(tr('remNo'))}</button></div></div></div>`;
+}
 function setQty(id,q){if(q<=0)delete S.cart[id];else S.cart[id]=q;saveCart();onCartChange(id);}
 function onCartChange(id){
   if(id)updateCardAction(id);
@@ -1273,9 +1329,105 @@ function openFilter(){
   sh.el.querySelector('#fApply').onclick=()=>{S.band=pick;S.shown=PAGE;closeSheet();renderChips();renderGrid(true);};
 }
 function filtered(){
-  const q=S.search.trim().toLowerCase(),b=BANDS.find(x=>x[0]===S.band)||BANDS[0];
-  const list=S.items.filter(i=>(S.type==='all'||i.type===S.type)&&i.price_uzs>=b[1]&&i.price_uzs<b[2]&&(!q||i.name.toLowerCase().includes(q)||(i.collection||'').toLowerCase().includes(q)));
+  const b=BANDS.find(x=>x[0]===S.band)||BANDS[0];
+  let list=S.items.filter(i=>(S.type==='all'||i.type===S.type)&&i.price_uzs>=b[1]&&i.price_uzs<b[2]);
+  const qt=searchTokens(S.search);
+  if(qt.length){
+    const sc=new Map();list=list.filter(i=>{const s=matchItem(i,qt);if(s>0)sc.set(i.id,s);return s>0;});
+    /* при поиске по умолчанию — сначала самые точные совпадения; выбранная сортировка важнее */
+    if(!SORTS[S.sort])return list.sort((a,c)=>sc.get(c.id)-sc.get(a.id)||(!a.photo)-(!c.photo));
+  }
   const cmp=SORTS[S.sort];return cmp?list.slice().sort(cmp):list;
+}
+
+/* ===== УМНЫЙ ПОИСК =====
+   • кириллица ↔ латиница: «вилладж», «блю стоун», «жанти», «монблан» находят Village, Blue Stone, Zhanti, Mont Blanc;
+   • узбекский: «choynak», «чойнак», «piyola» находят чайники и пиалы;
+   • опечатки: 1 ошибка в слове из 4–6 букв, 2 — в длинных («тарелки» → «тарелка», «вилаж» → Village);
+   • синонимы и цвета: «сервиз» — наборы, «чашки» — чашки и кружки, «золото» — Gold, «синий» — Blue;
+   • числа: «тарелка 25» находит D.P25; все слова запроса должны найтись; порядок — по точности. */
+const CYR2LAT={а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'yo',ж:'j',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sh',ъ:'',ы:'i',ь:'',э:'e',ю:'yu',я:'ya',ў:'o',қ:'k',ғ:'g',ҳ:'h'};
+const normS=s=>String(s||'').toLowerCase().replace(/ё/g,'е').replace(/[‘’ʻʼ`']/g,'');
+const tokS=s=>normS(s).split(/[^0-9a-zа-яўқғҳ]+/i).filter(Boolean);
+const isCyr=s=>/[а-яўқғҳ]/.test(s);
+const toLat=s=>s.replace(/[а-яёўқғҳ]/g,c=>CYR2LAT[c]??c);
+/* «скелет» слова — одинаковый для «village» и «вилладж», «stone» и «стоун» */
+const skel=s=>{let x=toLat(s).replace(/ch/g,'ç').replace(/sh/g,'ş');
+  x=x.replace(/dzh|dj|zh/g,'j').replace(/g(?=[eiy])/g,'j').replace(/ck/g,'k').replace(/c(?=[eiy])/g,'s').replace(/c/g,'k').replace(/q/g,'k').replace(/x/g,'ks')
+     .replace(/w/g,'v').replace(/ph/g,'f').replace(/th/g,'t').replace(/kh/g,'h').replace(/ee|ea/g,'i').replace(/oo|ou/g,'u').replace(/yu/g,'u').replace(/ya/g,'a').replace(/yo/g,'o').replace(/y/g,'i');
+  if(x.length>3)x=x.replace(/ue$/,'u').replace(/([^aeiouçş])e$/,'$1');
+  return x.replace(/(.)\1+/g,'$1').replace(/ç/g,'ch').replace(/ş/g,'sh');};
+const SYN={сервиз:['набор'],сервиза:['набор'],сервизы:['набор'],сервис:['набор'],servis:['набор'],чашки:['чашка','кружка'],чашка:['чашка','кружка'],кружки:['кружка'],
+  тарелки:['тарелка'],пиалы:['пиала'],салатники:['салатник'],солонки:['солонка'],перечницы:['перечница'],чайники:['чайник'],
+  piyola:['пиала'],choynak:['чайник'],likopcha:['тарелка'],kosa:['пиала'],vaza:['ваза'],oltin:['gold'],kumush:['silver'],kok:['blue'],oq:['white']};
+/* цвета и материалы по-русски → как они написаны в названиях */
+const SYN_RE=[[/^золот/,'gold'],[/^платин/,'platinum'],[/^серебр/,'silver'],[/^(син|голуб)/,'blue'],[/^бел/,'white'],[/^розов/,'pink'],[/^сер(ый|ая|ое|ые|ого)$/,'gray'],
+  [/^бирюз/,'turquoise'],[/^ч[её]рн/,'black'],[/^зел[её]н/,'green'],[/^оранж/,'orange'],[/^фиолет/,'violet'],[/^красн/,'red'],[/^кролик/,'rabbit'],[/^роз[аы]$/,'rose'],[/^мрамор/,'marble'],[/^т[её]мн/,'dark']];
+/* расстояние Дамерау — Левенштейна с ранним выходом, если больше max */
+function dist(a,b,max){
+  if(Math.abs(a.length-b.length)>max)return max+1;
+  let p2=null,p=Array.from({length:b.length+1},(_,j)=>j);
+  for(let i=1;i<=a.length;i++){const c=[i];let m=i;
+    for(let j=1;j<=b.length;j++){let v=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));
+      if(p2&&i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])v=Math.min(v,p2[j-2]+1);c[j]=v;if(v<m)m=v;}
+    if(m>max)return max+1;p2=p;p=c;}
+  return p[b.length];
+}
+const tol=n=>n<=3?0:n<=6?1:2;
+let SIDX=null;
+function searchIndex(){
+  if(SIDX&&SIDX.ref===S.items)return SIDX.m;
+  const m=new Map();
+  S.items.forEach(it=>{
+    const name=tokS(it.name),rest=[...tokS(it.collection),...tokS(it.type),...tokS(TYPE_UZ[it.type]),...tokS(TYPE_UZC[it.type])];
+    const extra=[];
+    for(let i=0;i+1<name.length;i++)if(!/\d/.test(name[i])&&!/\d/.test(name[i+1]))extra.push(name[i]+name[i+1]); // «монблан» = Mont Blanc
+    name.forEach(t=>{const d=t.match(/\d+/g);if(d&&!/^\d+$/.test(t))d.forEach(x=>extra.push(x));});           // «25» = D.P25
+    const mk=(arr,isName)=>arr.map(t=>({t,s:skel(t),c:isCyr(t),n:isName}));
+    m.set(it.id,[...mk(name,true),...mk(extra,true),...mk(rest,false)]);
+  });
+  SIDX={ref:S.items,m};return m;
+}
+function searchTokens(q){
+  return tokS(q).map(t=>{let alt=SYN[t]||null;if(!alt){const r=SYN_RE.find(([re])=>re.test(t));if(r)alt=[r[1]];}
+    return{t,s:skel(t),c:isCyr(t),alt,num:/^\d+$/.test(t)};});
+}
+/* очки за одно слово запроса против одного слова товара: 0 — не подходит */
+function tokScore(q,x){
+  if(q.num)return x.t===q.t?5:x.t.startsWith(q.t)?3:0;
+  if(x.t===q.t)return 6;
+  if(x.t.startsWith(q.t))return q.t.length>=2?5:(x.n?2:0);
+  if(q.c===x.c){const L=q.t.length,T=tol(L);
+    if(T&&(dist(q.t,x.t.slice(0,L+1),T)<=T||dist(q.t,x.t,T)<=T))return 3;
+    return 0;}
+  /* другая раскладка: сравниваем «скелеты» */
+  if(q.s.length>=3&&x.s.startsWith(q.s))return 4;
+  const sl=q.s.length,ST=tol(sl);
+  if(ST&&(dist(q.s,x.s.slice(0,sl),ST)<=ST||dist(q.s,x.s,ST)<=ST))return 2;
+  return 0;
+}
+function matchItem(it,qt){
+  const toks=searchIndex().get(it.id)||[];let total=0;
+  for(const q of qt){
+    let best=0;
+    for(const x of toks){let s=tokScore(q,x);if(s&&x.n)s+=1;if(s>best)best=s;}
+    if(!best&&q.alt)for(const a of q.alt){const aq={t:a,s:skel(a),c:isCyr(a),num:false};for(const x of toks){const s=tokScore(aq,x);if(s>best)best=s;}}
+    if(!best)return 0;
+    total+=best;
+  }
+  return total;
+}
+/* «Возможно, вы искали»: ближайшее название среди всех товаров */
+function didYouMean(q){
+  const qt=searchTokens(q).filter(x=>!x.num);if(!qt.length)return'';
+  let best='',bd=1e9;const seen=new Set();
+  for(const it of S.items){
+    const w=it.name.split(/\s+/).filter(t=>!/\d/.test(t)).slice(0,Math.min(2,qt.length));if(!w.length)continue;
+    const key=w.join(' ');if(seen.has(key))continue;seen.add(key);
+    let d=0;for(const q1 of qt){let m=9;for(const t of w){const s=skel(normS(t));m=Math.min(m,dist(q1.s,s,4));}d+=m;}
+    if(d<bd){bd=d;best=key;}
+  }
+  return bd<=qt.length*3?best:'';
 }
 /* сортировка: «Рекомендуем» — исходный порядок (сначала с фото); при равной цене — сначала с фото */
 const byPhoto=(a,b)=>(!a.photo)-(!b.photo);
@@ -1337,8 +1489,10 @@ function renderGrid(reset){
   $('metaRow').innerHTML=`<span aria-live="polite">${esc(tr('found',{n:num(list.length)}))}${(S.type!=='all'||S.band!=='all'||S.search)?` · <button id="resetAll">${esc(tr('reset'))}</button>`:''}</span><button class="sortbtn${S.sort!=='def'?' on':''}" id="sortBtn" aria-haspopup="dialog" aria-label="${esc(tr('sort')+': '+tr('s_'+S.sort))}">${ic('sortA')}<span>${esc(tr('s_'+S.sort))}</span>${ic('chevD')}</button>`;
   $('sortBtn').onclick=openSort;
   const ra=$('resetAll');if(ra)ra.onclick=resetFilters;
-  $('catEmpty').innerHTML=list.length?'':`<div class="empty"><div class="ic">${ic('sparkle')}</div><h3>${esc(tr('nothing'))}</h3><p>${esc(tr('nothingS'))}</p><button class="btn sm press" id="emptyReset">${esc(tr('resetAll'))}</button></div>`;
+  const dym=!list.length&&S.search.trim()?didYouMean(S.search):'';
+  $('catEmpty').innerHTML=list.length?'':`<div class="empty"><div class="ic">${ic('sparkle')}</div><h3>${esc(tr('nothing'))}</h3>${dym?`<p>${esc(tr('didYou'))} <button class="link" id="dymBtn">${esc(dym)}</button>?</p>`:`<p>${esc(tr('nothingS'))}</p>`}<button class="btn sm press" id="emptyReset">${esc(tr('resetAll'))}</button></div>`;
   const er=$('emptyReset');if(er)er.onclick=resetFilters;
+  const db=$('dymBtn');if(db)db.onclick=()=>{hap('sel');S.search=dym;$('search').value=dym;$('searchWrap').classList.add('has');S.type='all';S.band='all';S.shown=PAGE;renderChips();renderGrid(true);};
   const left=list.length-show.length,mw=$('moreWrap');mw.hidden=left<=0;
   if(left>0){$('moreBtn').textContent=tr('showMore')+' · '+num(Math.min(PAGE,left));$('moreBtn').onclick=()=>{hap();S.shown+=PAGE;renderGrid();};}
 }
@@ -1586,6 +1740,7 @@ function renderCart(){
    <div class="group">${ids.map(id=>{const it=S.byId[id],q=S.cart[id];return `<div class="row" data-id="${esc(id)}"><div class="thumb" data-a="open">${photo(it)?`<img alt="" loading="lazy" src="${esc(photo(it))}">`:''}</div><div class="b"><div class="n" data-a="open" ${asBtn()}>${esc(it.name)}</div><div class="m">${money(it.price_uzs)} × ${q}</div><div class="p">${money(q*it.price_uzs)}</div></div><div class="side"><button class="x press" data-a="rm" aria-label="${esc(tr('remove')+': '+it.name)}">${ic('x')}</button><div class="step" style="animation:none" role="group" aria-label="${esc(tr('qtyA')+': '+it.name)}"><button data-a="dec" aria-label="${esc(tr('dec'))}">${ic('minus')}</button><span>${q}</span><button data-a="inc" aria-label="${esc(tr('inc'))}">${ic('plus')}</button></div></div></div>`;}).join('')}</div>
    <div style="margin-top:12px">${certHtml}
    <div class="card2"><div class="sum-row"><span>${esc(tr('subtotal'))}</span><span>${money(t.sub)}</span></div>${t.applied?`<div class="sum-row disc"><span>${esc(tr('disc'))}</span><span>− ${money(t.discount)}</span></div>`:''}<div class="sum-row tot"><span>${esc(tr('total'))}</span><span>${money(t.total)}</span></div></div></div>
+   ${remindCardHtml()}
    <div class="sec-t">${esc(tr('contacts'))}</div>
    <div class="card2">
     <div class="fld"><label for="fName">${esc(tr('name'))}${reqM}</label><input class="inp${er.name?' bad':''}" id="fName" autocomplete="name" required ${errA('name')} placeholder="${esc(tr('nameP'))}" value="${esc(f.name)}">${errD('name')}</div>
@@ -1597,6 +1752,8 @@ function renderCart(){
    <div style="height:84px"></div></div>`;
   el.querySelectorAll('.row').forEach(r=>r.onclick=e=>{const a=e.target.closest('[data-a]');if(!a)return;const id=r.dataset.id;const q=S.cart[id]||0;
     if(a.dataset.a==='open')openProduct(id);else if(a.dataset.a==='rm'){hap();setQty(id,0);}else if(a.dataset.a==='inc'){hap('sel');setQty(id,q+1);}else if(a.dataset.a==='dec'){hap('sel');setQty(id,q-1);}});
+  const ry=$('remYes');if(ry)ry.onclick=askRemind;
+  const rn=$('remNo');if(rn)rn.onclick=()=>{hap('sel');setRemind(false);renderCart();};
   const ct=$('certTg');if(ct)ct.onclick=()=>{hap('sel');S.certOn=!S.certOn;renderCart();};
   const bindF=(id,k)=>$(id).addEventListener('input',e=>{S.form[k]=e.target.value;if(S.errors[k]){S.errors[k]='';e.target.classList.remove('bad');e.target.removeAttribute('aria-invalid');e.target.removeAttribute('aria-describedby');const n=e.target.parentElement.querySelector('.err')||e.target.parentElement.parentElement.querySelector('.err');n&&n.remove();}save('form',{name:S.form.name,phone:S.form.phone,addr:S.form.addr});});
   bindF('fName','name');bindF('fPhone','phone');bindF('fAddr','addr');bindF('fCom','comment');
@@ -1761,6 +1918,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)flushOutbo
 setInterval(()=>flushOutbox(false),4000);
 function netBar(){
   let b=$('netbar');const off=navigator.onLine===false;
+  if(!b&&!off)return; /* плашку создаём только когда сеть действительно пропала */
   if(!b){b=document.createElement('div');b.id='netbar';b.className='netbar';b.setAttribute('role','status');b.setAttribute('aria-live','polite');document.body.appendChild(b);}
   const q=outboxGet().length;
   b.textContent=off?tr(q?'offlineQ':'offline'):'';b.classList.toggle('in',off);
@@ -1790,6 +1948,7 @@ function renderProfile(){
     <button class="mrow press" id="mgr"><div class="mi">${ic('send')}</div><div class="mt">${esc(tr('manager'))}<small>@${MANAGER}</small></div><div class="mv">${ic('chev')}</div></button>
     ${S.isAdmin?`<button class="mrow press" id="statsBtn"><div class="mi">${ic('chart')}</div><div class="mt">Статистика<small>Заказы, выручка и просмотры</small></div><div class="mv">${ic('chev')}</div></button>`:''}
     ${S.isAdmin?`<button class="mrow press" id="adminBtn"><div class="mi">${ic('gavel')}</div><div class="mt">Управление аукционом<small>Лоты и предложения цены</small></div><div class="mv">${ic('chev')}</div></button>`:''}
+    ${remindAvail()?`<div class="mrow"><div class="mi">${ic('bell')}</div><div class="mt" id="remPL">${esc(tr('remProf'))}<small>${esc(tr('remProfS'))}</small></div><button class="toggle${S.remind===true?' on':''}" id="remTg" role="switch" aria-checked="${S.remind===true}" aria-labelledby="remPL"></button></div>`:''}
     <button class="mrow press" data-go="favs"><div class="mi">${ic('heart')}</div><div class="mt">${esc(tr('favs'))}</div><div class="mv">${S.favs.length||''}${ic('chev')}</div></button>
    </div>
    <div style="text-align:center;color:var(--muted);font-size:12px;margin:26px 0 6px">Maison Forfè · Tashkent</div>
@@ -1799,6 +1958,7 @@ function renderProfile(){
   el.querySelectorAll('[data-rep]').forEach(b=>b.onclick=()=>{const o=S.orders[+b.dataset.rep];hap('medium');o.items.forEach(i=>{if(S.byId[i.id])S.cart[i.id]=(S.cart[i.id]||0)+i.q;});saveCart();Object.keys(cardCache).forEach(updateCardAction);renderNav(true);renderHero();toast(tr('repeated'),'bag');});
   const ab=$('adminBtn');if(ab)ab.onclick=()=>{hap();openAdmin();};
   const sb=$('statsBtn');if(sb)sb.onclick=()=>{hap();openStats();};
+  const rt=$('remTg');if(rt)rt.onclick=()=>{if(S.remind===true){hap('sel');setRemind(false);renderProfile();}else askRemind();};
   $('mgr').onclick=()=>{hap();const url='https://t.me/'+MANAGER;try{tg&&tg.openTelegramLink?tg.openTelegramLink(url):open(url,'_blank');}catch(e){open(url,'_blank');}};
   bindGo(el);
   wholesale();
@@ -1988,6 +2148,10 @@ function whenAuction(cb,n=0){if(AUC.data){cb(AUC.data);return;}if(n<40)setTimeou
 function handleStart(){
   const sp=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||'';
   if(location.hash==='#auction'||sp==='auction'){go('auction');return;}
+  /* из напоминания о корзине: «Открыть корзину» и «Больше не напоминать» */
+  const gq=new URLSearchParams(location.search).get('go')||location.hash.slice(1).split(/[&?#]/)[0];
+  if(gq==='cart'||sp==='cart'){go('cart');return;}
+  if(gq==='nocart'||sp==='nocart'){setRemind(false);go('cart');setTimeout(()=>toast(tr('remOff'),'bell'),400);return;}
   let m;
   /* товар: из Telegram — ?startapp=i_<id>, из браузера — #i_<id> */
   if((m=(sp||location.hash.slice(1)).match(/^i_(.+)$/))&&S.byId[m[1]]){openProduct(m[1]);return;}
