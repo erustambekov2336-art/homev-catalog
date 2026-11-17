@@ -2,14 +2,14 @@
 //   • за 5 минут до старта — анонс в канале с обратным отсчётом и напоминания подписавшимся;
 //   • на старте — пост превращается в LIVE, подписавшимся в последние минуты приходит «Начался»;
 //   • во время торгов — в посте обновляется текущая цена; после продажи — «Продан за …»;
-//   • ценовые уведомления «сообщить, когда цена опустится до …».
+//   • ценовые предупреждения распродажи: «предупредить, пока цена не выросла до …».
 import { getStore } from '@netlify/blobs';
 import { STORE_NAME } from '../lib/tg.mjs';
 import { norm, priceAt } from '../lib/auction.mjs';
 import { ANNOUNCE_MS, channelPost, channelEdit, dm, esc, num } from '../lib/channel.mjs';
 
 const siteUrl = () => (process.env.URL || '').replace(/\/$/, '');
-const openBtn = (text) => (process.env.URL ? [[[text, '🔨', siteUrl() + '/#auction']]] : []);
+const openBtn = (text) => (process.env.URL ? [[[text, '🏷', siteUrl() + '/?go=auction']]] : []);
 const pause = () => new Promise((r) => setTimeout(r, 40));
 
 // Атомарно меняет лот; fn возвращает false, если менять не нужно.
@@ -34,7 +34,7 @@ async function remindAll(s, lot, ids, html) {
   const done = new Set(await getList(s, 'remindDone/' + lot.id));
   const todo = [...new Set(ids)].filter((id) => !done.has(id)).slice(0, 500);
   for (const id of todo) {
-    await dm(id, html, openBtn('Открыть аукцион'));
+    await dm(id, html, openBtn('Открыть распродажу'));
     done.add(id);
     await pause();
   }
@@ -64,7 +64,7 @@ export default async () => {
         await s.delete('remind/next').catch(() => {});
         const mins = Math.max(0, Math.round(startsIn / 60000));
         await remindAll(s, lot, [...own, ...general], (e) =>
-          `${e('🔔')} <b>${mins > 0 ? `Через ${mins} мин начнётся` : 'Начался'} аукцион Maison Forfè</b>\n\n${esc(lot.itemName)}\n${e('💎')} ${num(lot.start)} → ${num(lot.min)} сум\nЦена снижается каждую секунду, пока кто-то не купит.`);
+          `${e('🔔')} <b>${mins > 0 ? `Через ${mins} мин начнётся распродажа` : 'Началась распродажа'} Maison Forfè</b>\n\n${esc(lot.itemName)}\n${e('💎')} ${num(lot.min)} → ${num(lot.start)} сум\nЦена растёт каждую секунду — самая низкая цена в первые секунды.`);
       }
     }
 
@@ -73,7 +73,7 @@ export default async () => {
       const marked = await patch(s, b.key, (l) => (l.startNotified ? false : ((l.startNotified = true), true)));
       if (marked) {
         await remindAll(s, lot, await getList(s, 'remind/' + lot.id), (e) =>
-          `${e('🔴')} <b>Аукцион начался!</b>\n\n${esc(lot.itemName)}\n${e('🔨')} Сейчас ${num(p.price)} сум, цена падает каждую секунду.`);
+          `${e('🔴')} <b>Распродажа началась!</b>\n\n${esc(lot.itemName)}\n${e('🏷')} Сейчас ${num(p.price)} сум, цена растёт каждую секунду — успейте дешевле.`);
       }
     }
 
@@ -95,17 +95,18 @@ export default async () => {
       }
     }
 
-    // 4) ценовые уведомления: сообщаем, когда цена дойдёт до нужной в ближайшие ~40 секунд
+    // 4) ценовые предупреждения распродажи: цена растёт — пишем примерно за 1,5 минуты до того,
+    //    как она дойдёт до суммы клиента (планировщик срабатывает раз в минуту)
     if (active && running && (raw.alerts || []).some((a) => !a.sent)) {
-      const soon = priceAt(lot, now + 40000).price;
+      const soon = priceAt(lot, now + 90000).price;
       const due = [];
       await patch(s, b.key, (l) => {
         due.length = 0;
-        for (const a of l.alerts || []) if (!a.sent && soon <= a.price) { a.sent = true; due.push(a); }
+        for (const a of l.alerts || []) if (!a.sent && soon >= a.price) { a.sent = true; due.push(a); }
         return due.length > 0;
       });
       for (const a of due) {
-        await dm(a.uid, (e) => `${e('🔔')} «${esc(lot.itemName)}»: цена опускается до <b>${num(a.price)} сум</b>!\nЛот могут забрать в любую секунду — откройте аукцион.`, openBtn('Открыть аукцион'));
+        await dm(a.uid, (e) => `${e('🔔')} «${esc(lot.itemName)}»: сейчас <b>${num(priceAt(lot, now).price)} сум</b>, скоро цена вырастет до ${num(a.price)} сум.\nУспейте купить дешевле — откройте распродажу.`, openBtn('Открыть распродажу'));
         await pause();
       }
     }

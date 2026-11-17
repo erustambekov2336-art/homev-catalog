@@ -1,4 +1,5 @@
-// Аукцион: состояние лота, бронь цены, покупка, предложения цены, напоминания и админ-управление.
+// Распродажа (бывший «аукцион»): цена растёт от минимума к максимуму. Состояние лота, бронь цены, покупка,
+// предложения цены, напоминания и админ-управление. Адрес /api/auction оставлен прежним для совместимости.
 // Все действия — POST /api/auction с полем action. Управлять лотами могут только ADMIN_IDS.
 import { getStore } from '@netlify/blobs';
 import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum } from '../lib/tg.mjs';
@@ -156,9 +157,9 @@ export default async (req) => {
     if (r.err) return json(200, { ok: false, error: r.err });
     const lot = r.lot;
     const text = [
-      `🔨 Аукцион: заказ ${no} — Maison Forfe`, '',
+      `🏷 Распродажа: заказ ${no} — Maison Forfe`, '',
       `• ${lot.itemName} — 1 шт.`,
-      `Цена на аукционе: ${sum(r.price)} (старт ${sum(lot.start)}, минимум ${sum(lot.min)})`, '',
+      `Цена на распродаже: ${sum(r.price)} (старт ${sum(lot.min)}, максимум ${sum(lot.start)})`, '',
       `Итого к оплате: ${sum(r.price)}`, '',
       `Имя: ${form.name}`, `Телефон: ${form.phone}`, `Адрес: ${form.addr}`,
       ...(form.comment ? [`Комментарий: ${form.comment}`] : []), '',
@@ -197,20 +198,20 @@ export default async (req) => {
       return {};
     });
     if (r.err) return json(200, { ok: false, error: r.err });
-    const msg = `💬 Предложение цены на аукционе\n\nЛот: ${lotName}\nПредложение: ${sum(price)}\nОт: ${name || '—'} ${who(user)}\nТелефон: ${phone}\n\nРешение — в мини-аппе: Профиль → Управление аукционом.`;
+    const msg = `💬 Предложение цены на распродаже\n\nЛот: ${lotName}\nПредложение: ${sum(price)}\nОт: ${name || '—'} ${who(user)}\nТелефон: ${phone}\n\nРешение — в мини-аппе: Профиль → Управление распродажей.`;
     await Promise.all(ADMIN_IDS.map((a) => tgSend(a, msg)));
     return json(200, { ok: true });
   }
 
   if (action === 'alert') {
-    // «Сообщить, когда цена опустится до…»
+    // Распродажа: «Предупредить, пока цена не выросла до…» — цена должна быть выше текущей и не выше максимума
     const id = str(body.id, 40);
     const price = Math.round(Number(body.price) || 0);
     const r = await updateLot(s, id, (lot) => {
       const p = priceAt(lot, now);
       if (!['live', 'held', 'scheduled'].includes(p.phase)) return { err: p.phase };
-      if (price < lot.min) return { err: 'below_min' };
-      if (price >= p.price) return { err: 'above_now' };
+      if (price > lot.start) return { err: 'above_max' };
+      if (price <= p.price) return { err: 'below_now' };
       lot.alerts = (lot.alerts || []).filter((a) => a.uid !== uid);
       lot.alerts.push({ uid, price, at: now, sent: false });
       lot.alerts = lot.alerts.slice(-500);
@@ -243,9 +244,10 @@ export default async (req) => {
       status: 'active', paused: 0, hold: null, offers: [], createdAt: now,
     };
     if (!lot.itemId || !lot.itemName) return json(400, { ok: false, error: 'Выберите набор' });
-    if (!(lot.start > lot.min && lot.min > 0)) return json(400, { ok: false, error: 'Старт должен быть больше минимума' });
+    // распродажа: lot.min — цена на старте, lot.start — максимальная цена
+    if (!(lot.start > lot.min && lot.min > 0)) return json(400, { ok: false, error: 'Максимальная цена должна быть больше цены на старте' });
     if (!lot.floor) lot.floor = lot.min;
-    if (lot.floor > lot.start) return json(400, { ok: false, error: 'Порог предложений не может быть выше старта' });
+    if (lot.floor > lot.start) return json(400, { ok: false, error: 'Порог предложений не может быть выше максимальной цены' });
     if (lot.durationMin < 5 || lot.durationMin > 24 * 60) return json(400, { ok: false, error: 'Длительность от 5 минут до 24 часов' });
     if (!lot.startAt || lot.startAt < now - 60000) return json(400, { ok: false, error: 'Время старта уже прошло' });
     const clash = (await loadLots(s)).find((x) => x.status === 'active' && priceAt(norm(x, now), now).phase !== 'ended' &&
@@ -305,7 +307,7 @@ export default async (req) => {
     const lot = r.lot;
     if (accept) {
       await tgSend(process.env.ORDER_CHAT_ID, [
-        `🔨 Аукцион: принято предложение ${no} — Maison Forfe`, '',
+        `🏷 Распродажа: принято предложение ${no} — Maison Forfe`, '',
         `• ${lot.itemName} — 1 шт.`, `Цена по предложению: ${sum(offer.price)}`, '',
         `Имя: ${offer.name || '—'}`, `Телефон: ${offer.phone}`, `Telegram: ${offer.username ? '@' + offer.username + ' ' : ''}(ID ${offer.uid})`, '',
         'Адрес уточните при звонке.',
