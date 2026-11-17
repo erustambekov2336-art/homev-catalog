@@ -1127,6 +1127,12 @@ const ic=(n,cls='',extra='')=>`<svg class="i ${cls}" viewBox="0 0 24 24" aria-hi
 /* telegram */
 const tg=window.Telegram&&window.Telegram.WebApp;
 const tgUser=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user||null;
+/* открыто в Telegram, но без данных аккаунта (например, старой кнопкой под полем ввода) — подсказываем, как открыть правильно */
+if(tg&&tg.platform&&tg.platform!=='unknown'&&!tgUser){
+  T.ru.guestS='Откройте каталог кнопкой «Открыть каталог» в боте — слева от поля ввода или под сообщением. Тогда подтянутся аккаунт, сертификат и заказы.';
+  T.uz.guestS='Katalogni botdagi «Katalogni ochish» tugmasi orqali oching — xabar maydonining chap tomonida yoki xabar ostida. Shunda akkaunt, sertifikat va buyurtmalar ko‘rinadi.';
+  T.uzc.guestS=toCyr(T.uz.guestS);
+}
 const hap=(t='light')=>{try{tg&&tg.HapticFeedback&&(t==='ok'?tg.HapticFeedback.notificationOccurred('success'):t==='err'?tg.HapticFeedback.notificationOccurred('error'):t==='sel'?tg.HapticFeedback.selectionChanged():tg.HapticFeedback.impactOccurred(t))}catch(e){}};
 
 /* storage */

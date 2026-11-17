@@ -27,7 +27,7 @@ const T = {
       '',
       '🎁 Новым покупателям — сертификат на <b>500 000 сум</b> к заказу от 3 000 000 сум. Он уже ждёт вас в профиле каталога.',
       '',
-      '🛍 Чтобы выбрать посуду, нажмите <b>«Открыть каталог»</b> — кнопка внизу экрана.',
+      '🛍 Чтобы выбрать посуду, нажмите <b>«Открыть каталог»</b> — кнопка внизу слева от поля ввода или под сообщением ниже.',
       '🕐 Заказы принимаем <b>24/7</b>.',
       '',
       'Ниже — как всё устроено: заказ, распродажа, доставка и оплата.',
@@ -35,7 +35,7 @@ const T = {
     how: () => [
       '📖 <b>Как сделать заказ</b>',
       '',
-      '1️⃣ Нажмите <b>«Открыть каталог»</b> внизу экрана.',
+      '1️⃣ Нажмите <b>«Открыть каталог»</b> — внизу слева от поля ввода или под этим сообщением.',
       '2️⃣ Выберите посуду. Помогут поиск (можно писать и по-русски, и латиницей), категории, фильтр по цене и сортировка. Нажмите ❤️, чтобы сохранить товар в избранное.',
       '3️⃣ Откройте товар: фото можно увеличить, ниже — вещи из той же серии и похожие наборы.',
       '4️⃣ Нажмите <b>«В корзину»</b>, затем в корзине — <b>«Оформить заказ»</b>.',
@@ -81,10 +81,10 @@ const T = {
       'После каждого заказа менеджер связывается с вами и уточняет детали.',
       `💬 Вопросы — @${ADMIN}`,
     ].join('\n'),
-    other: () => 'Чтобы выбрать посуду, нажмите <b>«Открыть каталог»</b> внизу экрана. Ответы на частые вопросы — кнопками ниже.',
+    other: () => 'Чтобы выбрать посуду, нажмите <b>«Открыть каталог»</b> — внизу слева от поля ввода или под этим сообщением. Ответы на частые вопросы — кнопками ниже.',
     open: '🛍 Открыть каталог', sale_btn: '🏷 Распродажа', how_btn: '📖 Как сделать заказ', sale_how: '🏷 Как работает распродажа',
     del_btn: '🚚 Доставка и оплата', chan_btn: '📣 Наш канал', admin_btn: '💬 Написать админу',
-    menu: 'Каталог',
+    menu: 'Открыть каталог',
     cmds: [['start', 'Начать и открыть каталог'], ['help', 'Как сделать заказ'], ['sale', 'Как работает распродажа'], ['delivery', 'Доставка и оплата']],
     descr: 'Maison Forfè — иранский фарфор в Ташкенте.\n\n🛍 Каталог сервизов, чайных и кофейных наборов прямо в Telegram\n🏷 Распродажа: новый лот каждый час, чем раньше — тем дешевле\n🚚 По Ташкенту — на следующий день, оплата при доставке\n📦 По регионам — почтой\n🎁 Сертификат 500 000 сум новым покупателям\n\nНажмите «Старт», чтобы начать.',
     short: 'Иранский фарфор в Ташкенте. Заказы 24/7, доставка по Ташкенту на следующий день.',
@@ -97,7 +97,7 @@ const T = {
       '',
       '🎁 Yangi xaridorlarga — 3 000 000 so‘mdan buyurtmaga <b>500 000 so‘mlik</b> sertifikat. U katalog profilida sizni kutmoqda.',
       '',
-      '🛍 Idish tanlash uchun ekran pastidagi <b>«Katalogni ochish»</b> tugmasini bosing.',
+      '🛍 Idish tanlash uchun <b>«Katalogni ochish»</b> tugmasini bosing — u pastda, xabar yozish maydonining chap tomonida yoki quyidagi xabar ostida.',
       '🕐 Buyurtmalar <b>24/7</b> qabul qilinadi.',
       '',
       'Quyida — hammasi qanday ishlaydi: buyurtma, chegirmalar, yetkazib berish va to‘lov.',
@@ -105,7 +105,7 @@ const T = {
     how: () => [
       '📖 <b>Qanday buyurtma berish</b>',
       '',
-      '1️⃣ Ekran pastidagi <b>«Katalogni ochish»</b> tugmasini bosing.',
+      '1️⃣ <b>«Katalogni ochish»</b> tugmasini bosing — pastda, xabar maydonining chap tomonida yoki shu xabar ostida.',
       '2️⃣ Idish tanlang: qidiruv (lotin va kirill harflarida), toifalar, narx filtri va saralash yordam beradi. ❤️ — sevimlilarga saqlash.',
       '3️⃣ Mahsulotni oching: rasmni kattalashtirish mumkin, pastda — shu seriyadagi va o‘xshash to‘plamlar.',
       '4️⃣ <b>«Savatga»</b> ni, so‘ng savatda <b>«Buyurtma berish»</b> ni bosing.',
@@ -151,7 +151,7 @@ const T = {
       'Har bir buyurtmadan keyin menejer siz bilan bog‘lanib, tafsilotlarni aniqlaydi.',
       `💬 Savollar — @${ADMIN}`,
     ].join('\n'),
-    other: () => 'Idish tanlash uchun ekran pastidagi <b>«Katalogni ochish»</b> tugmasini bosing. Ko‘p beriladigan savollarga javoblar — quyidagi tugmalarda.',
+    other: () => 'Idish tanlash uchun <b>«Katalogni ochish»</b> tugmasini bosing — pastda, xabar maydonining chap tomonida yoki shu xabar ostida. Ko‘p beriladigan savollarga javoblar — quyidagi tugmalarda.',
     open: '🛍 Katalogni ochish', sale_btn: '🏷 Chegirmalar', how_btn: '📖 Qanday buyurtma berish', sale_how: '🏷 Chegirmalar qanday ishlaydi',
     del_btn: '🚚 Yetkazish va to‘lov', chan_btn: '📣 Bizning kanal', admin_btn: '💬 Adminga yozish',
     menu: 'Katalog',
@@ -163,12 +163,12 @@ const T = {
 
 const langOf = (from) => (/^uz/i.test(from?.language_code || '') ? 'uz' : 'ru');
 
-// Нижняя клавиатура: одна большая кнопка «Открыть каталог», всегда под полем ввода
-const bottomKeyboard = (t) => ({
-  keyboard: [[{ text: t.open, web_app: { url: site() } }]],
-  resize_keyboard: true,
-  is_persistent: true,
-});
+// ВАЖНО: каталог НЕ открываем кнопкой нижней клавиатуры (reply keyboard) — при таком запуске Telegram
+// не передаёт мини-приложению данные пользователя, и в каталоге выходит «Гость».
+// Кнопка внизу — это кнопка меню «Открыть каталог» слева от поля ввода (ставится в setup) и кнопки
+// под сообщениями: при них Telegram передаёт аккаунт, сертификат и заказы подтягиваются.
+// Убираем старую нижнюю клавиатуру у тех, кому её уже прислали.
+const removeKeyboard = { remove_keyboard: true };
 
 // Кнопки под сообщением: каталог, распродажа, разделы инструкции, канал, админ
 function inlineMenu(t, skip) {
@@ -191,8 +191,8 @@ async function onMessage(m) {
   const t = T[langOf(m.from)];
   const cmd = String(m.text || '').trim().split(/[\s@]/)[0].toLowerCase();
   if (cmd === '/start') {
-    // сначала — нижняя кнопка «Открыть каталог», затем меню с разделами
-    await send(m.chat.id, t.welcome(), bottomKeyboard(t));
+    // приветствие (заодно убирает старую нижнюю клавиатуру), затем инструкция с кнопкой «Открыть каталог»
+    await send(m.chat.id, t.welcome(), removeKeyboard);
     await send(m.chat.id, t.how(), inlineMenu(t, 'how'));
     return;
   }
@@ -200,7 +200,9 @@ async function onMessage(m) {
   if (cmd === '/sale') return send(m.chat.id, t.sale(), inlineMenu(t, 'sale'));
   if (cmd === '/delivery') return send(m.chat.id, t.delivery(), inlineMenu(t, 'delivery'));
   if (m.web_app_data) return; // данные из мини-приложения не обрабатываем
-  return send(m.chat.id, t.other(), inlineMenu(t));
+  // любое другое сообщение: убираем старую нижнюю клавиатуру и показываем кнопки
+  await send(m.chat.id, t.other(), removeKeyboard);
+  return send(m.chat.id, t.how(), inlineMenu(t, 'how'));
 }
 
 async function onCallback(q) {
