@@ -998,11 +998,16 @@ html.lite .cbar{-webkit-backdrop-filter:none;backdrop-filter:none;background:var
 .p-tags svg{width:14px;height:14px}
 
 /* цена в карточке: сумы слева, доллары справа — всегда в одну строку во всех карточках */
-.c-foot{container-type:inline-size}
-/* размер подстраивается под ширину карточки: на обычных телефонах — как раньше (16 px), на узких чуть меньше, но в одну строку */
-.c-price{flex-wrap:nowrap;white-space:nowrap;gap:.25em;min-width:0;font-size:15px;font-size:min(16px,calc(11.2cqi - 1.4px))}
-.c-price span{letter-spacing:0;font-size:.75em}
-.c-price small{margin-left:auto;flex:none;font-size:.75em}
+/* простые размеры в пикселях — одинаково в Telegram на iPhone и Android; на узких экранах цифры чуть меньше */
+.c-price{flex-wrap:nowrap;white-space:nowrap;gap:4px;min-width:0;font-size:16px;letter-spacing:-.4px}
+.c-price span{flex:none;font-size:12px;letter-spacing:0}
+.c-price small{flex:none;margin-left:auto;padding-left:2px;font-size:12px;letter-spacing:0}
+@media (max-width:389px){.c-price{font-size:15px}}
+/* форма «Новый лот»: поля цены в одну линию, даже если подпись переносится; пустая ошибка не видна */
+.ad-grid .fld{display:flex;flex-direction:column;justify-content:flex-end}
+.err[hidden]{display:none}
+input.inp[type="datetime-local"]{-webkit-appearance:none;appearance:none;display:block;text-align:left;min-height:48px}
+@media (max-width:369px){.c-price{font-size:14.5px;letter-spacing:-.5px;gap:3px}}
 
 /* остатки: тихая строка под описанием — зелёная точка и количество; мало (1–3) — золотом */
 .c-stock{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--ok);margin:4px 6px 0;white-space:nowrap}
@@ -2466,7 +2471,7 @@ function openAdminCreate(){
   const loc=x=>{const p=n=>String(n).padStart(2,'0');return `${x.getFullYear()}-${p(x.getMonth()+1)}-${p(x.getDate())}T${p(x.getHours())}:${p(x.getMinutes())}`;};
   const nf=(id,label)=>`<div class="fld"><label>${label}</label><input class="inp" id="${id}" inputmode="numeric"></div>`;
   const body=`<div class="fld"><label>Набор из каталога</label><input class="inp" id="adQ" placeholder="Начните вводить название"><div class="ad-res" id="adRes" hidden></div><div id="adPick" style="margin-top:8px"></div></div>
-   <div class="ad-grid">${nf('adMin','Цена на старте (минимум), сум')}${nf('adStart','Максимальная цена, сум')}</div>
+   <div class="ad-grid">${nf('adMin','Цена старта, сум')}${nf('adStart','Макс. цена, сум')}</div>
    ${nf('adFloor','Порог предложений, сум')}
    <div class="fld"><label>Время старта</label><input class="inp" id="adAt" type="datetime-local" value="${loc(d)}"></div>
    <div class="fld"><label>Длительность</label><select class="inp" id="adDur">${[10,15,20,30,45,60,90,120].map(m=>`<option value="${m}"${m===30?' selected':''}>${m} мин</option>`).join('')}</select></div>
