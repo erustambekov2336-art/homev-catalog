@@ -4,7 +4,7 @@
 import { getStore } from '@netlify/blobs';
 import { json, verifyInitData, STORE_NAME, tgSend, isAdmin, ADMIN_IDS, sum } from '../lib/tg.mjs';
 import { HOLD_MS, HOLD_LIMIT, HOLD_WINDOW_MS, norm, priceAt } from '../lib/auction.mjs';
-import { channelNow, appBase } from '../lib/channel.mjs';
+import { channelNow, appBase, dm, esc, num } from '../lib/channel.mjs';
 import { recordOrder } from '../lib/stats.mjs';
 
 // «Смотрят сейчас»: открытое приложение отмечается раз в ~20 секунд, считаем последние 30–60 секунд.
@@ -80,6 +80,37 @@ const orderNo = () => {
   return 'MF-A' + String(d.getUTCFullYear()).slice(2) + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0') + '-' + String(Date.now()).slice(-4);
 };
 const who = (u) => (u.username ? '@' + u.username + ' ' : '') + `(ID ${u.id})`;
+
+// Одно сообщение в группу на один проданный лот, что бы ни случилось (повтор запроса, двойное нажатие,
+// оборвавшаяся связь). Перед отправкой «занимаем» ключ sent/<лот>; если он уже есть — второй раз не шлём.
+async function sendSaleOnce(s, lotId, no, text) {
+  const key = 'sent/' + lotId;
+  let claimed = false;
+  try {
+    const res = await s.setJSON(key, { no, at: Date.now() }, { onlyIfNew: true });
+    claimed = !res || res.modified !== false;
+  } catch { claimed = true; } // хранилище недоступно — лучше отправить, чем потерять заказ
+  if (!claimed) {
+    const prev = await s.get(key, { type: 'json' }).catch(() => null);
+    return { ok: true, dup: true, no: prev?.no || no };
+  }
+  const sent = await tgSend(process.env.ORDER_CHAT_ID, text);
+  if (!sent) await s.delete(key).catch(() => {}); // не ушло — освобождаем, чтобы повтор смог отправить
+  return { ok: sent, dup: false, no };
+}
+
+// Покупателю в личные сообщения: «набор ваш» + кнопки «Посмотреть другие товары» и «Следить за другими лотами»
+const site = () => (process.env.URL || '').replace(/\/$/, '');
+const WON = {
+  ru: (name, price, no) => `🎉 <b>Набор ваш!</b>\n\n«${esc(name)}» — <b>${num(price)} сум</b>\nЗаказ ${esc(no)}. Менеджер свяжется с вами в течение рабочего дня и уточнит доставку.\n\nВ Ташкенте оплата при доставке — заранее ничего на карту отправлять не нужно.`,
+  uz: (name, price, no) => `🎉 <b>To‘plam sizniki!</b>\n\n«${esc(name)}» — <b>${num(price)} so‘m</b>\nBuyurtma ${esc(no)}. Menejer ish kuni davomida siz bilan bog‘lanib, yetkazib berishni aniqlaydi.\n\nToshkentda to‘lov yetkazilganda — oldindan kartaga hech narsa yuborish shart emas.`,
+};
+const WON_BTN = { ru: ['Посмотреть другие товары', 'Следить за другими лотами'], uz: ['Boshqa mahsulotlarni ko‘rish', 'Boshqa lotlarni kuzatish'] };
+async function dmWinner(uid, lang, name, price, no) {
+  if (!site()) return false;
+  const l = /^uz/i.test(lang || '') ? 'uz' : 'ru';
+  return dm(uid, () => WON[l](name, price, no), [[[WON_BTN[l][0], '🛍', site() + '/']], [[WON_BTN[l][1], '🏷', site() + '/?go=auction']]]).catch(() => false);
+}
 
 export default async (req) => {
   if (req.method !== 'POST') return json(405, { ok: false });
@@ -165,16 +196,18 @@ export default async (req) => {
       ...(form.comment ? [`Комментарий: ${form.comment}`] : []), '',
       `✅ Подтверждено Telegram: ${who(user)}`,
     ].join('\n');
-    const sent = await tgSend(process.env.ORDER_CHAT_ID, text);
-    if (!sent) {
+    const res = await sendSaleOnce(s, lot.id, no, text);
+    if (!res.ok) {
       // заказ не ушёл — возвращаем лот покупателю, чтобы он мог повторить
       await s.setJSON('lot/' + id, { ...snapshot, hold: { ...snapshot.hold, until: Date.now() + 2 * 60000 } }).catch(() => {});
       return json(502, { ok: false, error: 'telegram' });
     }
+    if (res.dup) return json(200, { ok: true, no: res.no, price: r.price }); // уже отправлено раньше — второй раз ничего не делаем
     if (!/т[еe]ст|test/i.test(form.comment)) {
       await addToFeed(s, lot.itemId).catch(() => {});
       await recordOrder(s, { items: [[lot.itemId, 1]], total: r.price, source: 'auction' }).catch((e) => console.error('stats failed', e));
     }
+    await dmWinner(uid, user.language_code, lot.itemName, r.price, no);
     await channelNow(lot);
     return json(200, { ok: true, no, price: r.price });
   }
@@ -192,7 +225,7 @@ export default async (req) => {
       if (price < (lot.floor || lot.min)) return { err: 'low' };
       if (price >= p.price && p.phase === 'live') return { err: 'buy_instead' };
       lot.offers = (lot.offers || []).filter((o) => o.uid !== uid);
-      lot.offers.push({ uid, username: user.username || '', name, phone, price, at: now, status: 'new' });
+      lot.offers.push({ uid, username: user.username || '', name, phone, price, at: now, status: 'new', lang: user.language_code || '' });
       lot.offers = lot.offers.slice(-50);
       lotName = lot.itemName;
       return {};
@@ -266,6 +299,7 @@ export default async (req) => {
         await s.delete('lot/' + l.id).catch(() => {});
         await s.delete('remind/' + l.id).catch(() => {});
         await s.delete('remindDone/' + l.id).catch(() => {});
+        await s.delete('sent/' + l.id).catch(() => {});
         removed++;
       }
     }
@@ -306,13 +340,16 @@ export default async (req) => {
     if (r.err) return json(200, { ok: false, error: r.err });
     const lot = r.lot;
     if (accept) {
-      await tgSend(process.env.ORDER_CHAT_ID, [
+      const res = await sendSaleOnce(s, lot.id, no, [
         `🏷 Распродажа: принято предложение ${no} — Maison Forfe`, '',
         `• ${lot.itemName} — 1 шт.`, `Цена по предложению: ${sum(offer.price)}`, '',
         `Имя: ${offer.name || '—'}`, `Телефон: ${offer.phone}`, `Telegram: ${offer.username ? '@' + offer.username + ' ' : ''}(ID ${offer.uid})`, '',
         'Адрес уточните при звонке.',
       ].join('\n'));
-      await tgSend(ouid, `🎉 Ваше предложение ${sum(offer.price)} за «${lot.itemName}» принято! Менеджер свяжется с вами в течение рабочего дня.`);
+      if (res.dup) return json(200, { ok: true });
+      if (!(await dmWinner(ouid, offer.lang, lot.itemName, offer.price, no))) {
+        await tgSend(ouid, `🎉 Ваше предложение ${sum(offer.price)} за «${lot.itemName}» принято! Менеджер свяжется с вами в течение рабочего дня.`);
+      }
       await addToFeed(s, lot.itemId).catch(() => {});
       await channelNow(lot);
     } else {
