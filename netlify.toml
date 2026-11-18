@@ -7,3 +7,26 @@
 
 [functions]
   node_bundler = "esbuild"
+
+# Скорость: фото, значки и иконки телефон хранит у себя 7 дней и при повторном открытии не скачивает заново.
+# Если фото заменили под тем же именем — клиенты увидят новое в течение недели (а фоном — сразу после показа старого).
+# Сама страница и data.json кешем не задерживаются: цены и товары всегда свежие.
+[[headers]]
+  for = "/uploads/homev-catalog-redesign/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/uploads/homev-catalog-redesign/badges/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/uploads/homev-catalog-redesign/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
+
+[[headers]]
+  for = "/uploads/logo-480.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=2592000"
